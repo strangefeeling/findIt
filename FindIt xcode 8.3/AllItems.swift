@@ -317,17 +317,17 @@ class AllItems: UIViewController, UICollectionViewDelegate, UICollectionViewData
         } else {*/
             let postInfo = PostInfo()
             let profileImageURL = allUsers.downloadUrls[indexPath.item]
-            postInfo.image.loadImageUsingCacheWithUrlString(profileImageURL)
-            postInfo.image.contentMode = .scaleAspectFit
+            image.loadImageUsingCacheWithUrlString(profileImageURL)
+            image.contentMode = .scaleAspectFit
             //postInfo.descriptiontextField.text = allUsers.descriptions[indexPath.item]
-            postInfo.postName = allUsers.postName[indexPath.item]
+            postName = allUsers.postName[indexPath.item]
             let currentCell = collectionView.cellForItem(at: indexPath) as! MyItemsCell
-            postInfo.posterUid.text = currentCell.nameLabel.text!
-            postInfo.dateLabel.text = currentCell.dateLabel.text!
-            postInfo.locationLabel.text = currentCell.locationLabel.text!
-            postInfo.cityLabel.text = currentCell.cityLabel.text!
-            postInfo.postName = postId[indexPath.item]
-            postInfo.imageUrl = profileImageURL
+            posterUid.text = currentCell.nameLabel.text!
+            dateLabel.text = currentCell.dateLabel.text!
+            locationLabel.text = currentCell.locationLabel.text!
+            cityLabel.text = currentCell.cityLabel.text!
+            postName = postId[indexPath.item]
+            imageUrl = profileImageURL
             
             UserDefaults.standard.set(allUsers.descriptions[indexPath.item], forKey: "descriptiontextField")
             UserDefaults.standard.set(currentCell.nameLabel.text!, forKey: "nameLabel")

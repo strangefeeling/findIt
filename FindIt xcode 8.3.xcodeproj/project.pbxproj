@@ -37,6 +37,11 @@
 		7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC51FB115EE00667DA6 /* NavController.swift */; };
 		7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */; };
 		7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5AAF21FADDC86004BA02F /* MapController.swift */; };
+		7BBF48B31FC8735F005414C1 /* AllFoundItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */; };
+		7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B61FC8759E005414C1 /* FirstPage.swift */; };
+		7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */; };
+		7BBF48BB1FC9843D005414C1 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48BA1FC9843D005414C1 /* Variables.swift */; };
+		7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */; };
 		8D3EA7F3FA42ABBE1D70FE04 /* Pods_FindIt_xcode_8_3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0459CB7FF908CE1564249014 /* Pods_FindIt_xcode_8_3.framework */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +79,11 @@
 		7BA44FC51FB115EE00667DA6 /* NavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
 		7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
 		7BB5AAF21FADDC86004BA02F /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
+		7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllFoundItems.swift; sourceTree = "<group>"; };
+		7BBF48B61FC8759E005414C1 /* FirstPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
+		7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewCell.swift; sourceTree = "<group>"; };
+		7BBF48BA1FC9843D005414C1 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
+		7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllLostItems.swift; sourceTree = "<group>"; };
 		B05427D3E50F16747F586ED0 /* Pods-FindIt xcode 8.3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindIt xcode 8.3.release.xcconfig"; path = "Pods/Target Support Files/Pods-FindIt xcode 8.3/Pods-FindIt xcode 8.3.release.xcconfig"; sourceTree = "<group>"; };
 		E8EB56E139CF549CAD1410C0 /* Pods-FindIt xcode 8.3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindIt xcode 8.3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FindIt xcode 8.3/Pods-FindIt xcode 8.3.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,15 +185,36 @@
 				7B8F4C171FAC73D300E61996 /* Main.storyboard */,
 				7B8F4C1A1FAC73D300E61996 /* Assets.xcassets */,
 				7B3A4D161FB89EAD00E5DDBF /* Model.xcdatamodeld */,
+				7BBF48BA1FC9843D005414C1 /* Variables.swift */,
 				7B17CF9E1FAC77BF00394879 /* Users */,
 				7B17CF911FAC76D000394879 /* controllers */,
 				7B8F4C1C1FAC73D300E61996 /* LaunchScreen.storyboard */,
+				7BBF48B51FC874EC005414C1 /* NewTabs */,
 				7B17CFA71FAC783500394879 /* Tabs */,
+				7BBF48B41FC874D2005414C1 /* NewCells */,
 				7B17CFAE1FAC789600394879 /* Cells */,
 				7B8F4C251FAC743100E61996 /* GoogleService-Info.plist */,
 				7B8F4C1F1FAC73D300E61996 /* Info.plist */,
 			);
 			path = "FindIt xcode 8.3";
+			sourceTree = "<group>";
+		};
+		7BBF48B41FC874D2005414C1 /* NewCells */ = {
+			isa = PBXGroup;
+			children = (
+				7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */,
+				7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */,
+				7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */,
+			);
+			name = NewCells;
+			sourceTree = "<group>";
+		};
+		7BBF48B51FC874EC005414C1 /* NewTabs */ = {
+			isa = PBXGroup;
+			children = (
+				7BBF48B61FC8759E005414C1 /* FirstPage.swift */,
+			);
+			name = NewTabs;
 			sourceTree = "<group>";
 		};
 		D9579EFD5C8B2A6850BF372C /* Pods */ = {
@@ -323,13 +354,16 @@
 				7B17CFB21FAC78BE00394879 /* MessagesCell.swift in Sources */,
 				7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */,
 				7B17CFA21FAC77F000394879 /* EveryUser.swift in Sources */,
+				7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */,
 				7B17CF931FAC76F000394879 /* TabBarController.swift in Sources */,
 				7B17CF9B1FAC778D00394879 /* EdditPost.swift in Sources */,
 				7B17CFB61FAC78E400394879 /* PostInfoCell.swift in Sources */,
 				7B4B06B61FC5DA5D005320B0 /* PostInfoStuff.swift in Sources */,
 				7B17CFB41FAC78CE00394879 /* InfoCell.swift in Sources */,
+				7BBF48BB1FC9843D005414C1 /* Variables.swift in Sources */,
 				7B18EF101FAF2C6A007742F4 /* FoundItemsMap.swift in Sources */,
 				7B4B06B81FC716E2005320B0 /* MyPostInfo.swift in Sources */,
+				7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */,
 				7B17CFB01FAC78A800394879 /* MyItemsCell.swift in Sources */,
 				7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */,
 				7B17CF9D1FAC77B400394879 /* Chat.swift in Sources */,
@@ -342,8 +376,10 @@
 				7B17CFA61FAC782300394879 /* Extensions.swift in Sources */,
 				7B17CF951FAC773B00394879 /* AddItemController.swift in Sources */,
 				7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */,
+				7BBF48B31FC8735F005414C1 /* AllFoundItems.swift in Sources */,
 				7B17CFA91FAC785200394879 /* MyItems.swift in Sources */,
 				7B81EF8D1FBEF06E0036F982 /* AddCommentController.swift in Sources */,
+				7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */,
 				7B17CF971FAC775700394879 /* LoginRegister.swift in Sources */,
 				7B17CF991FAC776A00394879 /* PostInfo.swift in Sources */,
 			);

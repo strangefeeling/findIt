@@ -15,6 +15,21 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     let allItems = AllItems()
     let backButton = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = myColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        setupView()
+        
+    }
+    
+    
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
@@ -24,6 +39,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
+            print(keyboardHeight, "<---")
             self.view.frame.origin.y -= keyboardHeight
             
           //  self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
@@ -31,19 +47,49 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         }
     }
     
-    
     func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y += keyboardHeight
-        UIView.animate(withDuration: 0.5) {
-            self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        }
         
+        UIView.animate(withDuration: 0.5) {
+            print(self.keyboardHeight, "<---")
+            self.view.frame.origin.y += self.keyboardHeight
+        }
         
         keyboardHeight = 0
         
     }
+    
+    let mySwitch: UISwitch = {
+       let mySwitch = UISwitch()
+        mySwitch.onTintColor = .yellow
+        mySwitch.translatesAutoresizingMaskIntoConstraints = false
+        return mySwitch
+    }()
+    
+    let lostLabel: UILabel = {
+       let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.text = "Lost"
+        label.font = UIFont(name: "Avenir Next", size: 20)
+        
+        return label
+    }()
+    
+    let foundLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "Found"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "Avenir Next", size: 20)
+        
+        return label
+    }()
+    
+
 
     var keyboardHeight: CGFloat = 0
+    
+    
     
     let tempButtonWithImage: UIButton = {
         let tbwi = UIButton()
@@ -88,6 +134,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         pb.titleLabel?.font = UIFont(name: "Anevir Next", size: 20)
         pb.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
         pb.tintColor = UIColor.white
+        pb.titleLabel?.textAlignment = .center
         pb.translatesAutoresizingMaskIntoConstraints = false
         
         return pb
@@ -100,9 +147,10 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
       //  present(map, animated: true, completion: nil)
     }
     
-    @objc func postToServer(){
+    func post(){
+        
         if imageToPost != nil && itemDescription.text != ""{
-            print("Posted")
+            
             let imageName = NSUUID().uuidString
             let postName = NSUUID().uuidString
             let imagesFolder = Storage.storage().reference().child("images")
@@ -123,7 +171,14 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             let lon = UserDefaults.standard.string(forKey: "lon")
                             let locationName = UserDefaults.standard.string(forKey: "title")
                             let city = UserDefaults.standard.string(forKey: "city")
-                            let allRef = Database.database().reference().child("allPosts").child(postName)
+                            var allRef = Database.database().reference().child("allPosts")
+                            if self.mySwitch.isOn{
+                                allRef = Database.database().reference().child("allPosts").child("found").child(postName)
+                            } else {
+                              allRef = Database.database().reference().child("allPosts").child("lost").child(postName)
+                            }
+                            
+                            //.child(postName)
                             //allRef.setValue(currUser!)
                             /*  ref.child("downloadURL").setValue(downloadURL)
                              ref.child("description").setValue(self.itemDescription.text!)
@@ -133,6 +188,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             allRef.child("description").setValue(self.itemDescription.text!)
                             allRef.child("timeStamp").setValue(timeStamp)
                             allRef.child("uid").setValue(currUser!)
+                            allRef.child("email").setValue(self.myEmail)
                             allRef.child("lon").setValue(lon)
                             allRef.child("lat").setValue(lat)
                             allRef.child("locationName").setValue(locationName)
@@ -154,56 +210,82 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
             }
             
         }
-        
+
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = myColor
-        //view.addSubview(backButton)
-        view.addSubview(tempButtonWithImage)
-        view.addSubview(openMapsButton)
-        view.addSubview(itemDescription)
-        view.addSubview(postButton)
-        NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
-        setupView()
-        
+    var myEmail = String()
+    
+    @objc func postToServer(){
+        let currUser = Auth.auth().currentUser?.uid
+        let myRef = Database.database().reference().child("users").child(currUser!)
+        myRef.observe(.value, with: { (snapshot) in
+            let dict = snapshot.value as! [String: Any]
+            
+            self.myEmail = dict["email"] as! String
+            DispatchQueue.main.async {
+                self.post()
+            }
+        })
+
     }
     
+
     func setupView(){
         
-        tempButtonWithImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        tempButtonWithImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 90).isActive = true
-        tempButtonWithImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
-        tempButtonWithImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2 - 90).isActive = true
+        view.addSubview(tempButtonWithImage)
         
-       /* backButton.setTitle("Back", for: .normal)
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
-        backButton.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backButton.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        backButton.heightAnchor.constraint(equalToConstant: 100).isActive = true*/
+        tempButtonWithImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        tempButtonWithImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
+        tempButtonWithImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
+        tempButtonWithImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 3.2).isActive = true
+        
+    
+        view.addSubview(openMapsButton)
         
         openMapsButton.topAnchor.constraint(equalTo: tempButtonWithImage.bottomAnchor, constant: 8).isActive = true
         openMapsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        openMapsButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        openMapsButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        openMapsButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 2 ).isActive = true
+        openMapsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 12).isActive = true
         
-        itemDescription.topAnchor.constraint(equalTo: openMapsButton.bottomAnchor, constant: 20).isActive = true
-        itemDescription.leftAnchor.constraint(equalTo: tempButtonWithImage.leftAnchor, constant: 0).isActive = true
-        itemDescription.widthAnchor.constraint(equalTo: tempButtonWithImage.widthAnchor).isActive = true
-        itemDescription.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2 - 250).isActive = true
+        view.addSubview(itemDescription)
         
-        postButton.topAnchor.constraint(equalTo: itemDescription.bottomAnchor, constant: 10).isActive = true
+        itemDescription.topAnchor.constraint(equalTo: openMapsButton.bottomAnchor, constant: 4).isActive = true
+        itemDescription.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        itemDescription.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
+        itemDescription.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 5).isActive = true
+       
+        view.addSubview(mySwitch)
+        
+        mySwitch.topAnchor.constraint(equalTo: itemDescription.bottomAnchor, constant: 10).isActive = true
+        mySwitch.centerXAnchor.constraint(equalTo: itemDescription.centerXAnchor).isActive = true
+        mySwitch.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        mySwitch.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        view.addSubview(lostLabel)
+        
+        lostLabel.rightAnchor.constraint(equalTo: mySwitch.leftAnchor, constant: -8).isActive = true
+        lostLabel.topAnchor.constraint(equalTo: mySwitch.topAnchor).isActive = true
+        lostLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        lostLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        view.addSubview(foundLabel)
+        
+        foundLabel.leftAnchor.constraint(equalTo: mySwitch.rightAnchor, constant: 8).isActive = true
+        foundLabel.topAnchor.constraint(equalTo: mySwitch.topAnchor).isActive = true
+        foundLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        foundLabel.widthAnchor.constraint(equalToConstant: 60).isActive  = true
+
+        view.addSubview(postButton)
+        postButton.topAnchor.constraint(equalTo: mySwitch.bottomAnchor, constant: 10).isActive = true
         postButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        postButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        postButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        postButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        postButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        /*
+         
+     /*   */
+        
+       */
     }
     
     @objc func postPhoto(_ sender: Any) {

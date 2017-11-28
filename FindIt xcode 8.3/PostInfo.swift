@@ -11,11 +11,11 @@ import UIKit
 import Firebase
 import CoreGraphics
 
-var messagesInPost = [String]()
+var posterEmail = String()
 
 class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
-    var imageUrl = String()
+    
     
     var isCommentByPoster: Bool = false
     
@@ -23,7 +23,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         
-        descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
+       // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
         descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20)
         descriptiontextField.sizeToFit()
         tableView.dataSource = self
@@ -62,18 +62,9 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     var tableView = UITableView()
     
-    var posterUid: UILabel = {
-        var uid = UILabel()
-        uid.translatesAutoresizingMaskIntoConstraints = false
-        uid.sizeToFit()
-        //uid.backgroundColor = .yellow
-        uid.font = UIFont(name: "Avenir Next", size: 16)
-        uid.textColor = .darkGray
-        
-        return uid
-    }()
+
     var usserrr = String()
-    var postName = String()
+   // var postName = String()
     let allUsers = EveryUser()
     //  let tableView = UITableView()
     
@@ -89,49 +80,12 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     var toId = String()
     var chat = Chat(collectionViewLayout: UICollectionViewFlowLayout())
     
-    let image: UIImageView = {
-        let image = UIImageView()
-        // image.backgroundColor = .red
-        image.contentMode = .top
-        return image
-    }()
+  
     
-    let locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Location"
-        label.textAlignment = .left
-        label.sizeToFit()
-        
-        label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let dateLabel: UILabel = {
-        let label = UILabel()
-        label.text = "2017"
-        label.textAlignment = .left
-        label.sizeToFit()
-        
-        label.textColor = .lightGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+
     
     
-    let cityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Name"
-        label.textAlignment = .left
-        label.sizeToFit()
-        
-        label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+
     
     let cityWord: UILabel = {
         let label = UILabel()
@@ -157,16 +111,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         return label
     }()
 
-    
-    let descriptiontextField: UILabel = {
-        let textField = UILabel()
-        textField.text = "sadhbjkasfaksfnaklsvnzkcnaskfnsakjnakscnascnadskjnsdkjvndmnz,mcvn"
-        textField.font = UIFont(name: "Avenir Next", size: 16)
-        textField.numberOfLines = 0
-        textField.sizeToFit()
-        textField.textAlignment = .center
-        return textField
-    }()
+
     
 
     
@@ -331,7 +276,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     @objc func toChatController(){
         self.comments.removeAll()
-        let ref = Database.database().reference().child("allPosts").child(postName)
+        let ref = Database.database().reference().child("allPosts").child("found").child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
             if let dictionary = snapshot.value as? [String: Any] {
@@ -486,7 +431,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             cellTwo.locationLabel.text = locationLabel.text
             cellTwo.cityLabel.text = cityLabel.text
             cellTwo.descriptiontextField.text = descriptiontextField.text
-            cellTwo.posterUid = posterUid
+            cellTwo.posterUid.text = posterUid.text
             
             return cellTwo
         }

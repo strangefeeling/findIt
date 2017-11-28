@@ -9,8 +9,6 @@
 import UIKit
 import Firebase
 
-let myColor = UIColor.red//(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)//(red: 78/255, green: 128/255, blue: 173/255, alpha: 1)
-
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
 
@@ -50,19 +48,16 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     func handleNavigation(){
         navigationController?.navigationBar.isHidden = false
-        let attrs = [
-            NSForegroundColorAttributeName: UIColor.white,
-            NSFontAttributeName: UIFont(name: "Avenir Next", size: 24)!
-        ]
-        
-        UINavigationBar.appearance().titleTextAttributes = attrs
+        let attrs = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name:"Marker Felt", size: 24)!]
+        //navigationItem.title = "rytis@gmail.com"
+        //UINavigationBar.appearance().titleTextAttributes = attrs
         let textAttributes = [NSForegroundColorAttributeName:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         // navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
+       // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         navigationController?.navigationBar.barTintColor = myColor
         
         navigationController?.navigationBar.isTranslucent = false
@@ -111,6 +106,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
        let addbt = UIButton()
         addbt.translatesAutoresizingMaskIntoConstraints = false
         addbt.setTitle("Add item", for: .normal)
+        addbt.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         addbt.addTarget(self, action: #selector(addIteem), for: .touchUpInside)
         return addbt
     }()
@@ -118,6 +114,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let logoutButton: UIButton = {
        let logout = UIButton()
         logout.setTitle("Logout", for: .normal)
+        logout.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         logout.translatesAutoresizingMaskIntoConstraints = false
         logout.addTarget(self, action: #selector(handleLogOut), for: .touchUpInside)
         
@@ -127,6 +124,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let browseMapButton: UIButton = {
         let browseMap = UIButton()
         browseMap.setTitle("Browse Map", for: .normal)
+        browseMap.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         browseMap.translatesAutoresizingMaskIntoConstraints = false
         browseMap.addTarget(self, action: #selector(toMap), for: .touchUpInside)
         return browseMap
@@ -242,6 +240,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     @objc func doNothing(){
         
     }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         

@@ -487,7 +487,7 @@ class MyPostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource 
             cellTwo.locationLabel.text = locationLabel.text
             cellTwo.cityLabel.text = cityLabel.text
             cellTwo.descriptiontextField.text = descriptiontextField.text
-            cellTwo.posterUid = posterUid
+            cellTwo.posterUid.text = posterUid.text
             
             return cellTwo
         }

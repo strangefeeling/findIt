@@ -47,13 +47,17 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     var lon = [String]()
     var lat = [String]()
     var descriptions = [String]()
-    var postName = [String]()
+    var postNames = [String]()
     var downloadURL = [String]()
     var toId = [String]()
     var pinIndex = Int()
     var uids = [String]()
     var isCurrUser = false
     var whichUser = [Bool]()
+    var cities = [String]()
+    var locations = [String]()
+    var dates = [Date]()
+    var emails = [String]()
     
     let backButton: UIButton = {
        let back = UIButton()
@@ -105,8 +109,12 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         postName.removeAll()
         lon.removeAll()
         lat.removeAll()
+        cities.removeAll()
+        locations.removeAll()
+        dates.removeAll()
+        emails.removeAll()
         descriptions.append(description)
-        let ref = Database.database().reference().child("allPosts")
+        let ref = Database.database().reference().child("allPosts").child("found")
         ref.queryOrdered(byChild: "timeStamp").observe( .childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: Any] else {return}
             
@@ -120,16 +128,25 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 let toId = dictionary["uid"] as! String
                 let downloadURL = dictionary["downloadURL"] as! String
                 let uid = dictionary["uid"] as! String
+                let city = dictionary["city"] as! String
+                let location = dictionary["locationName"] as! String
+                let email = dictionary["email"] as! String
+                //let date = dictionary["timeStamp"] as! Double
+                let date = Date(timeIntervalSince1970:dictionary["timeStamp"] as! Double)
                 
                 if uid == Auth.auth().currentUser?.uid {
                     self.isCurrUser = true
                 } else {
                     self.isCurrUser = false
                 }
+                self.emails.append(email)
+                self.dates.append(date)
+                self.locations.append(location)
+                self.cities.append(city)
                 self.uids.append(uid)
                 self.downloadURL.append(downloadURL)
                 self.toId.append(toId)
-                self.postName.append(postName)
+                self.postNames.append(postName)
                 self.lon.append(long)
                 self.lat.append(lati)
                 self.descriptions.append(description)
@@ -143,6 +160,17 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         
        
     }
+    
+    func makeDate(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        // dateFormatter.timeZone = TimeZone(abbreviation: "GMT") //Set timezone that you want
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        
+        return strDate
+    }
+
     
     func getAnnotations(lat: String, lon: String, description: String){
         if lat != ""{
@@ -298,11 +326,16 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         DispatchQueue.main.async {
             if self.toId[self.pinIndex] != Auth.auth().currentUser?.uid{
                 print("pinIndex ",self.pinIndex)
-                postInfo.postName = self.postName[self.pinIndex]
+                postName = self.postNames[self.pinIndex]
+                posterUid.text = self.emails[self.pinIndex]
                 postInfo.toId = self.toId[self.pinIndex]
-                postInfo.image.loadImageUsingCacheWithUrlString(self.downloadURL[self.pinIndex])
-                postInfo.image.contentMode = .scaleAspectFit
-                postInfo.descriptiontextField.text = self.descriptions[self.pinIndex + 1]
+            //    image.loadImageUsingCacheWithUrlString(self.downloadURL[self.pinIndex])
+            //    image.contentMode = .scaleAspectFit
+                locationLabel.text = self.locations[self.pinIndex]
+                imageUrl = self.downloadURL[self.pinIndex]
+                cityLabel.text = self.cities[self.pinIndex]
+                dateLabel.text = String(self.makeDate(date:  self.dates[self.pinIndex]))
+                descriptiontextField.text = self.descriptions[self.pinIndex + 1]
                 self.show(postInfo, sender: self)
             }
         }

@@ -256,7 +256,7 @@ class MyItems: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         postInfo.dateLabel.text = currentCell.dateLabel.text!
         postInfo.locationLabel.text = currentCell.locationLabel.text!
         postInfo.cityLabel.text = currentCell.cityLabel.text!
-        postInfo.postName = user.postName[indexPath.item]
+        //postInfo.postName = user.postName[indexPath.item]
         postInfo.imageUrl = profileImageURL
         
                

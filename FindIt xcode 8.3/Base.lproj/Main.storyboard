@@ -116,7 +116,7 @@
         <!--Item-->
         <scene sceneID="vi7-98-Dta">
             <objects>
-                <viewController id="QBF-CF-AwE" customClass="AllItems" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="QBF-CF-AwE" customClass="FirstPage" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="h7H-De-d0B"/>
                         <viewControllerLayoutGuide type="bottom" id="NFp-sv-DAJ"/>
@@ -184,6 +184,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="au7-uh-HRg"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="registerTapped:" destination="xyr-40-uLV" eventType="touchUpInside" id="7Mb-9k-XBi"/>
@@ -248,9 +249,12 @@
                     <tabBarItem key="tabBarItem" title="Item" id="TUa-nr-jPB"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="40Z-xJ-fzU">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="40Z-xJ-fzU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="17"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -263,6 +267,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hHL-ga-MCl"/>
+        <segue reference="PSY-Ev-ZrE"/>
     </inferredMetricsTieBreakers>
 </document>
