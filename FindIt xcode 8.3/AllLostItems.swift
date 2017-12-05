@@ -36,18 +36,23 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         tableView.delegate = self
         tableView.dataSource = self
         //tableView.layoutIfNeeded()
+        tableView.separatorStyle = .none
         
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
         contentView.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         //tableView.frame = CGRect(x: 0, y: 50, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        
+        tableView.addSubview(refresh)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
-        contentView.addConstraintsWithFormat(format: "V:|-50-[v0]-55-|", views: tableView)
+        contentView.addConstraintsWithFormat(format: "V:|-50-[v0]-85-|", views: tableView)
         
     }
     
-    
+    lazy var refresh: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(observeOneTime), for: .valueChanged)
+        return refresh
+    }()
     
     func observeOneTime(){
         
@@ -121,6 +126,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
+                    self.refresh.endRefreshing()
                     // self.getEmails()
                     // ref.removeAllObservers()
                 })
@@ -150,7 +156,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
      }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height - 50
+        return UIScreen.main.bounds.height - 40
     }
     
     
@@ -210,6 +216,8 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         locationLabel.text = currentCell.locationLabel.text!
         cityLabel.text = currentCell.cityLabel.text!
         postName = postId[indexPath.item]
+        foundOrLost = "lost"
+        toIdd = allUsers.uid[indexPath.row]
         descriptiontextField.text = currentCell.infoLabel.text
         imageUrl = profileImageURL
         

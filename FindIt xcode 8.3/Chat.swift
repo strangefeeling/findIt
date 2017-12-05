@@ -266,7 +266,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: message).width + 32
         
         if fromId[indexPath.row] == Auth.auth().currentUser?.uid {
-            cell.bubbleView.backgroundColor = myColor//UIColor(red: 255/255, green: 129/255, blue: 117/255, alpha: 0.6)
+            cell.bubbleView.backgroundColor = UIColor(patternImage: UIImage(named: "redBubble")!)//myColor//UIColor(red: 255/255, green: 129/255, blue: 117/255, alpha: 0.6)
             cell.textView.textColor = .white
             cell.bubbleViewRightAnchor?.isActive = true
             cell.bubbleViewLeftAnchor?.isActive = false

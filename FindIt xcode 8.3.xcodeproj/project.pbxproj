@@ -37,11 +37,14 @@
 		7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC51FB115EE00667DA6 /* NavController.swift */; };
 		7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */; };
 		7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5AAF21FADDC86004BA02F /* MapController.swift */; };
-		7BBF48B31FC8735F005414C1 /* AllFoundItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */; };
+		7BBF48B31FC8735F005414C1 /* AllItemsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B21FC8735F005414C1 /* AllItemsCollectionViewCell.swift */; };
 		7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B61FC8759E005414C1 /* FirstPage.swift */; };
 		7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */; };
 		7BBF48BB1FC9843D005414C1 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48BA1FC9843D005414C1 /* Variables.swift */; };
+		7BC2F9031FD033E900D0AE88 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC2F9021FD033E900D0AE88 /* SearchResults.swift */; };
 		7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */; };
+		7BEB4BF31FCD894300D1B990 /* SecondPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEB4BF21FCD894300D1B990 /* SecondPage.swift */; };
+		7BEB4BF51FCD8B7500D1B990 /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */; };
 		8D3EA7F3FA42ABBE1D70FE04 /* Pods_FindIt_xcode_8_3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0459CB7FF908CE1564249014 /* Pods_FindIt_xcode_8_3.framework */; };
 /* End PBXBuildFile section */
 
@@ -79,11 +82,14 @@
 		7BA44FC51FB115EE00667DA6 /* NavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
 		7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
 		7BB5AAF21FADDC86004BA02F /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
-		7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllFoundItems.swift; sourceTree = "<group>"; };
+		7BBF48B21FC8735F005414C1 /* AllItemsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsCollectionViewCell.swift; sourceTree = "<group>"; };
 		7BBF48B61FC8759E005414C1 /* FirstPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
 		7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewCell.swift; sourceTree = "<group>"; };
 		7BBF48BA1FC9843D005414C1 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
+		7BC2F9021FD033E900D0AE88 /* SearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllLostItems.swift; sourceTree = "<group>"; };
+		7BEB4BF21FCD894300D1B990 /* SecondPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondPage.swift; sourceTree = "<group>"; };
+		7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
 		B05427D3E50F16747F586ED0 /* Pods-FindIt xcode 8.3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindIt xcode 8.3.release.xcconfig"; path = "Pods/Target Support Files/Pods-FindIt xcode 8.3/Pods-FindIt xcode 8.3.release.xcconfig"; sourceTree = "<group>"; };
 		E8EB56E139CF549CAD1410C0 /* Pods-FindIt xcode 8.3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindIt xcode 8.3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FindIt xcode 8.3/Pods-FindIt xcode 8.3.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -115,6 +121,7 @@
 				7B17CF941FAC773B00394879 /* AddItemController.swift */,
 				7B17CF961FAC775700394879 /* LoginRegister.swift */,
 				7B81EF8C1FBEF06E0036F982 /* AddCommentController.swift */,
+				7BC2F9021FD033E900D0AE88 /* SearchResults.swift */,
 				7BB5AAF21FADDC86004BA02F /* MapController.swift */,
 				7BA44FC51FB115EE00667DA6 /* NavController.swift */,
 				7B17CF981FAC776A00394879 /* PostInfo.swift */,
@@ -202,7 +209,8 @@
 		7BBF48B41FC874D2005414C1 /* NewCells */ = {
 			isa = PBXGroup;
 			children = (
-				7BBF48B21FC8735F005414C1 /* AllFoundItems.swift */,
+				7BBF48B21FC8735F005414C1 /* AllItemsCollectionViewCell.swift */,
+				7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */,
 				7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */,
 				7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */,
 			);
@@ -213,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				7BBF48B61FC8759E005414C1 /* FirstPage.swift */,
+				7BEB4BF21FCD894300D1B990 /* SecondPage.swift */,
 			);
 			name = NewTabs;
 			sourceTree = "<group>";
@@ -355,6 +364,7 @@
 				7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */,
 				7B17CFA21FAC77F000394879 /* EveryUser.swift in Sources */,
 				7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */,
+				7BEB4BF31FCD894300D1B990 /* SecondPage.swift in Sources */,
 				7B17CF931FAC76F000394879 /* TabBarController.swift in Sources */,
 				7B17CF9B1FAC778D00394879 /* EdditPost.swift in Sources */,
 				7B17CFB61FAC78E400394879 /* PostInfoCell.swift in Sources */,
@@ -370,13 +380,15 @@
 				7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */,
 				7B17CFAD1FAC788700394879 /* MessagesController.swift in Sources */,
 				7B17CFA01FAC77D900394879 /* Userr.swift in Sources */,
+				7BC2F9031FD033E900D0AE88 /* SearchResults.swift in Sources */,
 				7B17CFAB1FAC786B00394879 /* AllItems.swift in Sources */,
 				7B17CFA41FAC780300394879 /* Messages.swift in Sources */,
 				7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */,
 				7B17CFA61FAC782300394879 /* Extensions.swift in Sources */,
 				7B17CF951FAC773B00394879 /* AddItemController.swift in Sources */,
 				7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */,
-				7BBF48B31FC8735F005414C1 /* AllFoundItems.swift in Sources */,
+				7BBF48B31FC8735F005414C1 /* AllItemsCollectionViewCell.swift in Sources */,
+				7BEB4BF51FCD8B7500D1B990 /* MyCell.swift in Sources */,
 				7B17CFA91FAC785200394879 /* MyItems.swift in Sources */,
 				7B81EF8D1FBEF06E0036F982 /* AddCommentController.swift in Sources */,
 				7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */,
@@ -508,6 +520,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9Q3Y7NC9M5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "FindIt xcode 8.3/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -523,6 +539,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9Q3Y7NC9M5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "FindIt xcode 8.3/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

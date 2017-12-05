@@ -9,10 +9,29 @@
 import UIKit
 import Firebase
 
-class TabBarController: UITabBarController, UITabBarControllerDelegate {
+
+
+
+class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearchBarDelegate {
     
 
     var addItemController = AddItemController()
+    
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    let allUsers = EveryUser()
+
+    var usersSearchResults = [String]()
+    
+    let cellId = "cellid"
+    let tableView = UITableView()
+    var postId = [String]()
+    var messagesInPost = [String]()
+    var allUids = [String]()
+    var cities = [String]()
+    var locations = [String]()
+    var date = [Double]()
+    var emails = [String]()
     
     override func viewDidAppear(_ animated: Bool) {
         print(UserDefaults.standard.object(forKey: "userUid")," userdafualts")
@@ -45,10 +64,203 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
     }
     
+    func handleSearch(){
+        
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Enter City Name"
+        searchController.searchBar.barTintColor = UIColor(patternImage: patternImage!)
+        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
+        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
+        
+        self.searchController.hidesNavigationBarDuringPresentation = false;
+        self.definesPresentationContext = false
+        present(searchController, animated: true, completion: nil)
+        
+    }
+    
+    var textInput = ""
+    let searchResults = SearchResults()
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        var i = 1
+        textInput = searchBar.text!
+        usersSearchResults.removeAll()
+        self.allUsers.descriptions.removeAll()
+        self.allUsers.downloadUrls.removeAll()
+        self.allUsers.uid.removeAll()
+        self.cities.removeAll()
+        self.locations.removeAll()
+        self.date.removeAll()
+        self.postId.removeAll()
+        self.emails.removeAll()
+       
+        let ref = Database.database().reference().child("allPosts").child("lost")
+        ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observe( .value, with: { (snapshot) in
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+           
+            print("ieskau lost")
+            if snapshot.exists(){
+                for snap in snapshots {
+                    if let description = snap.childSnapshot(forPath: "description").value as? String {
+                        self.usersSearchResults.append(description)
+                        print(description)
+                    }
+                    
+                    
+                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                        self.allUsers.timeStamp.append(timePosted)
+                        self.allUsers.dictionary["timeStamp"] = timePosted
+                        self.date.append(Double(timePosted))
+
+                    }
+                    
+                    if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+                        self.allUsers.downloadUrls.append(snaaap)
+                        self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+                        self.allUsers.uid.append(uid)
+                        // self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    
+                    if let city = snap.childSnapshot(forPath: "city").value as? String{
+                        self.cities.append(city)
+                    }
+                    
+                    if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+                        self.locations.append(location)
+                    }
+                    
+                    if let email = snap.childSnapshot(forPath: "email").value as? String{
+                        self.emails.append(email)
+                    }
+    
+                }
+                self.date.reverse()
+                self.emails.reverse()
+                self.allUsers.uid.reverse()
+                self.allUsers.postName.reverse()
+                self.allUsers.timeStamp.reverse()
+                self.allUsers.downloadUrls.reverse()
+                self.allUsers.descriptions.reverse()
+                self.cities.reverse()
+                self.locations.reverse()
+                self.postId.reverse()
+               
+               /* let dictionary = snapshot.value as! [String: Any]
+                let desc = dictionary["description"] as! String
+                self.usersSearchResults.append(desc)*/
+                
+                
+                DispatchQueue.main.async {
+                    
+                    //self.searchResults.cellContent = self.usersSearchResults
+                    //print(desc)
+                    if i == 1{
+                        print(1,"<--------")
+                        self.searchFound()
+                    }
+                    i += 1
+                }
+            }   else {
+                self.searchFound()
+            }
+           
+        })
+      
+    }
+    
+    func searchFound(){
+        var i = 1
+      
+        let ref = Database.database().reference().child("allPosts").child("found")
+        ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observe( .value, with: { (snapshot) in
+           
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            print("ieskau found")
+           print(snapshot)
+                for snap in snapshots {
+                    if let description = snap.childSnapshot(forPath: "description").value as? String {
+                        self.usersSearchResults.append(description)
+                        print(description)
+                    }
+                    
+                    
+                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                        self.allUsers.timeStamp.append(timePosted)
+                        self.allUsers.dictionary["timeStamp"] = timePosted
+                        self.date.append(Double(timePosted))
+                        
+                    }
+                    
+                    if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+                        self.allUsers.downloadUrls.append(snaaap)
+                        self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+                        self.allUsers.uid.append(uid)
+                        // self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    
+                    if let city = snap.childSnapshot(forPath: "city").value as? String{
+                        self.cities.append(city)
+                        print("city", city)
+                    }
+                    
+                    if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+                        self.locations.append(location)
+                    }
+                    
+                    if let email = snap.childSnapshot(forPath: "email").value as? String{
+                        self.emails.append(email)
+                    }
+                    
+                }
+                self.date.reverse()
+                self.emails.reverse()
+                self.allUsers.uid.reverse()
+                self.allUsers.postName.reverse()
+                self.allUsers.timeStamp.reverse()
+                self.allUsers.downloadUrls.reverse()
+                self.allUsers.descriptions.reverse()
+                self.cities.reverse()
+                self.locations.reverse()
+                self.postId.reverse()
+                
+                /* let dictionary = snapshot.value as! [String: Any]
+                 let desc = dictionary["description"] as! String
+                 self.usersSearchResults.append(desc)*/
+                
+
+            
+            
+            DispatchQueue.main.async {
+                
+                self.searchResults.cellContent = self.usersSearchResults
+                self.searchResults.allUids = self.allUsers.uid
+                self.searchResults.emails = self.emails
+                self.searchResults.date = self.date
+                self.searchResults.downloadUrls = self.allUsers.downloadUrls
+                self.searchResults.cities = self.cities
+                self.searchResults.locations = self.locations
+                //print(desc)
+                if i == 1{
+                    self.show(self.searchResults, sender: true)
+                    self.dismiss(animated: true, completion: nil)
+                }
+                i += 1
+                }
+            
+        })
+
+    }
+
     
     func handleNavigation(){
         navigationController?.navigationBar.isHidden = false
-        let attrs = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name:"Marker Felt", size: 24)!]
+        //let attrs = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name:"Marker Felt", size: 24)!]
         //navigationItem.title = "rytis@gmail.com"
         //UINavigationBar.appearance().titleTextAttributes = attrs
         let textAttributes = [NSForegroundColorAttributeName:UIColor.white]
@@ -57,9 +269,18 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         // navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
+        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: "iPhone 7 Plus2")
+        imageView.image = image
+        //navigationController?.navigationBar.setBackgroundImage(image, for: .default)
        // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
-        navigationController?.navigationBar.barTintColor = myColor
+        //navigationController?.navigationBar.barTintColor = myColor
+        let myImage = UIImage(named: "iPhone 7 Plus2")
         
+        
+        self.navigationController?.navigationBar.setBackgroundImage(patternImage, for: .default)
+        //UINavigationBar.appearance().setBackgroundImage(UIImage(named:"manoView1"), for:.default)
         navigationController?.navigationBar.isTranslucent = false
     }
     
@@ -90,7 +311,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     func setTabBarAppearence(){
         self.tabBar.isTranslucent = false
-        self.tabBar.barTintColor = myColor
+        self.tabBar.barTintColor = UIColor(patternImage: patternImage!)
         self.tabBar.tintColor = .white
         self.tabBar.alpha = 1
     }
@@ -98,7 +319,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let myView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = myColor
+        view.backgroundColor = UIColor(patternImage: patternImage!)
         return view
     }()
     
@@ -132,7 +353,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     let coverupView: UIView = {
        let coverup = UIView()
-        coverup.backgroundColor = myColor
+        //coverup.backgroundColor = myColor
+        
+        coverup.backgroundColor = UIColor(patternImage: patternImage!)
         coverup.translatesAutoresizingMaskIntoConstraints = false
         return coverup
     }()
@@ -208,7 +431,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
                 view.addSubview(coverupView)
                 view.addSubview(myView)
                 coverupView.center.y = 0
-                UIView.animate(withDuration: 0.6, animations: {
+                UIView.animate(withDuration: 0.34, animations: {
                     self.coverupView.center.y = 150
                 })
                 self.myView.center.y = 0
@@ -237,15 +460,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
        show(addItemController, sender: self)
     }
     
-    @objc func doNothing(){
-        
-    }
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(doNothing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
 
         setTabBarAppearence()
        // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(addIteem))
@@ -289,3 +507,4 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     
 }
+

@@ -9,16 +9,25 @@
 import UIKit
 import Firebase
 
+var didUserJustPosted = false
+
 class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     var imageToPost: UIImage?
     let allItems = AllItems()
     let backButton = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
     
+    let imageView: UIImageView = {
+        let view = UIImageView()
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        view.image = patternImage
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = myColor
+        view.addSubview(imageView)
+       // view.backgroundColor = UIColor(patternImage: patternImage!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -28,6 +37,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         setupView()
         
     }
+    
     
     
     func dismissKeyboard() {
@@ -155,7 +165,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
             let postName = NSUUID().uuidString
             let imagesFolder = Storage.storage().reference().child("images")
             
-            if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.2){
+            if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.05){
                 imagesFolder.child("\(imageName).jpg").putData(imageData, metadata: nil, completion:{
                     (metadata, error) in
                     
@@ -195,17 +205,26 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             allRef.child("city").setValue(city)
                             
                         }
-                        
-                    }
-                    DispatchQueue.main.async {
-                        UserDefaults.standard.removeSuite(named: "lat")
-                        UserDefaults.standard.removeSuite(named: "lon")
-                        UserDefaults.standard.removeSuite(named: "title")
-                        UserDefaults.standard.removeSuite(named: "city")
-                        self.allItems.collectionView?.reloadData()
-                        self.navigationController?.popViewController(animated: true)
+                        DispatchQueue.main.async {
+                            
+                            didUserJustPosted = true
+                            
+                            UserDefaults.standard.removeSuite(named: "lat")
+                            UserDefaults.standard.removeSuite(named: "lon")
+                            UserDefaults.standard.removeSuite(named: "title")
+                            UserDefaults.standard.removeSuite(named: "city")
+                            //let myCell = SecondPage()
+                            //print("refresh <----")
+                            //myCell.collectionView?.reloadData()
+                            
+                            
+                            self.navigationController?.popViewController(animated: true)
+                            
+                        }
+
                     }
                 })
+             
                 
             }
             

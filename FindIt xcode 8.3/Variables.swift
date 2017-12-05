@@ -14,6 +14,12 @@ var messagesInPost = [String]()
 
 var imageUrl = String()
 
+var patternImage = UIImage(named: "iPhone 7 Plus1")
+
+var toIdd = ""
+
+var foundOrLost = "lost"
+
 let myColor = UIColor(red: 140/255, green: 212/255, blue: 141/255, alpha: 1)//(red: 78/255, green: 128/255, blue: 173/255, alpha: 1)//(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
 
 var descriptiontextField: UILabel = {

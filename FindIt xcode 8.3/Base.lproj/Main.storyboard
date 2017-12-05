@@ -13,7 +13,7 @@
         <!--Item-->
         <scene sceneID="Rua-wv-pm8">
             <objects>
-                <viewController id="Ew2-Il-R4o" customClass="MyItems" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Ew2-Il-R4o" customClass="SecondPage" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ijb-Vs-rzl"/>
                         <viewControllerLayoutGuide type="bottom" id="yZq-Or-KcT"/>
@@ -148,15 +148,6 @@
                     <view key="view" contentMode="scaleToFill" id="Y4v-fP-3me">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q1o-lD-gsH">
-                                <rect key="frame" x="166" y="256" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.70494249131944442" green="0.59429253472222221" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
@@ -249,7 +240,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="TUa-nr-jPB"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="40Z-xJ-fzU">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="40Z-xJ-fzU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">

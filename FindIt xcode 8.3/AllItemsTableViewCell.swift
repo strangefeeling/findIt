@@ -49,7 +49,7 @@ class AllItemsTableViewCell: UITableViewCell {
         label.textAlignment = .center
         label.textColor = .darkGray
         label.numberOfLines = 2
-        label.font = UIFont(name: "Avenir Next-Bold", size: 20)
+        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -175,7 +175,7 @@ class AllItemsTableViewCell: UITableViewCell {
         womanImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48).isActive = true
         womanImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         womanImage.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
-        womanImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        womanImage.heightAnchor.constraint(equalToConstant: 280).isActive = true
         
         nameLabel.bottomAnchor.constraint(equalTo: womanImage.topAnchor, constant: -8).isActive = true
         nameLabel.centerXAnchor.constraint(equalTo: womanImage.centerXAnchor).isActive = true

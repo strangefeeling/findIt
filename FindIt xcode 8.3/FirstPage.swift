@@ -18,8 +18,16 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         show(vc, sender: self)
     }
     
+    let myImage: UIImageView = {
+       let image = UIImageView()
+            image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(named:"manoViewVisas")
+        return image
+    }()
+    
     let lostFoundSegentedControll: UISegmentedControl = {
        let sc = UISegmentedControl(items: ["Found","Lost"])
+        sc.backgroundColor = UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white
         let borderColor = myColor
@@ -30,8 +38,8 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
 
         sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
         sc.layer.borderColor = borderColor.cgColor
-        sc.layer.borderWidth = 1
-        sc.backgroundColor = myColor
+        sc.layer.borderWidth = 0.5
+       // sc.backgroundColor = myColor
         //sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(handleSegmentedControll), for: .valueChanged)
         return sc
@@ -61,6 +69,11 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
        override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(myImage)
+        myImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
+        myImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
+        myImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        myImage.topAnchor.constraint(equalTo: view.topAnchor, constant: -80).isActive = true
         setup()
         
         collectionView?.register(AllItemsCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
@@ -103,6 +116,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         view.addConstraintsWithFormat(format: "V:|-28-[v0]|", views: collectionView!)
         
         collectionView?.contentInset = UIEdgeInsets(top: 30, left: -1, bottom: 0, right: 1)
+        
     }
 
     var whichCell = UICollectionViewCell()

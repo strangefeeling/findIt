@@ -14,15 +14,13 @@ import CoreGraphics
 var posterEmail = String()
 
 class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
-    
-    
-    
+
     var isCommentByPoster: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        
+        print("uid",toIdd)
        // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
         descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20)
         descriptiontextField.sizeToFit()
@@ -80,13 +78,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     var toId = String()
     var chat = Chat(collectionViewLayout: UICollectionViewFlowLayout())
     
-  
-    
 
-    
-    
-
-    
     let cityWord: UILabel = {
         let label = UILabel()
         label.text = "City:809890238902 "
@@ -121,7 +113,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
        let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
-        circle.backgroundColor = myColor
+        circle.backgroundColor = UIColor(patternImage: patternImage!)
         circle.addTarget(self, action: #selector(circleAction), for: .touchUpInside)
         
         circle.alpha = 0.5
@@ -137,7 +129,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
         button.alpha = 0
         
-        button.backgroundColor = myColor
+        button.backgroundColor = UIColor(patternImage: patternImage!)
         
         return button
     }()
@@ -155,7 +147,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.layer.cornerRadius = 6
         button.alpha = 0
         
-        button.backgroundColor = myColor
+        button.backgroundColor = UIColor(patternImage: patternImage!)
         
         return button
 
@@ -164,25 +156,28 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     var circleBool:Bool = false{
         didSet {
             if circleBool == true{
-                view.addSubview(toMessagesButton)
+                view.addSubview(addCommentButton)
                 
-                UIView.animate(withDuration: 0.34, animations: { 
+                UIView.animate(withDuration: 0.34, animations: {
                     self.circle.alpha = 1
                     self.toMessagesButton.alpha = 1
                     self.addCommentButton.alpha = 1
                 }, completion: nil)
                 
-                toMessagesButton.bottomAnchor.constraint(equalTo: circle.topAnchor, constant: -16).isActive = true
-                toMessagesButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-                toMessagesButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
-                toMessagesButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
-                
-                view.addSubview(addCommentButton)
-                
-                addCommentButton.bottomAnchor.constraint(equalTo: toMessagesButton.topAnchor, constant: -8).isActive = true
-                addCommentButton.rightAnchor.constraint(equalTo: toMessagesButton.rightAnchor, constant: 0).isActive = true
-                addCommentButton.heightAnchor.constraint(equalTo: toMessagesButton.heightAnchor, constant: 0).isActive = true
+                addCommentButton.bottomAnchor.constraint(equalTo: circle.topAnchor, constant: -16).isActive = true
+                addCommentButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+                addCommentButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
                 addCommentButton.widthAnchor.constraint(equalToConstant: 134).isActive = true
+                
+                if toIdd != Auth.auth().currentUser?.uid{
+                    view.addSubview(toMessagesButton)
+                    
+                    toMessagesButton.bottomAnchor.constraint(equalTo: addCommentButton.topAnchor, constant: -8).isActive = true
+                    toMessagesButton.rightAnchor.constraint(equalTo: addCommentButton.rightAnchor, constant: 0).isActive = true
+                    toMessagesButton.heightAnchor.constraint(equalTo: addCommentButton.heightAnchor, constant: 0).isActive = true
+                    toMessagesButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
+                }
+                
                 
                 
             }   else {
@@ -276,7 +271,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     @objc func toChatController(){
         self.comments.removeAll()
-        let ref = Database.database().reference().child("allPosts").child("found").child(postName)
+        let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
             if let dictionary = snapshot.value as? [String: Any] {
