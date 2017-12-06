@@ -10,6 +10,8 @@ import UIKit
 
 var postName = String()
 
+var postNames = [String]()
+
 var messagesInPost = [String]()
 
 var imageUrl = String()

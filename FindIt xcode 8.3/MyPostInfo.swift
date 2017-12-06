@@ -6,7 +6,7 @@
 //  Created by Rytis on 18/10/2017.
 //  Copyright © 2017 Rytis. All rights reserved.
 //
-
+/*
 import UIKit
 import Firebase
 import CoreGraphics
@@ -519,3 +519,4 @@ class MyPostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource 
     
     
 }
+*/

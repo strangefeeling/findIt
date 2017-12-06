@@ -88,14 +88,14 @@ class AllItems: UIViewController, UICollectionViewDelegate, UICollectionViewData
      if Auth.auth().currentUser != nil{
      let ref =  Database.database().reference().child("allPosts")
      ref.observe(.value, with: { (snapshot) in
-     // print("uids ", snapshot.key)
+     
      guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
      //self.allUsers.descriptions.removeAll()
      //self.allUsers.downloadUrls.removeAll()
      for snap in snapshots{
      self.allUids.append(snap.key)
      self.i += 1
-     // print("uids ", self.allUids)
+     
      }
      DispatchQueue.main.async {
      if self.allUsers.downloadUrls.isEmpty{
@@ -136,7 +136,7 @@ class AllItems: UIViewController, UICollectionViewDelegate, UICollectionViewData
                         self.allUsers.timeStamp.append(timePosted)
                         self.allUsers.dictionary["timeStamp"] = timePosted
                         self.date.append(Double(timePosted))
-                        // print("timeposted ", timePosted)
+                        
                         
                     }
                     
@@ -257,7 +257,7 @@ class AllItems: UIViewController, UICollectionViewDelegate, UICollectionViewData
             
             let ref = Database.database().reference().child("users").child(allUsers.uid[indexPath.item])
             ref.observe(.value, with: { (snapshot) in
-               // print("user snapshot ",snapshot)
+              
             
                 let dictionary = snapshot.value as! [String: Any]
                 let name = dictionary["email"] as! String

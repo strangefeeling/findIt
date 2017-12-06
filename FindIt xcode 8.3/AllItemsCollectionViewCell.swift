@@ -132,7 +132,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
-                    print(self.allUsers.uid)
+                    
                     self.refresh.endRefreshing()
                   
                 })
@@ -205,7 +205,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(emails[indexPath.row])
+        
         let postInfo = PostInfo()
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         

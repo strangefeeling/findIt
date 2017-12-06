@@ -34,7 +34,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     var emails = [String]()
     
     override func viewDidAppear(_ animated: Bool) {
-        print(UserDefaults.standard.object(forKey: "userUid")," userdafualts")
+        
         if let user = Auth.auth().currentUser?.uid{
             let ref = Database.database().reference().child("users").child(user).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String: Any]
@@ -52,6 +52,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         // self.delegate = self
         
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +85,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        var i = 1
+        //var i = 1
         textInput = searchBar.text!
         usersSearchResults.removeAll()
         self.allUsers.descriptions.removeAll()
@@ -94,97 +96,53 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         self.date.removeAll()
         self.postId.removeAll()
         self.emails.removeAll()
+        postNames.removeAll()
        
-        let ref = Database.database().reference().child("allPosts").child("lost")
-        ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observe( .value, with: { (snapshot) in
-            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-           
-            print("ieskau lost")
-            if snapshot.exists(){
-                for snap in snapshots {
-                    if let description = snap.childSnapshot(forPath: "description").value as? String {
-                        self.usersSearchResults.append(description)
-                        print(description)
-                    }
-                    
-                    
-                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
-                        self.allUsers.timeStamp.append(timePosted)
-                        self.allUsers.dictionary["timeStamp"] = timePosted
-                        self.date.append(Double(timePosted))
+        searchResults.searchText = searchBar.text!
+        searchResults.didUserTappedSearch = true
+        self.searchController.searchBar.isHidden = true
+        show(searchResults, sender: self)
+        
+        
+   /*     let ref = Database.database().reference().child("allPosts").child("lost")
+        ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
+            print(snapshot.key)
+            
+            postNames.append(snapshot.key)
+            //print("1 ",postNames)
+            
+            
+            DispatchQueue.main.async {
+                let anotherRef = Database.database().reference().child("allPosts").child("lost")
+                anotherRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                                    })
 
-                    }
-                    
-                    if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
-                        self.allUsers.downloadUrls.append(snaaap)
-                        self.allUsers.dictionary["downloadURL"] = snaaap
-                    }
-                    if let uid = snap.childSnapshot(forPath: "uid").value as? String {
-                        self.allUsers.uid.append(uid)
-                        // self.allUsers.dictionary["downloadURL"] = snaaap
-                    }
-                    
-                    if let city = snap.childSnapshot(forPath: "city").value as? String{
-                        self.cities.append(city)
-                    }
-                    
-                    if let location = snap.childSnapshot(forPath: "locationName").value as? String {
-                        self.locations.append(location)
-                    }
-                    
-                    if let email = snap.childSnapshot(forPath: "email").value as? String{
-                        self.emails.append(email)
-                    }
-    
-                }
-                self.date.reverse()
-                self.emails.reverse()
-                self.allUsers.uid.reverse()
-                self.allUsers.postName.reverse()
-                self.allUsers.timeStamp.reverse()
-                self.allUsers.downloadUrls.reverse()
-                self.allUsers.descriptions.reverse()
-                self.cities.reverse()
-                self.locations.reverse()
-                self.postId.reverse()
-               
-               /* let dictionary = snapshot.value as! [String: Any]
-                let desc = dictionary["description"] as! String
-                self.usersSearchResults.append(desc)*/
-                
-                
-                DispatchQueue.main.async {
-                    
-                    //self.searchResults.cellContent = self.usersSearchResults
-                    //print(desc)
-                    if i == 1{
-                        print(1,"<--------")
-                        self.searchFound()
-                    }
-                    i += 1
-                }
-            }   else {
-                self.searchFound()
             }
+            
+            
            
-        })
+        })*/
       
     }
     
-    func searchFound(){
+ /*   func searchFound(){
         var i = 1
       
         let ref = Database.database().reference().child("allPosts").child("found")
-        ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observe( .value, with: { (snapshot) in
-           
-            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-            
-            print("ieskau found")
-           print(snapshot)
+        ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observeSingleEvent(of:.childAdded, with: { (snapshot) in
+            if postNames.contains(snapshot.key) == false{
+                postNames.append(snapshot.key)
+            }
+            ref.queryOrdered(byChild: "city").queryStarting(atValue: self.textInput).queryEnding(atValue: self.textInput+"\u{f8ff}").observeSingleEvent(of:  .value, with: { (snapshot) in
+                
+                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+                
+                
+                
                 for snap in snapshots {
                     if let description = snap.childSnapshot(forPath: "description").value as? String {
                         self.usersSearchResults.append(description)
-                        print(description)
+                        
                     }
                     
                     
@@ -206,7 +164,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
                     
                     if let city = snap.childSnapshot(forPath: "city").value as? String{
                         self.cities.append(city)
-                        print("city", city)
+                        
                     }
                     
                     if let location = snap.childSnapshot(forPath: "locationName").value as? String {
@@ -218,44 +176,47 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
                     }
                     
                 }
-                self.date.reverse()
-                self.emails.reverse()
-                self.allUsers.uid.reverse()
-                self.allUsers.postName.reverse()
-                self.allUsers.timeStamp.reverse()
-                self.allUsers.downloadUrls.reverse()
-                self.allUsers.descriptions.reverse()
-                self.cities.reverse()
-                self.locations.reverse()
-                self.postId.reverse()
+                /* self.date.reverse()
+                 self.emails.reverse()
+                 self.allUsers.uid.reverse()
+                 self.allUsers.postName.reverse()
+                 self.allUsers.timeStamp.reverse()
+                 self.allUsers.downloadUrls.reverse()
+                 self.allUsers.descriptions.reverse()
+                 self.cities.reverse()
+                 self.locations.reverse()
+                 self.postId.reverse()*/
                 
                 /* let dictionary = snapshot.value as! [String: Any]
                  let desc = dictionary["description"] as! String
                  self.usersSearchResults.append(desc)*/
                 
-
-            
-            
-            DispatchQueue.main.async {
                 
-                self.searchResults.cellContent = self.usersSearchResults
-                self.searchResults.allUids = self.allUsers.uid
-                self.searchResults.emails = self.emails
-                self.searchResults.date = self.date
-                self.searchResults.downloadUrls = self.allUsers.downloadUrls
-                self.searchResults.cities = self.cities
-                self.searchResults.locations = self.locations
-                //print(desc)
-                if i == 1{
-                    self.show(self.searchResults, sender: true)
-                    self.dismiss(animated: true, completion: nil)
+                
+                
+                DispatchQueue.main.async {
+                    
+                    self.searchResults.cellContent = self.usersSearchResults
+                    self.searchResults.allUids = self.allUsers.uid
+                    self.searchResults.emails = self.emails
+                    self.searchResults.date = self.date
+                    self.searchResults.downloadUrls = self.allUsers.downloadUrls
+                    self.searchResults.cities = self.cities
+                    self.searchResults.locations = self.locations
+                    
+                    if i == 1{
+                        self.show(self.searchResults, sender: true)
+                        //self.dismiss(animated: true, completion: nil)
+                        //print(postNames)
+                    }
+                    i += 1
                 }
-                i += 1
-                }
-            
-        })
+                
+            })
 
-    }
+        })
+       
+    }*/
 
     
     func handleNavigation(){
@@ -462,7 +423,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.searchController.searchBar.isHidden = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
 
         setTabBarAppearence()

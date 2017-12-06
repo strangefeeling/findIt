@@ -69,7 +69,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         return refresh
     }()
     
-    func refreshData() {
+ /*   func refreshData() {
        
         let uid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference()
@@ -137,7 +137,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
             
         }
     }
-    
+    */
 
     
     func searchPosts(){
@@ -155,6 +155,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
             self.date.removeAll()
             self.postId.removeAll()
             self.emails.removeAll()
+            if snapshot.exists(){
             
             
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -202,13 +203,85 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
            
             
             DispatchQueue.main.async(execute: {
-                self.sortPosts(timee: self.date)
+               // self.sortPosts(timee: self.date)
+                self.getFoundItems()
                 ref.removeAllObservers()
             })
+            } else {
+                self.getFoundItems()
+            }
 
         })
      
      
+    }
+    
+    func getFoundItems(){
+        let uid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference().child("allPosts").child("found")
+        ref.queryOrdered(byChild: "uid").queryStarting(atValue: uid).queryEnding(atValue: uid!+"\u{f8ff}").observeSingleEvent(of: .value, with: { (snapshot) in
+           /* self.allUsers.descriptions.removeAll()
+            self.allUsers.downloadUrls.removeAll()
+            self.allUsers.uid.removeAll()
+            self.cities.removeAll()
+            self.locations.removeAll()
+            self.date.removeAll()
+            self.postId.removeAll()
+            self.emails.removeAll()*/
+            if snapshot.exists(){
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            for snap in snapshots {
+                
+                self.postId.append(snap.key)
+                self.allUsers.postName.append(snap.key)
+                
+                if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                    self.allUsers.timeStamp.append(timePosted)
+                    self.allUsers.dictionary["timeStamp"] = timePosted
+                    self.date.append(Double(timePosted))
+                    
+                    
+                }
+                
+                if let snaap = snap.childSnapshot(forPath: "description").value as? String{
+                    self.allUsers.descriptions.append(snaap)
+                    self.allUsers.dictionary["description"] = snaap
+                }
+                if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+                    self.allUsers.downloadUrls.append(snaaap)
+                    self.allUsers.dictionary["downloadURL"] = snaaap
+                }
+                if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+                    self.allUsers.uid.append(uid)
+                    // self.allUsers.dictionary["downloadURL"] = snaaap
+                }
+                
+                if let city = snap.childSnapshot(forPath: "city").value as? String{
+                    self.cities.append(city)
+                }
+                
+                if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+                    self.locations.append(location)
+                }
+                
+                if let email = snap.childSnapshot(forPath: "email").value as? String{
+                    self.emails.append(email)
+                }
+                
+            }
+            
+            
+            
+            
+            DispatchQueue.main.async(execute: {
+                self.sortPosts(timee: self.date)
+                ref.removeAllObservers()
+            })
+            }
+            else {
+                self.sortPosts(timee: self.date)
+            }
+        })
     }
     
     func sortPosts(timee: [Double]){
@@ -264,8 +337,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         self.cities.reverse()
         self.locations.reverse()
         self.postId.reverse()
-        print(self.allUsers.descriptions)
-        print(self.emails)
+      
         tableView.reloadData()
         self.refresh.endRefreshing()
     }

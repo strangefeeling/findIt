@@ -30,7 +30,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print(descriptions.count)
+        
         
     }
     
@@ -98,6 +98,9 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     }
     
     func getLocations(){
+        var long = ""
+        var lat = ""
+        var description = ""
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -115,47 +118,98 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         emails.removeAll()
         descriptions.append(description)
         let ref = Database.database().reference().child("allPosts").child("found")
-        ref.queryOrdered(byChild: "timeStamp").observe( .childAdded, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: Any] else {return}
+        ref.queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
             
-            
-            if let latitude = dictionary["lat"] as? String {
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            for snap in snapshots {
+
+                self.postNames.append(snap.key)
+                guard let dictionary = snap.value as? [String: Any] else {return}
+                if let latitude = dictionary["lat"] as? String {
+                    
+                    let lati = latitude
+                    let long = dictionary["lon"] as! String
+                    let description = dictionary["description"] as! String
+                    let postName = snap.key
+                    let toId = dictionary["uid"] as! String
+                    let downloadURL = dictionary["downloadURL"] as! String
+                    let uid = dictionary["uid"] as! String
+                    let city = dictionary["city"] as! String
+                    let location = dictionary["locationName"] as! String
+                    let email = dictionary["email"] as! String
+                    //let date = dictionary["timeStamp"] as! Double
+                    let date = Date(timeIntervalSince1970:dictionary["timeStamp"] as! Double)
+                    
+                    if uid == Auth.auth().currentUser?.uid {
+                        self.isCurrUser = true
+                    } else {
+                        self.isCurrUser = false
+                    }
+                    self.emails.append(email)
+                    self.dates.append(date)
+                    self.locations.append(location)
+                    self.cities.append(city)
+                    self.uids.append(uid)
+                    self.downloadURL.append(downloadURL)
+                    self.toId.append(toId)
+                    self.postNames.append(postName)
+                    self.lon.append(long)
+                    self.lat.append(lati)
+                    self.descriptions.append(description)
+                    
+                    DispatchQueue.main.async {
+                        self.getAnnotations(lat: lati, lon: long, description: description)
+                        ref.removeAllObservers()
+                    }
+                }
+
+               /* if let lati = snap.childSnapshot(forPath: "lat").value as? String{
+                    self.lat.append(lati)
+                    lat  = lati
+                }
+                if let longg = snap.childSnapshot(forPath: "lon").value as? String{
+                    self.lon.append(longg)
+                    long = longg
+                }
+                if let email = snap.childSnapshot(forPath: "emails").value as? String{
+                    self.emails.append(email)
+                }
+                if let city = snap.childSnapshot(forPath: "city").value as? String{
+                    self.cities.append(city)
+                }
+                if let location = snap.childSnapshot(forPath: "locationName").value as? String{
+                    self.locations.append(location)
+                }
+                if let date = snap.childSnapshot(forPath: "timeStamp").value as? Double{
+                    
+                    self.dates.append(Date(timeIntervalSince1970:date))
+                }
+                if let uid = snap.childSnapshot(forPath: "uid").value as? String{
+                    self.uids.append(uid)
+                }
                 
-                let lati = latitude
-                let long = dictionary["lon"] as! String
-                let description = dictionary["description"] as! String
-                let postName = snapshot.key
-                let toId = dictionary["uid"] as! String
-                let downloadURL = dictionary["downloadURL"] as! String
-                let uid = dictionary["uid"] as! String
-                let city = dictionary["city"] as! String
-                let location = dictionary["locationName"] as! String
-                let email = dictionary["email"] as! String
-                //let date = dictionary["timeStamp"] as! Double
-                let date = Date(timeIntervalSince1970:dictionary["timeStamp"] as! Double)
+                if let desc = snap.childSnapshot(forPath: "description").value as? String{
+                    self.descriptions.append(desc)
+                    description = desc
+                }
+                if let url = snap.childSnapshot(forPath: "downloadURL").value as? String{
+                    self.downloadURL.append(url)
+                }
                 
-                if uid == Auth.auth().currentUser?.uid {
+                if let uid = Auth.auth().currentUser?.uid {
                     self.isCurrUser = true
                 } else {
                     self.isCurrUser = false
                 }
-                self.emails.append(email)
-                self.dates.append(date)
-                self.locations.append(location)
-                self.cities.append(city)
-                self.uids.append(uid)
-                self.downloadURL.append(downloadURL)
-                self.toId.append(toId)
-                self.postNames.append(postName)
-                self.lon.append(long)
-                self.lat.append(lati)
-                self.descriptions.append(description)
-                
                 DispatchQueue.main.async {
-                    self.getAnnotations(lat: lati, lon: long, description: description)
+                    self.getAnnotations(lat: lat, lon: long, description: description)
                     ref.removeAllObservers()
-                }
+                }*/
+                
             }
+            
+         
+            
         }, withCancel: nil)
         
        
@@ -193,16 +247,17 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         
         let currUser = Auth.auth().currentUser?.uid
         
-       
-            for user in uids{
+        pinView.pinTintColor = UIColor(patternImage: patternImage!)
+         /*   for user in uids{
                 if user == currUser {
                     pinView.pinTintColor = UIColor.red
-                    print(user, "current user")
+                    
                 } else{
                     pinView.pinTintColor = myColor
-                    print(user, "<--else user")
+                    
                 }
-            }
+        
+    }*/
 
         
         
@@ -219,14 +274,25 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+       /* currUser = Auth.auth().currentUser?.uid
+        for user in uids{
+            if user == currUser {
+                pinView.pinTintColor = UIColor.red
+                
+            } else{
+                pinView.pinTintColor = myColor
+                
+            }
+            
+        }*/
         
         for item in descriptions{
             if item == (view.annotation!.title!)! {
                 pinIndex = descriptions.index(of: item)! - 1
-                print("item ",descriptions.index(of: item)!)
+                
             }
         }
-        print((view.annotation!.title!)!)
+        
         
     }
     
@@ -286,17 +352,17 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                             
                             if placemark.subThoroughfare != nil {
                                 title += placemark.subThoroughfare! + " "
-                                print("title ", title)
+                                
                             }
                             
                             if placemark.thoroughfare != nil {
                                 title += placemark.thoroughfare!
-                                print("title ", title)
+                                
                             }
                             
                             if placemark.locality != nil{
                                 city = placemark.locality!
-                                print(city, "city")
+                                
                             }
                             
                         }
@@ -304,7 +370,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     let annotation = MKPointAnnotation()
                     annotation.coordinate = CLLocationCoordinate2D(latitude: Double(lat!), longitude: Double(lon!))
                     annotation.title = title
-                    print("annotation title ",annotation.title)
+                    
                     //self.mapView.addAnnotation(annotation)
                     //UserDefaults.standard.set(lat, forKey: "lat")
                     
@@ -324,9 +390,9 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         let postInfo = PostInfo()
         
         DispatchQueue.main.async {
-            if self.toId[self.pinIndex] != Auth.auth().currentUser?.uid{
+            //if self.toId[self.pinIndex] != Auth.auth().currentUser?.uid{
                 print("pinIndex ",self.pinIndex)
-                postName = self.postNames[self.pinIndex]
+                postName = self.postNames[self.pinIndex - 1]
                 posterUid.text = self.emails[self.pinIndex]
                 postInfo.toId = self.toId[self.pinIndex]
             //    image.loadImageUsingCacheWithUrlString(self.downloadURL[self.pinIndex])
@@ -336,8 +402,11 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 cityLabel.text = self.cities[self.pinIndex]
                 dateLabel.text = String(self.makeDate(date:  self.dates[self.pinIndex]))
                 descriptiontextField.text = self.descriptions[self.pinIndex + 1]
+                toIdd = self.toId[self.pinIndex]
+                print("cara uid ",toIdd)
+                foundOrLost = "found" 
                 self.show(postInfo, sender: self)
-            }
+            //}
         }
     }
     

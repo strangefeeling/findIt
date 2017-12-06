@@ -78,7 +78,7 @@ class AddCommentController: UIViewController {
         let commentName = NSUUID().uuidString
         let email = UserDefaults.standard.object(forKey: "email") as! String
         let timeStamp = Int(NSDate().timeIntervalSince1970)
-        let ref = Database.database().reference().child("allPosts").child(postName).child("comments").child(commentName)//.child(commentName).child(user!)
+        let ref = Database.database().reference().child("allPosts").child("comments").child(postName).child(commentName)//.child(commentName).child(user!)
         
         
        // postInfo.tableView.frame.origin.y += 48

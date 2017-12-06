@@ -20,7 +20,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        print("uid",toIdd)
+        
        // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
         descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20)
         descriptiontextField.sizeToFit()
@@ -196,7 +196,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
 //-------------------------------------------------------------------------------------------------------
     func getComment(){
         
-        let ref = Database.database().reference().child("allPosts").child(postName).child("comments")
+        let ref = Database.database().reference().child("allPosts").child("comments").child(postName)
         ref.queryOrdered(byChild: "timestamp").observe( .value, with: { (snapshot) in
             self.comments.removeAll()
             self.fromEmail.removeAll()
@@ -279,7 +279,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                 self.allUsers.toId = dictionary["uid"] as! String
                 
                 self.chat.fromID = (Auth.auth().currentUser?.uid)!
-                self.chat.toId = self.toId
+                self.chat.toId = toIdd
             }
             DispatchQueue.main.async {
                 self.circleBool = false

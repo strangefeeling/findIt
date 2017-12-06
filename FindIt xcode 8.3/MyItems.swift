@@ -5,7 +5,7 @@
 //  Created by Rytis on 12/10/2017.
 //  Copyright © 2017 Rytis. All rights reserved.
 //
-
+/*
 import UIKit
 import Firebase
 
@@ -93,7 +93,7 @@ class MyItems: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
                             self.user.timeStamp.append(timePosted)
                             self.user.dictionary["timeStamp"] = timePosted
                             self.date.append(Double(timePosted))
-                            // print("timeposted ", timePosted)
+                            
                             
                         }
                         
@@ -172,7 +172,6 @@ class MyItems: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
  
  let ref = Database.database().reference().child("users").child(allUsers.uid[indexPath.item])
  ref.observe(.value, with: { (snapshot) in
- // print("user snapshot ",snapshot)
  
  let dictionary = snapshot.value as! [String: Any]
  let name = dictionary["email"] as! String
@@ -263,7 +262,7 @@ class MyItems: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
 }
 
-
+*/
 
 
 

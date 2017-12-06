@@ -28,11 +28,11 @@ class MessagesController: UITableViewController {
         observeMessages()
         
         if let to = UserDefaults.standard.object(forKey: "toName") {
-            print("to ", to)
+            
         }
         
         if let emails = UserDefaults.standard.object(forKey: "emails"){
-            print("emails ",emails)
+            
         }
         
  
@@ -108,7 +108,7 @@ class MessagesController: UITableViewController {
                 }, withCancel: nil)
             }, withCancel: nil)
             DispatchQueue.main.async {
-                print("emails ", self.emails)
+                
                 UserDefaults.standard.set(self.emails, forKey: "emails")
             }
         })

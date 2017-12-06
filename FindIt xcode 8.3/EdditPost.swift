@@ -5,7 +5,7 @@
 //  Created by Rytis on 13/10/2017.
 //  Copyright © 2017 Rytis. All rights reserved.
 //
-
+/*
 import UIKit
 import Firebase
 
@@ -18,7 +18,7 @@ class EdditPost: UIViewController {
         super.viewDidLoad()
         
         //  self.getData()
-        print(postName)
+        
         navigationItem.title = "Edit Post"
         
         deviceRotation()
@@ -27,7 +27,7 @@ class EdditPost: UIViewController {
         view.addSubview(stackView)
         
         handleConstraints()
-        print("postName ",postName)
+        
         
     }
     
@@ -51,10 +51,10 @@ class EdditPost: UIViewController {
     }()
     
     @objc func handleSave(){
-        print("Clicked")
+      
         let ref =  Database.database().reference().child("allPosts").child(postName)
         
-        //  print("here ",snapshots[snapshots.count - self.selectedPost! - 1])
+       
         let timeStamp = Int(NSDate().timeIntervalSince1970)
         ref.child("description").setValue(self.itemDescription.text!)
         ref.child("timeStamp").setValue(timeStamp)
@@ -176,4 +176,4 @@ class EdditPost: UIViewController {
     }*/
     
     
-}
+}*/

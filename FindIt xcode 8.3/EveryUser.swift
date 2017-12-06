@@ -17,5 +17,9 @@ class EveryUser: NSObject {
     var dictionary = ["description": String(),"downloadUrls": String(), "timeStamp": Int()] as [String : Any]
     var timeStamp = [Int]()
     var uid = [String]()
+    var date = [Double]()
+    var location = [String]()
+    var city = [String]()
+    var email = [String]()
 }
 

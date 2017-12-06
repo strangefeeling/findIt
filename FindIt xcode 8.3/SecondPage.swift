@@ -73,7 +73,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         setup()
         
         collectionView?.register(MyCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.register(AllLostItems.self, forCellWithReuseIdentifier: cellId2)
+        collectionView?.register(FollowedItems.self, forCellWithReuseIdentifier: cellId2)
         // Do any additional setup after loading the view.
     }
     
@@ -118,7 +118,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     let cellId2 = "cellId2"
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("index ",indexPath.item)
+       
         if indexPath.item == 0{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MyCell
             cell.awakeFromNib()
@@ -130,7 +130,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             return cell
         } else {
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId2, for: indexPath) as! AllLostItems
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId2, for: indexPath) as! FollowedItems
             cell.awakeFromNib()
             cell.delegate = self
             

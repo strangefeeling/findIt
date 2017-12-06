@@ -123,7 +123,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     let cellId2 = "cellId2"
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("index ",indexPath.item)
+        
         if indexPath.item == 0{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AllItemsCollectionViewCell
         cell.awakeFromNib()

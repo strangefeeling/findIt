@@ -105,17 +105,17 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
                             
                             if placemark.subThoroughfare != nil {
                                 title += placemark.subThoroughfare! + " "
-                                print("title ", title)
+                                
                             }
                             
                             if placemark.thoroughfare != nil {
                                 title += placemark.thoroughfare!
-                                print("title ", title)
+                                
                             }
                             
                             if placemark.locality != nil{
                                 city = placemark.locality!
-                                print(city, "city")
+                                
                             }
                             
                         }
@@ -123,7 +123,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
                     let annotation = MKPointAnnotation()
                     annotation.coordinate = CLLocationCoordinate2D(latitude: Double(lat!), longitude: Double(lon!))
                     annotation.title = title
-                    print("annotation title ",annotation.title)
+                    
                     self.mapView.addAnnotation(annotation)
                     UserDefaults.standard.set(lat, forKey: "lat")
                     
@@ -160,7 +160,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         uilpgr.minimumPressDuration = 2
         mapView.addGestureRecognizer(uilpgr)*/
 
-        print("coordinates ", UserDefaults.standard.string(forKey: "lat"))
+       
         let lat = UserDefaults.standard.string(forKey: "lat")
         let lon = UserDefaults.standard.string(forKey: "lon")
         let title = UserDefaults.standard.string(forKey: "title")

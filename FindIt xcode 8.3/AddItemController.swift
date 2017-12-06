@@ -49,7 +49,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
-            print(keyboardHeight, "<---")
+            
             self.view.frame.origin.y -= keyboardHeight
             
           //  self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
@@ -60,7 +60,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     func keyboardWillHide(sender: NSNotification) {
         
         UIView.animate(withDuration: 0.5) {
-            print(self.keyboardHeight, "<---")
+            
             self.view.frame.origin.y += self.keyboardHeight
         }
         
@@ -165,7 +165,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
             let postName = NSUUID().uuidString
             let imagesFolder = Storage.storage().reference().child("images")
             
-            if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.05){
+            if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.1){
                 imagesFolder.child("\(imageName).jpg").putData(imageData, metadata: nil, completion:{
                     (metadata, error) in
                     
@@ -214,7 +214,6 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             UserDefaults.standard.removeSuite(named: "title")
                             UserDefaults.standard.removeSuite(named: "city")
                             //let myCell = SecondPage()
-                            //print("refresh <----")
                             //myCell.collectionView?.reloadData()
                             
                             

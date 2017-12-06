@@ -155,7 +155,7 @@ class MyItemsCell: UICollectionViewCell {
     
     /*    override func willTransition(from oldLayout: UICollectionViewLayout, to newLayout: UICollectionViewLayout) {
      let myCell = MyItemsCell()
-     print("transition occured")
+     
      if UIDevice.current.orientation.isLandscape {
      myCell.stackView.axis = .horizontal
      }  else{
