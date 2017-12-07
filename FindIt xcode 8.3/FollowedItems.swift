@@ -93,6 +93,17 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     func getFollowedPosts(post: String){
         let foundRef = Database.database().reference().child("allPosts")
        
+        self.allUsers.date.removeAll()
+        self.allUsers.email.removeAll()
+        self.allUsers.uid.removeAll()
+        self.allUsers.postName.removeAll()
+        self.allUsers.timeStamp.removeAll()
+        self.allUsers.downloadUrls.removeAll()
+        self.allUsers.descriptions.removeAll()
+        self.allUsers.city.removeAll()
+        self.allUsers.location.removeAll()
+        self.postId.removeAll()
+        
             foundRef.child("found").child(post).observe(.value, with: { (snapshot) in
                 let dict = snapshot.value as? [String: Any]
                 if snapshot.exists(){
@@ -173,18 +184,82 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    self.refresh.endRefreshing()
+                    self.sortPosts(timee: self.allUsers.date)
                     //   print("lost  ",snapshot.key)
                 }
             } else{
                 self.tableView.reloadData()
-                self.refresh.endRefreshing()
+                self.sortPosts(timee: self.allUsers.date)
             }
             
         })//cia lostRef
 
     }
 
+    
+    func sortPosts(timee: [Double]){
+        var time = timee
+        if time.count > 1{
+            var i = 0
+            while i < time.count - 1{
+                var j = i
+                while j < time.count {
+                    if time[j] < time[i]{ // date[0] > date[1]
+                        time.insert(time[j], at: i)
+                        time.remove(at: j + 1)
+                        
+                        allUsers.date.insert(allUsers.date[j], at: i)
+                        allUsers.date.remove(at: j + 1)
+                        
+                        allUsers.email.insert(allUsers.email[j], at: i)
+                        allUsers.email.remove(at: j + 1)
+                        
+                        allUsers.city.insert(allUsers.city[j], at: i)
+                        allUsers.city.remove(at: j + 1)
+                        
+                        allUsers.location.insert(allUsers.location[j], at: i)
+                        allUsers.location.remove(at: j + 1)
+                        
+                        postId.insert(postId[j], at: i)
+                        postId.remove(at: j + 1)
+                        
+                        allUsers.uid.insert(allUsers.uid[j], at: i)
+                        allUsers.uid.remove(at: j + 1)
+                        
+                       // allUsers.timeStamp.insert(allUsers.timeStamp[j], at: i)
+                        //allUsers.timeStamp.remove(at: j + 1)
+                        
+                       // allUsers.postName.insert(allUsers.postName[j], at: i)
+                        //allUsers.postName.remove(at: j + 1)
+                        
+                        allUsers.downloadUrls.insert(allUsers.downloadUrls[j], at: i)
+                        allUsers.downloadUrls.remove(at: j + 1)
+                        
+                        allUsers.descriptions.insert(allUsers.descriptions[j], at: i)
+                        allUsers.descriptions.remove(at: j + 1)
+                    }
+                    j += 1
+                }
+                i += 1
+            }
+        }
+        self.allUsers.date.reverse()
+        self.allUsers.email.reverse()
+        self.allUsers.uid.reverse()
+       // self.allUsers.postName.reverse()
+        self.allUsers.timeStamp.reverse()
+        self.allUsers.downloadUrls.reverse()
+        self.allUsers.descriptions.reverse()
+        self.allUsers.city.reverse()
+        self.allUsers.location.reverse()
+        self.postId.reverse()
+        
+        tableView.reloadData()
+        self.refresh.endRefreshing()
+    }
+    
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AllItemsTableViewCell
         cell.awakeFromNib()

@@ -295,6 +295,9 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
                         time.insert(time[j], at: i)
                         time.remove(at: j + 1)
                         
+                        date.insert(date[j], at: i)
+                        date.remove(at: j + 1)
+                        
                         emails.insert(emails[j], at: i)
                         emails.remove(at: j + 1)
                         
@@ -327,7 +330,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
                 i += 1
             }
         }
-        //self.date.reverse()
+        self.date.reverse()
         self.emails.reverse()
         self.allUsers.uid.reverse()
         self.allUsers.postName.reverse()

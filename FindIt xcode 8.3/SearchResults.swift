@@ -47,6 +47,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     override func viewWillAppear(_ animated: Bool) {
         if didUserTappedSearch{
              getPosts()
+            
         }
         //getPosts()
     }
@@ -134,6 +135,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             self.allUsers.downloadUrls.removeAll()
             self.locations.removeAll()
             self.emails.removeAll()
+            self.date.removeAll()
             postNames.removeAll()
             
             print(snapshot.key)
@@ -144,8 +146,8 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 //postNames.append(snapshot.key)
                 
                 for snap in snapshots {
-                    postNames.append(snap.key)
                     
+                    postNames.append(snap.key)
                     
                     if let description = snap.childSnapshot(forPath: "description").value as? String {
                         self.cellContent.append(description)
@@ -206,7 +208,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                     //self.searchResults.cellContent = self.usersSearchResults
                     
               
-                        
+                    
                         self.searchFound()
                
                     i += 1
@@ -223,15 +225,13 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let ref = Database.database().reference().child("allPosts").child("found")
         ref.queryOrdered(byChild: "city").queryStarting(atValue: searchText).queryEnding(atValue: searchText+"\u{f8ff}").observeSingleEvent(of:.value, with: { (snapshot) in
             
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
             if snapshot.exists(){
            
-                
-                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-                
-                
-                
                 for snap in snapshots {
                     print(snap.key)
+                    
                     postNames.append(snap.key)
                     if let description = snap.childSnapshot(forPath: "description").value as? String {
                         self.cellContent.append(description)
@@ -288,22 +288,71 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
                 
                 DispatchQueue.main.async {
-                    
-                    self.tableView.reloadData()
-                    
-                    if i == 1{
-                        
-                        //self.dismiss(animated: true, completion: nil)
-                        //print(postNames)
-                    }
-                    i += 1
+                    self.sortPosts(timee: self.date)
                 }
             }
             })
         
         
     }
-
+    func sortPosts(timee: [Double]){
+        var time = timee
+        if time.count > 1{
+            var i = 0
+            while i < time.count - 1{
+                var j = i
+                while j < time.count {
+                    if time[j] < time[i]{ // date[0] > date[1]
+                        time.insert(time[j], at: i)
+                        time.remove(at: j + 1)
+                        
+                        date.insert(date[j], at: i)
+                        date.remove(at: j + 1)
+                        
+                        emails.insert(emails[j], at: i)
+                        emails.remove(at: j + 1)
+                        
+                        cities.insert(cities[j], at: i)
+                        cities.remove(at: j + 1)
+                        
+                        locations.insert(locations[j], at: i)
+                        locations.remove(at: j + 1)
+                        
+                        postNames.insert(postNames[j], at: i)
+                        postNames.remove(at: j + 1)
+                        
+                        allUsers.uid.insert(allUsers.uid[j], at: i)
+                        allUsers.uid.remove(at: j + 1)
+                        
+                        allUsers.timeStamp.insert(allUsers.timeStamp[j], at: i)
+                        allUsers.timeStamp.remove(at: j + 1)
+                        
+                        allUsers.downloadUrls.insert(allUsers.downloadUrls[j], at: i)
+                        allUsers.downloadUrls.remove(at: j + 1)
+                        
+                        cellContent.insert(cellContent[j], at: i)
+                        cellContent.remove(at: j + 1)
+                    }
+                    j += 1
+                }
+                i += 1
+            }
+            print(date)
+            self.date.reverse()
+            self.emails.reverse()
+            self.allUsers.uid.reverse()
+            postNames.reverse()
+            self.allUsers.timeStamp.reverse()
+            self.allUsers.downloadUrls.reverse()
+            self.allUsers.descriptions.reverse()
+            self.cities.reverse()
+            self.locations.reverse()
+            self.postId.reverse()
+            let indexPath = IndexPath(item: 0, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            self.tableView.reloadData()
+        }
+    }
     
 }
 

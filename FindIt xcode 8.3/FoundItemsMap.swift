@@ -74,7 +74,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     func handleSearch(){
         
         searchController.searchBar.delegate = self
-        searchController.searchBar.barTintColor = myColor
+        searchController.searchBar.barTintColor = UIColor(patternImage: patternImage!)//myColor
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
