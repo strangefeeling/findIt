@@ -12,15 +12,15 @@ import Firebase
 
 
 
-class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearchBarDelegate {
+class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearchBarDelegate, GADBannerViewDelegate {
     
-
+    
     var addItemController = AddItemController()
     
     let searchController = UISearchController(searchResultsController: nil)
     
     let allUsers = EveryUser()
-
+    
     var usersSearchResults = [String]()
     
     let cellId = "cellid"
@@ -32,6 +32,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     var locations = [String]()
     var date = [Double]()
     var emails = [String]()
+    
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -47,13 +48,15 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
             
         }
         
-       // i = 0
-       // handleNavigation()
+        // i = 0
+        // handleNavigation()
         // self.delegate = self
         
     }
     
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationItem.title = "Back"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +65,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
             self.checkIfUserIsLoggedIn()
         }
         self.setNeedsStatusBarAppearanceUpdate()
-         handleNavigation()
+        handleNavigation()
+        setupAd()
         self.delegate = self
     }
     
@@ -83,6 +87,28 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     var textInput = ""
     let searchResults = SearchResults()
     
+    let ad: GADBannerView = {
+        let ad = GADBannerView()
+        ad.translatesAutoresizingMaskIntoConstraints = false
+        return ad
+    }()
+    
+    func setupAd(){
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+       // request.testDevices = [ "55a4e7c8d80f58b53b5f39bb7c2685e2" ];// mobui
+        ad.delegate = self
+        ad.adUnitID = "ca-app-pub-8501633358477205/8183851861"
+        ad.rootViewController = self
+        ad.load(request)
+        view.addSubview(ad)
+        ad.widthAnchor.constraint(equalToConstant: 320).isActive = true
+        ad.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        ad.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: 0).isActive = true
+        ad.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         //var i = 1
@@ -97,127 +123,127 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         self.postId.removeAll()
         self.emails.removeAll()
         postNames.removeAll()
-       
+        
         searchResults.searchText = searchBar.text!
         searchResults.didUserTappedSearch = true
         self.searchController.searchBar.isHidden = true
         show(searchResults, sender: self)
         
         
-   /*     let ref = Database.database().reference().child("allPosts").child("lost")
-        ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
-            print(snapshot.key)
-            
-            postNames.append(snapshot.key)
-            //print("1 ",postNames)
-            
-            
-            DispatchQueue.main.async {
-                let anotherRef = Database.database().reference().child("allPosts").child("lost")
-                anotherRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                                    })
-
-            }
-            
-            
-           
-        })*/
-      
+        /*     let ref = Database.database().reference().child("allPosts").child("lost")
+         ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
+         print(snapshot.key)
+         
+         postNames.append(snapshot.key)
+         //print("1 ",postNames)
+         
+         
+         DispatchQueue.main.async {
+         let anotherRef = Database.database().reference().child("allPosts").child("lost")
+         anotherRef.observeSingleEvent(of: .value, with: { (snapshot) in
+         })
+         
+         }
+         
+         
+         
+         })*/
+        
     }
     
- /*   func searchFound(){
-        var i = 1
-      
-        let ref = Database.database().reference().child("allPosts").child("found")
-        ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observeSingleEvent(of:.childAdded, with: { (snapshot) in
-            if postNames.contains(snapshot.key) == false{
-                postNames.append(snapshot.key)
-            }
-            ref.queryOrdered(byChild: "city").queryStarting(atValue: self.textInput).queryEnding(atValue: self.textInput+"\u{f8ff}").observeSingleEvent(of:  .value, with: { (snapshot) in
-                
-                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-                
-                
-                
-                for snap in snapshots {
-                    if let description = snap.childSnapshot(forPath: "description").value as? String {
-                        self.usersSearchResults.append(description)
-                        
-                    }
-                    
-                    
-                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
-                        self.allUsers.timeStamp.append(timePosted)
-                        self.allUsers.dictionary["timeStamp"] = timePosted
-                        self.date.append(Double(timePosted))
-                        
-                    }
-                    
-                    if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
-                        self.allUsers.downloadUrls.append(snaaap)
-                        self.allUsers.dictionary["downloadURL"] = snaaap
-                    }
-                    if let uid = snap.childSnapshot(forPath: "uid").value as? String {
-                        self.allUsers.uid.append(uid)
-                        // self.allUsers.dictionary["downloadURL"] = snaaap
-                    }
-                    
-                    if let city = snap.childSnapshot(forPath: "city").value as? String{
-                        self.cities.append(city)
-                        
-                    }
-                    
-                    if let location = snap.childSnapshot(forPath: "locationName").value as? String {
-                        self.locations.append(location)
-                    }
-                    
-                    if let email = snap.childSnapshot(forPath: "email").value as? String{
-                        self.emails.append(email)
-                    }
-                    
-                }
-                /* self.date.reverse()
-                 self.emails.reverse()
-                 self.allUsers.uid.reverse()
-                 self.allUsers.postName.reverse()
-                 self.allUsers.timeStamp.reverse()
-                 self.allUsers.downloadUrls.reverse()
-                 self.allUsers.descriptions.reverse()
-                 self.cities.reverse()
-                 self.locations.reverse()
-                 self.postId.reverse()*/
-                
-                /* let dictionary = snapshot.value as! [String: Any]
-                 let desc = dictionary["description"] as! String
-                 self.usersSearchResults.append(desc)*/
-                
-                
-                
-                
-                DispatchQueue.main.async {
-                    
-                    self.searchResults.cellContent = self.usersSearchResults
-                    self.searchResults.allUids = self.allUsers.uid
-                    self.searchResults.emails = self.emails
-                    self.searchResults.date = self.date
-                    self.searchResults.downloadUrls = self.allUsers.downloadUrls
-                    self.searchResults.cities = self.cities
-                    self.searchResults.locations = self.locations
-                    
-                    if i == 1{
-                        self.show(self.searchResults, sender: true)
-                        //self.dismiss(animated: true, completion: nil)
-                        //print(postNames)
-                    }
-                    i += 1
-                }
-                
-            })
-
-        })
-       
-    }*/
-
+    /*   func searchFound(){
+     var i = 1
+     
+     let ref = Database.database().reference().child("allPosts").child("found")
+     ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observeSingleEvent(of:.childAdded, with: { (snapshot) in
+     if postNames.contains(snapshot.key) == false{
+     postNames.append(snapshot.key)
+     }
+     ref.queryOrdered(byChild: "city").queryStarting(atValue: self.textInput).queryEnding(atValue: self.textInput+"\u{f8ff}").observeSingleEvent(of:  .value, with: { (snapshot) in
+     
+     guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+     
+     
+     
+     for snap in snapshots {
+     if let description = snap.childSnapshot(forPath: "description").value as? String {
+     self.usersSearchResults.append(description)
+     
+     }
+     
+     
+     if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+     self.allUsers.timeStamp.append(timePosted)
+     self.allUsers.dictionary["timeStamp"] = timePosted
+     self.date.append(Double(timePosted))
+     
+     }
+     
+     if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+     self.allUsers.downloadUrls.append(snaaap)
+     self.allUsers.dictionary["downloadURL"] = snaaap
+     }
+     if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+     self.allUsers.uid.append(uid)
+     // self.allUsers.dictionary["downloadURL"] = snaaap
+     }
+     
+     if let city = snap.childSnapshot(forPath: "city").value as? String{
+     self.cities.append(city)
+     
+     }
+     
+     if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+     self.locations.append(location)
+     }
+     
+     if let email = snap.childSnapshot(forPath: "email").value as? String{
+     self.emails.append(email)
+     }
+     
+     }
+     /* self.date.reverse()
+     self.emails.reverse()
+     self.allUsers.uid.reverse()
+     self.allUsers.postName.reverse()
+     self.allUsers.timeStamp.reverse()
+     self.allUsers.downloadUrls.reverse()
+     self.allUsers.descriptions.reverse()
+     self.cities.reverse()
+     self.locations.reverse()
+     self.postId.reverse()*/
+     
+     /* let dictionary = snapshot.value as! [String: Any]
+     let desc = dictionary["description"] as! String
+     self.usersSearchResults.append(desc)*/
+     
+     
+     
+     
+     DispatchQueue.main.async {
+     
+     self.searchResults.cellContent = self.usersSearchResults
+     self.searchResults.allUids = self.allUsers.uid
+     self.searchResults.emails = self.emails
+     self.searchResults.date = self.date
+     self.searchResults.downloadUrls = self.allUsers.downloadUrls
+     self.searchResults.cities = self.cities
+     self.searchResults.locations = self.locations
+     
+     if i == 1{
+     self.show(self.searchResults, sender: true)
+     //self.dismiss(animated: true, completion: nil)
+     //print(postNames)
+     }
+     i += 1
+     }
+     
+     })
+     
+     })
+     
+     }*/
+    
     
     func handleNavigation(){
         navigationController?.navigationBar.isHidden = false
@@ -235,7 +261,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         let image = UIImage(named: "iPhone 7 Plus2")
         imageView.image = image
         //navigationController?.navigationBar.setBackgroundImage(image, for: .default)
-       // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         //navigationController?.navigationBar.barTintColor = myColor
         let myImage = UIImage(named: "iPhone 7 Plus2")
         
@@ -285,7 +311,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     }()
     
     let addItemButton: UIButton = {
-       let addbt = UIButton()
+        let addbt = UIButton()
         addbt.translatesAutoresizingMaskIntoConstraints = false
         addbt.setTitle("Add item", for: .normal)
         addbt.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
@@ -294,7 +320,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     }()
     
     let logoutButton: UIButton = {
-       let logout = UIButton()
+        let logout = UIButton()
         logout.setTitle("Logout", for: .normal)
         logout.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         logout.translatesAutoresizingMaskIntoConstraints = false
@@ -313,7 +339,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     }()
     
     let coverupView: UIView = {
-       let coverup = UIView()
+        let coverup = UIView()
         //coverup.backgroundColor = myColor
         
         coverup.backgroundColor = UIColor(patternImage: patternImage!)
@@ -355,9 +381,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     func presentAlert(alert:String){
         let alertVC = UIAlertController(title: "Do you really want to logout?", message: alert, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Cancel", style: .default) { (action) in
-                        alertVC.dismiss(animated: true, completion: nil)
+            alertVC.dismiss(animated: true, completion: nil)
             
-
+            
         }
         let cancelAction = UIAlertAction(title: "Yes", style: .default) { (action) in
             try! Auth.auth().signOut()
@@ -368,11 +394,11 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         alertVC.addAction(okAction)
         alertVC.addAction(cancelAction)
         present(alertVC, animated: true, completion: nil)
-       // handleLogOut()
-       // self.dismiss(animated: true, completion: nil)
+        // handleLogOut()
+        // self.dismiss(animated: true, completion: nil)
         
-            }
-
+    }
+    
     
     @objc func toMap(){
         launchBool = !launchBool
@@ -380,7 +406,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         //present(maps, animated: true, completion: nil)
         performSegue(withIdentifier: "toFoundItems", sender: nil)
     }
-
+    
     @objc func showMore(){
         launchBool = !launchBool
     }
@@ -388,7 +414,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     var launchBool: Bool = false {
         didSet {
             if launchBool == true {
-               
+                
                 view.addSubview(coverupView)
                 view.addSubview(myView)
                 coverupView.center.y = 0
@@ -402,40 +428,44 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
                 handleMyViewConstraints()
             } else {
                 
-                UIView.animate(withDuration: 0.34, animations: { 
+                UIView.animate(withDuration: 0.34, animations: {
                     self.myView.center.y = -150
                     self.coverupView.center.y = -110
                 }, completion: { (true) in
                     self.myView.removeFromSuperview()
                     self.coverupView.removeFromSuperview()
-
+                    
                 })
-               
-             
+                
+                
             }
         }
     }
     
     @objc func addIteem(){
-       launchBool = !launchBool
-       show(addItemController, sender: self)
+        launchBool = !launchBool
+        present(addItemController, animated: true, completion: nil)
+        //show(addItemController, sender: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let email = UserDefaults.standard.object(forKey: "email")
+        
+        self.navigationItem.title = email as? String
         self.searchController.searchBar.isHidden = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-
+        
         setTabBarAppearence()
-       // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(addIteem))
+        // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(addIteem))
         let moreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 8, height: 24))
         moreButton.setImage(UIImage(named: "Untitled"), for: .normal)
-       // moreButton.contentEdgeInsets = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
+        // moreButton.contentEdgeInsets = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
         moreButton.addTarget(self, action: #selector(showMore), for: .touchUpInside)
         // pleciam touch area
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: moreButton)
-
+        
         /* let tabOne = MyItems()
          let tabOneBarItem = UITabBarItem(title: "All Items", image: UIImage(named:"defaultImage.png"), selectedImage: UIImage(named: "selectedImage.png"))
          tabOne.title = "My Items"

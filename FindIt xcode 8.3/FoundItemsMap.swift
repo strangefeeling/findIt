@@ -109,7 +109,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         uids.removeAll()
         downloadURL.removeAll()
         toId.removeAll()
-        postName.removeAll()
+        postNames.removeAll()
         lon.removeAll()
         lat.removeAll()
         cities.removeAll()
@@ -122,15 +122,15 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
             
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for snap in snapshots {
-
-                self.postNames.append(snap.key)
+                print(snap.key,"<-----")
+                //self.postNames.append(snap.key)
                 guard let dictionary = snap.value as? [String: Any] else {return}
                 if let latitude = dictionary["lat"] as? String {
                     
                     let lati = latitude
                     let long = dictionary["lon"] as! String
                     let description = dictionary["description"] as! String
-                    let postName = snap.key
+                    let postNamee = snap.key
                     let toId = dictionary["uid"] as! String
                     let downloadURL = dictionary["downloadURL"] as! String
                     let uid = dictionary["uid"] as! String
@@ -152,7 +152,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     self.uids.append(uid)
                     self.downloadURL.append(downloadURL)
                     self.toId.append(toId)
-                    self.postNames.append(postName)
+                    self.postNames.append(postNamee)
                     self.lon.append(long)
                     self.lat.append(lati)
                     self.descriptions.append(description)
@@ -292,7 +292,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 
             }
         }
-        
+        print(postNames[pinIndex])
         
     }
     
@@ -384,7 +384,9 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         }
     }
     
-
+    override func viewDidDisappear(_ animated: Bool) {
+       // self.dismiss(animated: true, completion: nil)
+    }
     
     func toPost(){
         let postInfo = PostInfo()
@@ -392,7 +394,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         DispatchQueue.main.async {
             //if self.toId[self.pinIndex] != Auth.auth().currentUser?.uid{
                 print("pinIndex ",self.pinIndex)
-                postName = self.postNames[self.pinIndex - 1]
+                postName = self.postNames[self.pinIndex]
                 posterUid.text = self.emails[self.pinIndex]
                 postInfo.toId = self.toId[self.pinIndex]
             //    image.loadImageUsingCacheWithUrlString(self.downloadURL[self.pinIndex])

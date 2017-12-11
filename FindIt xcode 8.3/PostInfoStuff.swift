@@ -20,7 +20,7 @@ class PostInfoStuff: UITableViewCell {
     
     let commentsLabel: UILabel = {
        let label = UILabel()
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
+        label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.text = "Comments:"
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ class PostInfoStuff: UITableViewCell {
         label.sizeToFit()
         
         label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
+        label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.sizeToFit()
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +49,7 @@ class PostInfoStuff: UITableViewCell {
         label.sizeToFit()
         
         label.textColor = .lightGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
+        label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -62,7 +62,7 @@ class PostInfoStuff: UITableViewCell {
         label.sizeToFit()
         
         label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next-Bold", size: 16)
+        label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -74,7 +74,7 @@ class PostInfoStuff: UITableViewCell {
         label.sizeToFit()
         
         label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next", size: 16)
+        label.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,7 +86,7 @@ class PostInfoStuff: UITableViewCell {
         label.sizeToFit()
         
         label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next", size: 16)
+        label.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -96,7 +96,7 @@ class PostInfoStuff: UITableViewCell {
         uid.translatesAutoresizingMaskIntoConstraints = false
         uid.sizeToFit()
         //uid.backgroundColor = .yellow
-        uid.font = UIFont(name: "Avenir Next", size: 16)
+        uid.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         uid.textColor = .darkGray
         
         return uid
@@ -112,7 +112,7 @@ class PostInfoStuff: UITableViewCell {
     var descriptiontextField: UILabel = {
         let textField = UILabel()
         
-        textField.font = UIFont(name: "Avenir Next", size: 16)
+        textField.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         textField.numberOfLines = 0
         
         textField.sizeToFit()
@@ -141,7 +141,7 @@ class PostInfoStuff: UITableViewCell {
         
         
         posterUid.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-        posterUid.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        posterUid.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 33.35 + 8).isActive = true
         posterUid.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0).isActive = true
         
         
@@ -151,7 +151,7 @@ class PostInfoStuff: UITableViewCell {
         imagee.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         imagee.topAnchor.constraint(equalTo: posterUid.bottomAnchor, constant: 4).isActive = true
         imagee.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        imagee.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        imagee.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2.5).isActive = true
         
         
         descriptiontextField.translatesAutoresizingMaskIntoConstraints = false
@@ -162,7 +162,7 @@ class PostInfoStuff: UITableViewCell {
         
         cityWord.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         cityWord.topAnchor.constraint(equalTo: descriptiontextField.bottomAnchor, constant: 8).isActive = true
-        cityWord.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        cityWord.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 33.35 + 8).isActive = true
         
         
         cityLabel.leftAnchor.constraint(equalTo: cityWord.rightAnchor).isActive = true

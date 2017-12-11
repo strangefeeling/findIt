@@ -17,23 +17,24 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     func showController() {
         let vc = PostInfo()
+        
         show(vc, sender: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if didUserJustPosted == true {
-        collectionView?.reloadData()
-        didUserJustPosted = false
+            collectionView?.reloadData()
+            didUserJustPosted = false
         }
     }
-
+    
     let lostFoundSegentedControll: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["My Posts","Followed"])
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.backgroundColor = UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white
-        let borderColor = myColor
+        let borderColor = UIColor(patternImage: patternImage!)//myColor
         let attrs = [
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
@@ -118,13 +119,13 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     let cellId2 = "cellId2"
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       
+        
         if indexPath.item == 0{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MyCell
             cell.awakeFromNib()
             cell.delegate = self
             
-         
+            
             //lostFoundSegentedControll.selectedSegmentIndex = 1
             
             return cell

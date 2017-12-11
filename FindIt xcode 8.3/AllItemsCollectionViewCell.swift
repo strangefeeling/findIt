@@ -162,7 +162,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height - 40
+        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
     }
 
     
@@ -177,15 +177,18 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         AllItemsTableViewCell
         cell.awakeFromNib()
         cell.infoLabel.text = allUsers.descriptions[indexPath.row]
+        cell.infoLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         cell.cityLabel.text = cities[indexPath.row]
+        cell.cityLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         let profileImageURL = allUsers.downloadUrls[indexPath.row]
         cell.womanImage.loadImageUsingCacheWithUrlString(profileImageURL)
         cell.locationLabel.text = locations[indexPath.item]
+        cell.locationLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         let date = Date(timeIntervalSince1970:self.date[indexPath.item])
         cell.dateLabel.text = makeDate(date: date)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         cell.nameLabel.text = emails[indexPath.row]
-        
+        cell.dateLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
 
         return cell
     }

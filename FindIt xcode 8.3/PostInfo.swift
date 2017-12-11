@@ -13,25 +13,25 @@ import CoreGraphics
 
 var posterEmail = String()
 
-class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
+var firstCellHeight: CGFloat = 0
 
+class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
+    
     var isCommentByPoster: Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         
-       // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
-        descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20)
-        descriptiontextField.sizeToFit()
+        // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
+        //descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 33.35)
+        
         tableView.dataSource = self
         tableView.delegate = self
         setupView()
         getComment()
-        tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = 50
-        tableView.rowHeight = UITableViewAutomaticDimension
-      
+        
         
         
         
@@ -39,30 +39,36 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         //scrollView.contentSize = CGSize(width: view.bounds.width, height: 1000)
         tableView.register(PostInfoCell.self, forCellReuseIdentifier: cellId)
         tableView.register(PostInfoStuff.self, forCellReuseIdentifier: cellIdTwo)
-
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-           }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        
-        
-        //self.tableViewHeightConstraint?.isActive = true
-        
+        descriptiontextField.sizeToFit()
+        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 5
+        tableView.rowHeight = UITableViewAutomaticDimension
+        firstCellHeight = UIScreen.main.bounds.height / 2.5 + 7 * (UIScreen.main.bounds.height / 33.35 + 8)  + descriptiontextField.frame.height
+        if toIdd == Auth.auth().currentUser?.uid{
+            print("you can edit this post")
+           // navigationController?.navigationBar.tintColor = .red
+            //navigationController?.navigationBar.set 
+           
+        }
     }
     
+  
+
     var comments = [String]()
     
     let cellId = "cell"
     
     var tableView = UITableView()
     
-
+    
     var usserrr = String()
-   // var postName = String()
+    // var postName = String()
     let allUsers = EveryUser()
     //  let tableView = UITableView()
     
@@ -78,7 +84,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     var toId = String()
     var chat = Chat(collectionViewLayout: UICollectionViewFlowLayout())
     
-
+    
     let cityWord: UILabel = {
         let label = UILabel()
         label.text = "City:809890238902 "
@@ -102,15 +108,15 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-
     
-
+    
+    
+    
     
     let pliusas = UIImageView(image: (UIImage(named: "pliusas2")))//((UIImage(named: "Pliusas")))
     
     let circle: UIButton = {
-       let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
         circle.backgroundColor = UIColor(patternImage: patternImage!)
@@ -121,7 +127,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     }()
     
     let toMessagesButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.setTitle("Write a private message", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(toChatController), for: .touchUpInside)
@@ -136,7 +142,18 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     var fromEmail = [String]()
     
-   
+    let editButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Edit post", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(toEditPost), for: .touchUpInside)
+        button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
+        button.layer.cornerRadius = 6
+        button.alpha = 0
+        
+        button.backgroundColor = UIColor(patternImage: patternImage!)
+        return button
+    }()
     
     let addCommentButton: UIButton = {
         let button = UIButton()
@@ -150,8 +167,14 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.backgroundColor = UIColor(patternImage: patternImage!)
         
         return button
-
+        
     }()
+    
+    @objc func toEditPost(){
+        print("fuck")
+        let vc = AddItemController()
+        present(vc, animated: true, completion: nil)
+    }
     
     var circleBool:Bool = false{
         didSet {
@@ -162,6 +185,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     self.circle.alpha = 1
                     self.toMessagesButton.alpha = 1
                     self.addCommentButton.alpha = 1
+                    self.editButton.alpha = 1
                 }, completion: nil)
                 
                 addCommentButton.bottomAnchor.constraint(equalTo: circle.topAnchor, constant: -16).isActive = true
@@ -177,6 +201,15 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     toMessagesButton.heightAnchor.constraint(equalTo: addCommentButton.heightAnchor, constant: 0).isActive = true
                     toMessagesButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
                 }
+                else if toIdd == Auth.auth().currentUser?.uid {
+                    
+                    view.addSubview(editButton)
+                    editButton.bottomAnchor.constraint(equalTo: addCommentButton.topAnchor, constant: -8).isActive = true
+                    editButton.rightAnchor.constraint(equalTo: addCommentButton.rightAnchor, constant: 0).isActive = true
+                    editButton.heightAnchor.constraint(equalTo: addCommentButton.heightAnchor, constant: 0).isActive = true
+                    editButton.widthAnchor.constraint(equalToConstant: 75).isActive = true
+
+                }
                 
                 
                 
@@ -185,19 +218,22 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     self.circle.alpha = 0.5
                     self.toMessagesButton.alpha = 0
                     self.addCommentButton.alpha = 0
+                    self.editButton.alpha = 0
                 }, completion: { (true) in
                     self.toMessagesButton.removeFromSuperview()
                     self.addCommentButton.removeFromSuperview()
-
+                    self.editButton.removeFromSuperview()
+                    
                 })
             }
         }
     }
-//-------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------
     func getComment(){
         
         let ref = Database.database().reference().child("allPosts").child("comments").child(postName)
-        ref.queryOrdered(byChild: "timestamp").observe( .value, with: { (snapshot) in
+        
+        ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
             self.comments.removeAll()
             self.fromEmail.removeAll()
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -215,12 +251,12 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     //self.tableView.removeFromSuperview()
                     //self.tableView.heightAnchor.constraint(equalToConstant: CGFloat(48 * self.comments.count)).isActive = true
                     
-                   // self.tableViewHeightConstraint?.constant = CGFloat(self.comments.count * 48)
+                    // self.tableViewHeightConstraint?.constant = CGFloat(self.comments.count * 48)
                     //self.setupTableView()
                     //self.tableViewHeightConstraint = self.tableView.heightAnchor.constraint(equalToConstant: CGFloat(48 * self.comments.count));
                     //self.tableViewHeightConstraint?.isActive = true
-
-                 //   self.tableView.layoutIfNeeded()
+                    
+                    //   self.tableView.layoutIfNeeded()
                     self.tableView.reloadData()
                     
                 }
@@ -245,32 +281,32 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         
     }
     
-  /*  func drawLine(){
-       // let circlePath = UIBezierPath(arcCenter: CGPoint(x: 300, y: 300), radius: CGFloat(20), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
-        /*let shapeLayer = CAShapeLayer()
-         shapeLayer.path = circlePath.cgPath
-         shapeLayer.fillColor = myColor.cgColor
-         shapeLayer.lineWidth = 3
-         
-         circle.layer.addSublayer(shapeLayer)*/
-        
-        let aPath = UIBezierPath()
-        aPath.move(to: CGPoint(x: 40, y: 200))
-        aPath.addLine(to: CGPoint(x: 400, y: 500))
-        aPath.lineWidth = 10
-        aPath.close()
-        aPath.fill()
-        let aLayer = CAShapeLayer()
-        aLayer.path = aPath.cgPath
-        aLayer.fillColor = UIColor.white.cgColor
-        circle.layer.addSublayer(aLayer)
-   
-    }*/
+    /*  func drawLine(){
+     // let circlePath = UIBezierPath(arcCenter: CGPoint(x: 300, y: 300), radius: CGFloat(20), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
+     /*let shapeLayer = CAShapeLayer()
+     shapeLayer.path = circlePath.cgPath
+     shapeLayer.fillColor = myColor.cgColor
+     shapeLayer.lineWidth = 3
+     
+     circle.layer.addSublayer(shapeLayer)*/
+     
+     let aPath = UIBezierPath()
+     aPath.move(to: CGPoint(x: 40, y: 200))
+     aPath.addLine(to: CGPoint(x: 400, y: 500))
+     aPath.lineWidth = 10
+     aPath.close()
+     aPath.fill()
+     let aLayer = CAShapeLayer()
+     aLayer.path = aPath.cgPath
+     aLayer.fillColor = UIColor.white.cgColor
+     circle.layer.addSublayer(aLayer)
+     
+     }*/
     
     
     
     @objc func toChatController(){
-        self.comments.removeAll()
+        //self.comments.removeAll()
         let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
@@ -290,22 +326,22 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         
     }
     
-   
+    
     var tableViewHeightConstraint: NSLayoutConstraint?
     
     func setupView(){
-       
+        
         
         
         view.addSubview(tableView)
         
-       // scrollView.addSubview(image)
-       // scrollView.addSubview(cityWord)
-       // scrollView.addSubview(locationWord)
-       // scrollView.addSubview(cityLabel)
-       // scrollView.addSubview(locationLabel)
-       // scrollView.addSubview(dateLabel)
-       // scrollView.addSubview(descriptiontextField)
+        // scrollView.addSubview(image)
+        // scrollView.addSubview(cityWord)
+        // scrollView.addSubview(locationWord)
+        // scrollView.addSubview(cityLabel)
+        // scrollView.addSubview(locationLabel)
+        // scrollView.addSubview(dateLabel)
+        // scrollView.addSubview(descriptiontextField)
         
         view.addSubview(circle)
         circle.addSubview(pliusas)
@@ -320,7 +356,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-       
+        
         
         circle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         circle.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
@@ -332,52 +368,52 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         pliusas.heightAnchor.constraint(equalTo: circle.heightAnchor, multiplier: 0.5).isActive = true
         pliusas.centerXAnchor.constraint(equalTo: circle.centerXAnchor).isActive = true
         pliusas.centerYAnchor.constraint(equalTo: circle.centerYAnchor).isActive = true
-       
+        
         
         
         /*image.translatesAutoresizingMaskIntoConstraints = false
-        image.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 8).isActive = true
-        image.topAnchor.constraint(equalTo: posterUid.bottomAnchor, constant: 0).isActive = true
-        image.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        image.heightAnchor.constraint(equalToConstant: 300).isActive = true
-
+         image.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 8).isActive = true
+         image.topAnchor.constraint(equalTo: posterUid.bottomAnchor, constant: 0).isActive = true
+         image.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+         image.heightAnchor.constraint(equalToConstant: 300).isActive = true
+         
+         
+         descriptiontextField.translatesAutoresizingMaskIntoConstraints = false
+         descriptiontextField.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 16).isActive = true
+         descriptiontextField.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16).isActive = true
+         descriptiontextField.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -16).isActive = true
+         
+         
+         cityWord.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 8).isActive = true
+         cityWord.topAnchor.constraint(equalTo: descriptiontextField.bottomAnchor, constant: 8).isActive = true
+         cityWord.heightAnchor.constraint(equalToConstant: 20).isActive = true
+         
+         
+         cityLabel.leftAnchor.constraint(equalTo: cityWord.rightAnchor).isActive = true
+         cityLabel.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
+         cityLabel.topAnchor.constraint(equalTo: cityWord.topAnchor).isActive = true
+         
+         locationWord.leftAnchor.constraint(equalTo: cityWord.leftAnchor).isActive = true
+         locationWord.topAnchor.constraint(equalTo: cityWord.bottomAnchor, constant: 4).isActive = true
+         locationWord.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
+         
+         locationLabel.leftAnchor.constraint(equalTo: locationWord.rightAnchor).isActive = true
+         locationLabel.topAnchor.constraint(equalTo: locationWord.topAnchor).isActive = true
+         locationLabel.heightAnchor.constraint(equalTo: locationWord.heightAnchor).isActive = true
+         
+         viewCommentsButton.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 4).isActive = true
+         viewCommentsButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+         viewCommentsButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+         //viewCommentsButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+         
+         dateLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+         dateLabel.topAnchor.constraint(equalTo: viewCommentsButton.bottomAnchor, constant: 8).isActive = true
+         
+         */
         
-        descriptiontextField.translatesAutoresizingMaskIntoConstraints = false
-        descriptiontextField.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 16).isActive = true
-        descriptiontextField.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16).isActive = true
-        descriptiontextField.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -16).isActive = true
-       
-        
-        cityWord.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 8).isActive = true
-        cityWord.topAnchor.constraint(equalTo: descriptiontextField.bottomAnchor, constant: 8).isActive = true
-        cityWord.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         
-        cityLabel.leftAnchor.constraint(equalTo: cityWord.rightAnchor).isActive = true
-        cityLabel.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
-        cityLabel.topAnchor.constraint(equalTo: cityWord.topAnchor).isActive = true
-        
-        locationWord.leftAnchor.constraint(equalTo: cityWord.leftAnchor).isActive = true
-        locationWord.topAnchor.constraint(equalTo: cityWord.bottomAnchor, constant: 4).isActive = true
-        locationWord.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
-        
-        locationLabel.leftAnchor.constraint(equalTo: locationWord.rightAnchor).isActive = true
-        locationLabel.topAnchor.constraint(equalTo: locationWord.topAnchor).isActive = true
-        locationLabel.heightAnchor.constraint(equalTo: locationWord.heightAnchor).isActive = true
-        
-        viewCommentsButton.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 4).isActive = true
-        viewCommentsButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
-        viewCommentsButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        //viewCommentsButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        
-        dateLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        dateLabel.topAnchor.constraint(equalTo: viewCommentsButton.bottomAnchor, constant: 8).isActive = true
-        
-        */
-        
-        
-        
-       // tableViewHeightConstraint.constant = tableView.contentSize.height
+        // tableViewHeightConstraint.constant = tableView.contentSize.height
         
     }
     
@@ -387,15 +423,16 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-        if indexPath.row == 0{
-
-            return descriptiontextField.frame.height + 420 + 30 + 40
-
-        } else {
         
-        return UITableViewAutomaticDimension
+        if indexPath.row == 0{
+            
+            return UIScreen.main.bounds.height / 2.5 + 8 * (UIScreen.main.bounds.height / 33.35 + 8) + (descriptiontextField.text?.height(withConstrainedWidth: UIScreen.main.bounds.width, font: UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)!))!// + firstCellHeight//descriptiontextField.frame.height//descriptiontextField.text?.height(withConstrainedWidth: UIScreen.main.bounds.width, font: UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)!))//descriptiontextField.frame.height + 420 + 30 + 40
+            
+        } else {
+            
+            return UITableViewAutomaticDimension
         }
     }
     
@@ -412,9 +449,6 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
-       
-        
         if indexPath.row == 0 {
             let cellTwo = tableView.dequeueReusableCell(withIdentifier: cellIdTwo, for: indexPath) as! PostInfoStuff
             cellTwo.awakeFromNib()
@@ -423,6 +457,13 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             cellTwo.imagee.contentMode = .scaleAspectFit
             cellTwo.selectionStyle = UITableViewCellSelectionStyle.none
             cellTwo.dateLabel.text = dateLabel.text
+            cellTwo.dateLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+            cellTwo.locationLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+            cellTwo.cityLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+            cellTwo.descriptiontextField.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+            
+            cellTwo.posterUid.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+            cellTwo.commentsLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
             cellTwo.locationLabel.text = locationLabel.text
             cellTwo.cityLabel.text = cityLabel.text
             cellTwo.descriptiontextField.text = descriptiontextField.text
@@ -434,18 +475,20 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PostInfoCell
             cell.awakeFromNib()
             
-           cell.selectionStyle = UITableViewCellSelectionStyle.none
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
             tableView.isUserInteractionEnabled = true
             cell.message.sizeToFit()
             cell.message.numberOfLines = 0
             cell.message.text = comments[indexPath.row - 1]
             cell.emailLabel.text = fromEmail[indexPath.row - 1]
-            if fromEmail[indexPath.row - 1] == posterUid.text {
-                cell.emailLabel.font = UIFont(name: "Avenir Next-bold", size: 16)
+           /* if fromEmail[indexPath.row - 1] == posterUid.text {
+                cell.emailLabel.font = UIFont(name: "Avenir Next-bold", size: UIScreen.main.bounds.height / 33.5)
+                cell.message.font = UIFont(name: "Avenir Next-bold", size: UIScreen.main.bounds.height / 33.5)
                 cell.emailLabel.textColor = .black
-            } else {
-                cell.emailLabel.font = UIFont(name: "Avenir Next", size: 16)
-            }
+            } else {*/
+                cell.emailLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.5)
+                cell.message.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.5)
+            //}
             if comments.count == indexPath.row{
                 cell.separatorLine.removeFromSuperview()
             }
@@ -453,8 +496,16 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
-
     
-
-   
+    
+    
+    
+}
+extension String {
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        
+        return ceil(boundingBox.height)
+}
 }

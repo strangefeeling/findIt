@@ -28,13 +28,14 @@
 		7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7B3A4D161FB89EAD00E5DDBF /* Model.xcdatamodeld */; };
 		7B4B06B61FC5DA5D005320B0 /* PostInfoStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */; };
 		7B4B06B81FC716E2005320B0 /* MyPostInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4B06B71FC716E2005320B0 /* MyPostInfo.swift */; };
+		7B4D597F1FD9643A001C2310 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */; };
+		7B69D0A61FD96E5A0073D6BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */; };
 		7B7E851A1FD6CAF80085C8F9 /* FollowedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */; };
 		7B81EF8D1FBEF06E0036F982 /* AddCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B81EF8C1FBEF06E0036F982 /* AddCommentController.swift */; };
 		7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8F4C131FAC73D300E61996 /* AppDelegate.swift */; };
 		7B8F4C191FAC73D300E61996 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B8F4C171FAC73D300E61996 /* Main.storyboard */; };
 		7B8F4C1B1FAC73D300E61996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B8F4C1A1FAC73D300E61996 /* Assets.xcassets */; };
 		7B8F4C1E1FAC73D300E61996 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B8F4C1C1FAC73D300E61996 /* LaunchScreen.storyboard */; };
-		7B8F4C261FAC743100E61996 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B8F4C251FAC743100E61996 /* GoogleService-Info.plist */; };
 		7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC51FB115EE00667DA6 /* NavController.swift */; };
 		7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */; };
 		7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB5AAF21FADDC86004BA02F /* MapController.swift */; };
@@ -72,6 +73,8 @@
 		7B3A4D171FB89EAD00E5DDBF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoStuff.swift; sourceTree = "<group>"; };
 		7B4B06B71FC716E2005320B0 /* MyPostInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostInfo.swift; sourceTree = "<group>"; };
+		7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowedItems.swift; sourceTree = "<group>"; };
 		7B81EF8C1FBEF06E0036F982 /* AddCommentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCommentController.swift; sourceTree = "<group>"; };
 		7B8F4C101FAC73D300E61996 /* FindIt xcode 8.3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FindIt xcode 8.3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,7 +83,6 @@
 		7B8F4C1A1FAC73D300E61996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B8F4C1D1FAC73D300E61996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7B8F4C1F1FAC73D300E61996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7B8F4C251FAC743100E61996 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7BA44FC51FB115EE00667DA6 /* NavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
 		7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
 		7BB5AAF21FADDC86004BA02F /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B4D597F1FD9643A001C2310 /* GoogleMobileAds.framework in Frameworks */,
 				8D3EA7F3FA42ABBE1D70FE04 /* Pods_FindIt_xcode_8_3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -150,7 +153,6 @@
 			children = (
 				7B17CFA81FAC785200394879 /* MyItems.swift */,
 				7B17CFAA1FAC786B00394879 /* AllItems.swift */,
-				7B17CFAC1FAC788700394879 /* MessagesController.swift */,
 			);
 			name = Tabs;
 			sourceTree = "<group>";
@@ -189,6 +191,7 @@
 		7B8F4C121FAC73D300E61996 /* FindIt xcode 8.3 */ = {
 			isa = PBXGroup;
 			children = (
+				7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */,
 				7B8F4C131FAC73D300E61996 /* AppDelegate.swift */,
 				7B17CFA51FAC782300394879 /* Extensions.swift */,
 				7B8F4C171FAC73D300E61996 /* Main.storyboard */,
@@ -202,8 +205,8 @@
 				7B17CFA71FAC783500394879 /* Tabs */,
 				7BBF48B41FC874D2005414C1 /* NewCells */,
 				7B17CFAE1FAC789600394879 /* Cells */,
-				7B8F4C251FAC743100E61996 /* GoogleService-Info.plist */,
 				7B8F4C1F1FAC73D300E61996 /* Info.plist */,
+				7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */,
 			);
 			path = "FindIt xcode 8.3";
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			children = (
 				7BBF48B61FC8759E005414C1 /* FirstPage.swift */,
 				7BEB4BF21FCD894300D1B990 /* SecondPage.swift */,
+				7B17CFAC1FAC788700394879 /* MessagesController.swift */,
 			);
 			name = NewTabs;
 			sourceTree = "<group>";
@@ -302,9 +306,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8F4C1E1FAC73D300E61996 /* LaunchScreen.storyboard in Resources */,
+				7B69D0A61FD96E5A0073D6BB /* GoogleService-Info.plist in Resources */,
 				7B8F4C1B1FAC73D300E61996 /* Assets.xcassets in Resources */,
 				7B8F4C191FAC73D300E61996 /* Main.storyboard in Resources */,
-				7B8F4C261FAC743100E61996 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +531,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FindIt\\ xcode\\ 8.3",
 				);
 				INFOPLIST_FILE = "FindIt xcode 8.3/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -546,6 +551,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FindIt\\ xcode\\ 8.3",
 				);
 				INFOPLIST_FILE = "FindIt xcode 8.3/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;

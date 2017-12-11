@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!--My Posts-->
         <scene sceneID="Rua-wv-pm8">
             <objects>
                 <viewController id="Ew2-Il-R4o" customClass="SecondPage" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
@@ -23,14 +23,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="d69-7p-qWA"/>
+                    <tabBarItem key="tabBarItem" title="My Posts" image="user (3)" selectedImage="user (3)" id="d69-7p-qWA"/>
                     <navigationItem key="navigationItem" id="KkX-bv-ux2"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uH7-v9-7Su" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2098.4000000000001" y="986.35682158920542"/>
         </scene>
-        <!--Item-->
+        <!--Messages-->
         <scene sceneID="LyP-99-lXw">
             <objects>
                 <tableViewController id="Nzl-cP-7d2" customClass="MessagesController" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
@@ -53,7 +53,7 @@
                             <outlet property="delegate" destination="Nzl-cP-7d2" id="Rzf-Fn-3Wm"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="thQ-sb-MRl"/>
+                    <tabBarItem key="tabBarItem" title="Messages" image="speech-bubble (1)" id="thQ-sb-MRl"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fGY-nO-soN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -94,7 +94,7 @@
             </objects>
             <point key="canvasLocation" x="2167" y="-408"/>
         </scene>
-        <!--Item-->
+        <!--Chat-->
         <scene sceneID="Gsn-wB-fmg">
             <objects>
                 <viewController id="Twg-bG-mpy" customClass="FoundItemsMap" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
@@ -107,13 +107,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="v4h-Zp-Ovr"/>
+                    <tabBarItem key="tabBarItem" title="Chat" image="speech-bubble" id="v4h-Zp-Ovr"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2S5-T8-DE4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="823" y="1516"/>
         </scene>
-        <!--Item-->
+        <!--All Posts-->
         <scene sceneID="vi7-98-Dta">
             <objects>
                 <viewController id="QBF-CF-AwE" customClass="FirstPage" customModule="FindIt_xcode_8_3" customModuleProvider="target" sceneMemberID="viewController">
@@ -127,7 +127,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="R0S-uo-Rfi"/>
+                    <tabBarItem key="tabBarItem" title="All Posts" image="group" selectedImage="group" id="R0S-uo-Rfi"/>
                     <navigationItem key="navigationItem" id="NY4-t2-Osh"/>
                     <connections>
                         <segue destination="eJk-xG-U8Y" kind="show" identifier="toPostinfo" id="e5V-90-ZQe"/>
@@ -257,6 +257,12 @@
             <point key="canvasLocation" x="-198" y="-304"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="group" width="24" height="24"/>
+        <image name="speech-bubble" width="24" height="24"/>
+        <image name="speech-bubble (1)" width="24" height="24"/>
+        <image name="user (3)" width="24" height="24"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="PSY-Ev-ZrE"/>
     </inferredMetricsTieBreakers>

@@ -9,9 +9,10 @@
 import UIKit
 
 class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ShowController {
-
+    
     var collectionView: UICollectionView?
     let cellId = "blah"
+   
     
     func showController() {
         let vc = PostInfo()
@@ -19,27 +20,27 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     }
     
     let myImage: UIImageView = {
-       let image = UIImageView()
-            image.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
         image.image = UIImage(named:"manoViewVisas")
         return image
     }()
     
     let lostFoundSegentedControll: UISegmentedControl = {
-       let sc = UISegmentedControl(items: ["Found","Lost"])
+        let sc = UISegmentedControl(items: ["Found","Lost"])
         sc.backgroundColor = UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white
-        let borderColor = myColor
+        let borderColor = UIColor(patternImage: patternImage!)//myColor
         let attrs = [
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
         ]
-
+        
         sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
         sc.layer.borderColor = borderColor.cgColor
         sc.layer.borderWidth = 0.5
-       // sc.backgroundColor = myColor
+        // sc.backgroundColor = myColor
         //sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(handleSegmentedControll), for: .valueChanged)
         return sc
@@ -67,7 +68,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         
     }
     
-       override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(myImage)
         myImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
@@ -95,7 +96,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         collectionView?.isPagingEnabled = true
-
+        
         
         
         view.addSubview(collectionView!)
@@ -107,10 +108,10 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         
         
         
-      /*  collectionView?.topAnchor.constraint(equalTo: lostFoundSegentedControll.bottomAnchor, constant: 0).isActive = true
-        collectionView?.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        collectionView?.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 50).isActive = true*/
+        /*  collectionView?.topAnchor.constraint(equalTo: lostFoundSegentedControll.bottomAnchor, constant: 0).isActive = true
+         collectionView?.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+         collectionView?.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+         collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 50).isActive = true*/
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView!)
         view.addConstraintsWithFormat(format: "V:|-28-[v0]|", views: collectionView!)
@@ -118,21 +119,21 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         collectionView?.contentInset = UIEdgeInsets(top: 30, left: -1, bottom: 0, right: 1)
         
     }
-
+    
     var whichCell = UICollectionViewCell()
     let cellId2 = "cellId2"
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.item == 0{
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AllItemsCollectionViewCell
-        cell.awakeFromNib()
-        cell.delegate = self
-        //lostFoundSegentedControll.selectedSegmentIndex = 1
-
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AllItemsCollectionViewCell
+            cell.awakeFromNib()
+            cell.delegate = self
+            //lostFoundSegentedControll.selectedSegmentIndex = 1
+            
             return cell
         } else {
-          
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId2, for: indexPath) as! AllLostItems
             cell.awakeFromNib()
             cell.delegate = self
@@ -143,10 +144,10 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if didUserTapped == false{
-        if scrollView.contentOffset.x > UIScreen.main.bounds.width / 2{
-            lostFoundSegentedControll.selectedSegmentIndex = 1
-        } else {
-            lostFoundSegentedControll.selectedSegmentIndex = 0
+            if scrollView.contentOffset.x > UIScreen.main.bounds.width / 2{
+                lostFoundSegentedControll.selectedSegmentIndex = 1
+            } else {
+                lostFoundSegentedControll.selectedSegmentIndex = 0
             }
         }
     }
@@ -156,7 +157,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-       
+        
         return CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     }
     

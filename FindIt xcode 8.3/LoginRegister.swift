@@ -20,7 +20,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        view.backgroundColor = UIColor(patternImage: patternImage!)
         handleLoginButton()
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -32,6 +32,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         view.addSubview(loginRegisterSegmentedControl)
         setupInputsContainerView()
         setupLoginRegisterSegmentedControl()
+        view.addSubview(logoView)
+        logoView.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -10).isActive = true
+        logoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoView.widthAnchor.constraint(equalToConstant: 140).isActive = true
+        logoView.heightAnchor.constraint(equalToConstant: 140).isActive = true
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -49,8 +54,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             self.view.frame.origin.y -= keyboardHeight
-
-              self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
+            
+            self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
             
         }
     }
@@ -58,7 +63,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     func keyboardWillHide(sender: NSNotification) {
         self.view.frame.origin.y += keyboardHeight
-        UIView.animate(withDuration: 0.5) { 
+        UIView.animate(withDuration: 0.5) {
             self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
         
@@ -72,11 +77,17 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-
+    
+    let logoView: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "binoculars (1)")
+        return logo
+    }()
     
     let emailSeparatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = myColor
+        view.backgroundColor = UIColor(patternImage: patternImage!)//myColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -88,6 +99,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.isSecureTextEntry = true
         tf.text = "abc123"
+    
         tf.delegate = self
         
         return tf
@@ -98,7 +110,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         let sc = UISegmentedControl(items: ["Login","Register"])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.tintColor = myColor
+        sc.tintColor = UIColor(patternImage: patternImage!)//myColor
         // automatiskai bus paselectintas register kai ijugsni appsa
         sc.selectedSegmentIndex = 1
         sc.addTarget(self, action: #selector(handleLoginRegisterChange), for: .valueChanged)
@@ -113,7 +125,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     
     func handleLoginButton(){
-        loginButton.backgroundColor  = myColor
+        loginButton.backgroundColor  = UIColor(patternImage: patternImage!)//myColor
         //loginButton.layer.borderWidth = 1
         // let borderColor = UIColor.darkGray
         // loginButton.layer.borderColor = borderColor.cgColor
@@ -127,7 +139,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     lazy var loginRegisterButton : UIButton = {
         // lazy var, nes it need access to  self
         let button = UIButton(type: .system)
-        button.backgroundColor  = myColor
+        button.backgroundColor  = UIColor(patternImage: patternImage!)//myColor
         // button.layer.borderWidth = 1
         let borderColor = UIColor.darkGray
         //button.layer.borderColor = borderColor.cgColor
@@ -264,7 +276,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         inputsContainerView.addSubview(passwordTextField)
         inputsContainerView.backgroundColor = .white
         inputsContainerView.layer.cornerRadius = 5
-        let borderColor = myColor
+        let borderColor = UIColor(patternImage: patternImage!)//myColor
         inputsContainerView.layer.borderColor = borderColor.cgColor
         inputsContainerView.layer.borderWidth = 1.2
         inputsContainerView.layer.masksToBounds = true

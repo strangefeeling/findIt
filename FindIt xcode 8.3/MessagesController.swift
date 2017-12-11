@@ -26,14 +26,7 @@ class MessagesController: UITableViewController {
         
         setNeedsStatusBarAppearanceUpdate()
         observeMessages()
-        
-        if let to = UserDefaults.standard.object(forKey: "toName") {
-            
-        }
-        
-        if let emails = UserDefaults.standard.object(forKey: "emails"){
-            
-        }
+        //tableView.allowsSelection = false
         
  
         
@@ -63,6 +56,8 @@ class MessagesController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lol", for: indexPath) as! MessagesCell
         cell.awakeFromNib()
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+
         //        let user = Auth.auth().currentUser?.uid
         DispatchQueue.main.async {
             /*

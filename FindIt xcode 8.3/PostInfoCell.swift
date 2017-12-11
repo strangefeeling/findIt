@@ -34,7 +34,7 @@ class PostInfoCell: UITableViewCell {
     var emailLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Avenir Next", size: 16)
+        label.font = UIFont(name: "Avenir Next", size:  UIScreen.main.bounds.height / 33.5)
         label.textColor = .darkGray
         return label
     }()
@@ -45,7 +45,7 @@ class PostInfoCell: UITableViewCell {
         emailLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -2).isActive = true
         emailLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         emailLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7).isActive = true
-        emailLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5).isActive = true
+        emailLabel.heightAnchor.constraint(equalToConstant:  UIScreen.main.bounds.height / 33.5 + 8).isActive = true
         
         message.translatesAutoresizingMaskIntoConstraints = false
         message.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
@@ -69,9 +69,9 @@ class PostInfoCell: UITableViewCell {
     
     private func estimatedFrameForText(text: String) -> CGRect{
         //200 nes chatmessagecelle toks, o 1000, nes px ir reik didelio
-        let size = CGSize(width: UIScreen.main.bounds.width * 0.7, height: 1000)
+        let size = CGSize(width: UIScreen.main.bounds.width * 0.7, height: 100000)
         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 16)], context: nil)
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: UIScreen.main.bounds.height / 33.35)], context: nil)
     }
     
     let separatorLine: UIView = {

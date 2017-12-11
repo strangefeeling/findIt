@@ -156,7 +156,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
      }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height - 40
+        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height
     }
     
     
@@ -179,6 +179,11 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         cell.nameLabel.text = emails[indexPath.row]
         cell.dateLabel.text = makeDate(date: date)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.dateLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.locationLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.infoLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.cityLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+
         //cell.nameLabel.text = emails[indexPath.row]
         
         

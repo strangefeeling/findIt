@@ -9,8 +9,8 @@
 import UIKit
 import Firebase
 
-class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSource  {
-
+class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate  {
+    
     let tableView = UITableView()
     var cellContent = [String]()
     var delegate: ShowController!
@@ -26,7 +26,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var date = [Double]()
     var emails = [String]()
     var downloadUrls = [String]()
-
+    
     var didUserTappedSearch = false
     
     override func viewDidLoad() {
@@ -35,25 +35,47 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         tableView.dataSource = self
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
         view.addSubview(tableView)
-        tableView.frame = view.frame
+        tableView.separatorStyle = .none
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
+        view.addConstraintsWithFormat(format: "V:|-[v0]-50-|", views: tableView)
         view.backgroundColor = .white
-       
+        setupAd()
         
         // Do any additional setup after loading the view.
     }
     
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if didUserTappedSearch{
-             getPosts()
+            getPosts()
             
         }
         //getPosts()
     }
     
-   
-
+    let ad: GADBannerView = {
+        let ad = GADBannerView()
+        ad.translatesAutoresizingMaskIntoConstraints = false
+        return ad
+    }()
+    
+    func setupAd(){
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+        //request.testDevices = [ "55a4e7c8d80f58b53b5f39bb7c2685e2" ];// mobui
+        ad.delegate = self
+        ad.adUnitID = "ca-app-pub-8501633358477205/8183851861"
+        ad.rootViewController = self
+        ad.load(request)
+        view.addSubview(ad)
+        ad.widthAnchor.constraint(equalToConstant: 320).isActive = true
+        ad.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        ad.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        ad.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AllItemsTableViewCell
         cell.awakeFromNib()
@@ -66,13 +88,17 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell.nameLabel.text = emails[indexPath.row]
         cell.dateLabel.text = makeDate(date: date)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
-
+        cell.dateLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.locationLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.cityLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        cell.infoLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height - 40
+        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
     }
     
     func makeDate(date: Date) -> String{
@@ -90,6 +116,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
         image.loadImageUsingCacheWithUrlString(profileImageURL)
@@ -101,7 +128,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         dateLabel.text = currentCell.dateLabel.text!
         locationLabel.text = currentCell.locationLabel.text!
         cityLabel.text = currentCell.cityLabel.text!
-       // postName = postId[indexPath.item]
+        // postName = postId[indexPath.item]
         print("POST NAME ",postName)
         descriptiontextField.text = currentCell.infoLabel.text
         toIdd = allUsers.uid[indexPath.row]
@@ -110,7 +137,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let postInfo = PostInfo()
         show(postInfo, sender: self)
         //show()
-
+        
     }
     func sshowController() {
         self.delegate.showController()
@@ -123,7 +150,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     func getPosts(){
         var i = 0
-       
+        
         
         let ref = Database.database().reference().child("allPosts").child("lost")
         ref.queryOrdered(byChild: "city").queryStarting(atValue: searchText).queryEnding(atValue: searchText+"\u{f8ff}").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -139,12 +166,12 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             postNames.removeAll()
             
             print(snapshot.key)
-            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
             
             
             if snapshot.exists(){
                 //postNames.append(snapshot.key)
-                
+                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
                     
                     postNames.append(snap.key)
@@ -157,7 +184,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                     
                     if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
                         self.allUsers.timeStamp.append(timePosted)
-                       // self.allUsers.dictionary["timeStamp"] = timePosted
+                        
                         self.date.append(Double(timePosted))
                         
                     }
@@ -203,20 +230,20 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
                 
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    //self.tableView.reloadData()
                     self.didUserTappedSearch = false
                     //self.searchResults.cellContent = self.usersSearchResults
                     
-              
                     
-                        self.searchFound()
-               
+                    
+                    self.searchFound()
+                    
                     i += 1
                 }
             }   else {
                 self.searchFound()
             }
-
+            
         }, withCancel: nil)
     }
     func searchFound(){
@@ -225,10 +252,10 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let ref = Database.database().reference().child("allPosts").child("found")
         ref.queryOrdered(byChild: "city").queryStarting(atValue: searchText).queryEnding(atValue: searchText+"\u{f8ff}").observeSingleEvent(of:.value, with: { (snapshot) in
             
-            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
             
             if snapshot.exists(){
-           
+                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
                     print(snap.key)
                     
@@ -287,11 +314,12 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
                 
                 
-                DispatchQueue.main.async {
-                    self.sortPosts(timee: self.date)
-                }
             }
-            })
+            
+            DispatchQueue.main.async {
+                self.sortPosts(timee: self.date)
+            }
+        })
         
         
     }
@@ -337,21 +365,24 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 }
                 i += 1
             }
-            print(date)
-            self.date.reverse()
-            self.emails.reverse()
-            self.allUsers.uid.reverse()
-            postNames.reverse()
-            self.allUsers.timeStamp.reverse()
-            self.allUsers.downloadUrls.reverse()
-            self.allUsers.descriptions.reverse()
-            self.cities.reverse()
-            self.locations.reverse()
-            self.postId.reverse()
-            let indexPath = IndexPath(item: 0, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-            self.tableView.reloadData()
+            
+            
         }
+        self.date.reverse()
+        self.emails.reverse()
+        self.allUsers.uid.reverse()
+        postNames.reverse()
+        self.allUsers.timeStamp.reverse()
+        self.allUsers.downloadUrls.reverse()
+        self.allUsers.descriptions.reverse()
+        self.cities.reverse()
+        self.locations.reverse()
+        self.postId.reverse()
+        cellContent.reverse()
+        
+        self.tableView.reloadData()
+        let indexPath = IndexPath(item: 0, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
     
 }

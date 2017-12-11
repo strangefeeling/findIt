@@ -15,18 +15,33 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     var imageToPost: UIImage?
     let allItems = AllItems()
-    let backButton = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+   
+    let backButton: UIButton = {
+       let button = UIButton()//(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Back", for: .normal)
+        button.titleLabel?.textAlignment = .left
+        button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        return button
+    }()
     
     let imageView: UIImageView = {
         let view = UIImageView()
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        
         view.image = patternImage
         return view
     }()
     
+    @objc func goBack()
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(imageView)
+        
        // view.backgroundColor = UIColor(patternImage: patternImage!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -38,7 +53,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
     }
     
-    
+    var shouldKeyboardHeightChange = true
     
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -46,14 +61,15 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        
+        if shouldKeyboardHeightChange {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             
             self.view.frame.origin.y -= keyboardHeight
-            
+            self.shouldKeyboardHeightChange = false
           //  self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
             
+        }
         }
     }
     
@@ -62,6 +78,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         UIView.animate(withDuration: 0.5) {
             
             self.view.frame.origin.y += self.keyboardHeight
+            self.shouldKeyboardHeightChange = true
         }
         
         keyboardHeight = 0
@@ -216,8 +233,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             //let myCell = SecondPage()
                             //myCell.collectionView?.reloadData()
                             
-                            
-                            self.navigationController?.popViewController(animated: true)
+                            self.dismiss(animated: true, completion: nil)
+                            //self.navigationController?.popViewController(animated: true)
                             
                         }
 
@@ -249,11 +266,17 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
 
     func setupView(){
+        view.addSubview(backButton)
+        
+        backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: -UIScreen.main.bounds.height / 33.35).isActive = true
+        backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 2 * UIScreen.main.bounds.height / 33.35).isActive = true
+        backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         view.addSubview(tempButtonWithImage)
         
         tempButtonWithImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        tempButtonWithImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
+        tempButtonWithImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 4 * UIScreen.main.bounds.height / 33.35).isActive = true
         tempButtonWithImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 20).isActive = true
         tempButtonWithImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 3.2).isActive = true
         

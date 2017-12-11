@@ -29,6 +29,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
  
         setUpInputComponents()
         setup()
+        
         fromID = (Auth.auth().currentUser?.uid)!
     }
     
@@ -36,7 +37,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
 
         
         collectionView?.alwaysBounceVertical = true
-        
+        //collectionView?.allowsSelection = false
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView?.backgroundColor = .white
@@ -78,7 +79,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     lazy var inputTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter message..."
+        textField.placeholder = "Type a message..."
         textField.translatesAutoresizingMaskIntoConstraints = false
         // kad paspaudus enter issiustu zinute
         textField.delegate = self
