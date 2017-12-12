@@ -45,6 +45,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        print("this item is from ",foundOrLost)
         descriptiontextField.sizeToFit()
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 5
@@ -58,7 +59,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-  
+    
 
     var comments = [String]()
     
@@ -169,10 +170,20 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         return button
         
     }()
-    
+    //_________________________________________________________//_________________________________________________________
     @objc func toEditPost(){
         print("fuck")
         let vc = AddItemController()
+        let indexPath = IndexPath(row: 0, section: 0)
+        //let cellTwo = tableView.dequeueReusableCell(withIdentifier: cellIdTwo, for: indexPath) as! PostInfoStuff
+        vc.itemDescription.text = descriptiontextField.text//cellTwo.descriptiontextField.text
+        let img = UIImageView()
+        img.loadImageUsingCacheWithUrlString(imageUrl)
+        let editableImage = img.image
+        vc.tempButtonWithImage.setImage(editableImage, for: .normal)
+        vc.imageToPost = editableImage
+        vc.isUserEditing = true
+        vc.editPostName = postName
         present(vc, animated: true, completion: nil)
     }
     

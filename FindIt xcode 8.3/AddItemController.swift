@@ -15,7 +15,9 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     var imageToPost: UIImage?
     let allItems = AllItems()
-   
+    var isUserEditing = false
+    var editPostName = ""
+    
     let backButton: UIButton = {
        let button = UIButton()//(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +35,10 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         return view
     }()
     
+    @objc func doNothing(){
+        print("susirasi darba")
+    }
+    
     @objc func goBack()
     {
         self.dismiss(animated: true, completion: nil)
@@ -41,6 +47,15 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(imageView)
+        if isUserEditing {
+            print("user is editing")
+            postButton.setTitle("Edit", for: .normal)
+            postButton.addTarget(self, action: #selector(getEmail), for: .touchUpInside)
+            
+            print(isUserEditing)
+        } else {
+            postButton.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
+        }
         
        // view.backgroundColor = UIColor(patternImage: patternImage!)
         
@@ -50,6 +65,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         view.addGestureRecognizer(tap)
         
         setupView()
+        print("image url ", imageUrl)
         
     }
     
@@ -159,7 +175,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         let pb = UIButton()
         pb.setTitle("Post", for: .normal)
         pb.titleLabel?.font = UIFont(name: "Anevir Next", size: 20)
-        pb.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
+       // pb.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
         pb.tintColor = UIColor.white
         pb.titleLabel?.textAlignment = .center
         pb.translatesAutoresizingMaskIntoConstraints = false
@@ -170,12 +186,12 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     func toMaps(){
         let map = MapController()
         dismissKeyboard()
-        show(map, sender: self)
-      //  present(map, animated: true, completion: nil)
+        //show(map, sender: self)
+        present(map, animated: true, completion: nil)
     }
     
     func post(){
-        
+      
         if imageToPost != nil && itemDescription.text != ""{
             
             let imageName = NSUUID().uuidString
@@ -204,6 +220,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             } else {
                               allRef = Database.database().reference().child("allPosts").child("lost").child(postName)
                             }
+                            
                             
                             //.child(postName)
                             //allRef.setValue(currUser!)
@@ -245,15 +262,18 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
             }
             
         }
-
+        
     }
     
     var myEmail = String()
     
     @objc func postToServer(){
+        var i = 0
         let currUser = Auth.auth().currentUser?.uid
+       // if isUserEditing == false{
+        
         let myRef = Database.database().reference().child("users").child(currUser!)
-        myRef.observe(.value, with: { (snapshot) in
+            myRef.observeSingleEvent(of: .value, with: { (snapshot) in
             let dict = snapshot.value as! [String: Any]
             
             self.myEmail = dict["email"] as! String
@@ -261,10 +281,201 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                 self.post()
             }
         })
+       // } else {
+      /*      let myRef = Database.database().reference().child("users").child(currUser!)
+            myRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                let dict = snapshot.value as! [String: Any]
+                
+                self.myEmail = dict["email"] as! String
+                DispatchQueue.main.async {
+                    self.editPost()
+                }
+            })*/
+       // }
+    }
+    
+    func getEmail(){
+        let currUser = Auth.auth().currentUser?.uid
+        let myRef = Database.database().reference().child("users").child(currUser!)
+        myRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            let dict = snapshot.value as! [String: Any]
+            
+            self.myEmail = dict["email"] as! String
+            DispatchQueue.main.async {
+                self.editPost()
+            }
+        })
 
     }
     
+    func editPost(){
+        if imageToPost != nil && itemDescription.text != ""{
+            
+            
+            if mySwitch.isOn && foundOrLost == "found" || mySwitch.isOn == false && foundOrLost == "lost"{//found, lost
+                //print("nepakeite", mySwitch.isOn)
+               
+              print("nepakeite")
+                let imageName = NSUUID().uuidString
+                let postName = editPostName
+                let imagesFolder = Storage.storage().reference().child("images")
+                
+                if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.1){
+                    imagesFolder.child("\(imageName).jpg").putData(imageData, metadata: nil, completion:{
+                        (metadata, error) in
+                        
+                        if let error = error{
+                            // self.presentAlert(alert: error.localizedDescription)
+                            print(error)
+                        } else{
+                            if let downloadURL =  metadata?.downloadURL()?.absoluteString {
+                                let timeStamp = Int(NSDate().timeIntervalSince1970)
+                                let currUser = Auth.auth().currentUser?.uid
+                                //   let ref = Database.database().reference().child("posts").child(currUser!).child(postName)
+                                let lat = UserDefaults.standard.string(forKey: "lat")
+                                let lon = UserDefaults.standard.string(forKey: "lon")
+                                let locationName = UserDefaults.standard.string(forKey: "title")
+                                let city = UserDefaults.standard.string(forKey: "city")
+                                var allRef = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+                                /* if self.mySwitch.isOn{
+                                 allRef = Database.database().reference().child("allPosts").child("found").child(postName)
+                                 } else {
+                                 allRef = Database.database().reference().child("allPosts").child("lost").child(postName)
+                                 }*/
+                                
+                                //.child(postName)
+                                //allRef.setValue(currUser!)
+                                /*  ref.child("downloadURL").setValue(downloadURL)
+                                 ref.child("description").setValue(self.itemDescription.text!)
+                                 ref.child("timeStamp").setValue(timeStamp)*/
+                                // allRef.child(currUser!).setValue(currUser!)
+                                allRef.child("downloadURL").setValue(downloadURL)
+                                allRef.child("description").setValue(self.itemDescription.text!)
+                                allRef.child("timeStamp").setValue(timeStamp)
+                                allRef.child("uid").setValue(currUser!)
+                                //allRef.child("email").setValue(self.myEmail)
+                                allRef.child("lon").setValue(lon)
+                                allRef.child("lat").setValue(lat)
+                                allRef.child("locationName").setValue(locationName)
+                                allRef.child("city").setValue(city)
+                                
+                            }
+                            DispatchQueue.main.async {
+                                
+                                didUserJustPosted = true
+                                
+                                UserDefaults.standard.removeSuite(named: "lat")
+                                UserDefaults.standard.removeSuite(named: "lon")
+                                UserDefaults.standard.removeSuite(named: "title")
+                                UserDefaults.standard.removeSuite(named: "city")
+                                //let myCell = SecondPage()
+                                //myCell.collectionView?.reloadData()
+                                
+                                self.dismiss(animated: true, completion: nil)
+                                //self.navigationController?.popViewController(animated: true)
+                                
+                            }
+                            
+                        }
+                    })
+                    
+                    
+                }
 
+
+            }
+            else if mySwitch.isOn == false && foundOrLost == "found" || mySwitch.isOn && foundOrLost == "lost" { //lost
+                print("pakeite")
+                let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+                ref.removeValue()
+                let imageName = NSUUID().uuidString
+                let imageRef = Storage.storage().reference(forURL: imageUrl)
+                imageRef.delete(completion: { (error) in
+                    print(error as Any)
+                })
+                
+                
+                let imagesFolder = Storage.storage().reference().child("images")
+                
+                if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.1){
+                    imagesFolder.child("\(imageName).jpg").putData(imageData, metadata: nil, completion:{
+                        (metadata, error) in
+                        
+                        if let error = error{
+                            // self.presentAlert(alert: error.localizedDescription)
+                            print(error)
+                        } else{
+                            if let downloadURL =  metadata?.downloadURL()?.absoluteString {
+                                let timeStamp = Int(NSDate().timeIntervalSince1970)
+                                let currUser = Auth.auth().currentUser?.uid
+                                //   let ref = Database.database().reference().child("posts").child(currUser!).child(postName)
+                                let lat = UserDefaults.standard.string(forKey: "lat")
+                                let lon = UserDefaults.standard.string(forKey: "lon")
+                                let locationName = UserDefaults.standard.string(forKey: "title")
+                                let city = UserDefaults.standard.string(forKey: "city")
+                                var allRef = Database.database().reference().child("allPosts")
+                                if self.mySwitch.isOn{
+                                    allRef = Database.database().reference().child("allPosts").child("found").child(postName)
+                                    
+                                } else {
+                                    allRef = Database.database().reference().child("allPosts").child("lost").child(postName)
+                                    
+                                }
+                                
+                                
+                                //.child(postName)
+                                //allRef.setValue(currUser!)
+                                /*  ref.child("downloadURL").setValue(downloadURL)
+                                 ref.child("description").setValue(self.itemDescription.text!)
+                                 ref.child("timeStamp").setValue(timeStamp)*/
+                                // allRef.child(currUser!).setValue(currUser!)
+                                allRef.child("downloadURL").setValue(downloadURL)
+                                allRef.child("description").setValue(self.itemDescription.text!)
+                                allRef.child("timeStamp").setValue(timeStamp)
+                                allRef.child("uid").setValue(currUser!)
+                                allRef.child("email").setValue(self.myEmail)
+                                allRef.child("lon").setValue(lon)
+                                allRef.child("lat").setValue(lat)
+                                allRef.child("locationName").setValue(locationName)
+                                allRef.child("city").setValue(city)
+                                
+                            }
+                            DispatchQueue.main.async {
+                                
+                                didUserJustPosted = true
+                                
+                                UserDefaults.standard.removeSuite(named: "lat")
+                                UserDefaults.standard.removeSuite(named: "lon")
+                                UserDefaults.standard.removeSuite(named: "title")
+                                UserDefaults.standard.removeSuite(named: "city")
+                                //let myCell = SecondPage()
+                                //myCell.collectionView?.reloadData()
+                                
+                                self.dismiss(animated: true, completion: nil)
+                                //self.navigationController?.popViewController(animated: true)
+                                
+                            }
+                            
+                        }
+                    })
+                    
+                    
+                }
+
+            }
+            
+        }
+    }
+    
+    /* if
+     
+
+ */
+    
+    /*  else
+    
+     */
+    
     func setupView(){
         view.addSubview(backButton)
         

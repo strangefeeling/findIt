@@ -27,6 +27,8 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var emails = [String]()
     var downloadUrls = [String]()
     
+    var isItFoundOrLost = [String]()
+    
     var didUserTappedSearch = false
     
     override func viewDidLoad() {
@@ -134,6 +136,8 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         toIdd = allUsers.uid[indexPath.row]
         imageUrl = profileImageURL
         
+        foundOrLost = isItFoundOrLost[indexPath.row]
+        
         let postInfo = PostInfo()
         show(postInfo, sender: self)
         //show()
@@ -173,7 +177,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 //postNames.append(snapshot.key)
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
-                    
+                    self.isItFoundOrLost.append("lost")
                     postNames.append(snap.key)
                     
                     if let description = snap.childSnapshot(forPath: "description").value as? String {
@@ -257,6 +261,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             if snapshot.exists(){
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
+                    self.isItFoundOrLost.append("found")
                     print(snap.key)
                     
                     postNames.append(snap.key)
@@ -340,6 +345,9 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                         emails.insert(emails[j], at: i)
                         emails.remove(at: j + 1)
                         
+                        isItFoundOrLost.insert(isItFoundOrLost[j], at: i)
+                        isItFoundOrLost.remove(at: j + 1)
+                        
                         cities.insert(cities[j], at: i)
                         cities.remove(at: j + 1)
                         
@@ -379,6 +387,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.locations.reverse()
         self.postId.reverse()
         cellContent.reverse()
+        self.isItFoundOrLost.reverse()
         
         self.tableView.reloadData()
         let indexPath = IndexPath(item: 0, section: 0)

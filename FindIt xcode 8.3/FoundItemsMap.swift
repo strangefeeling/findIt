@@ -159,6 +159,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     
                     DispatchQueue.main.async {
                         self.getAnnotations(lat: lati, lon: long, description: description)
+                        print(self.emails)
                         ref.removeAllObservers()
                     }
                 }

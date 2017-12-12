@@ -206,7 +206,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         back.translatesAutoresizingMaskIntoConstraints = false
         back.setTitle("Back", for: .normal)
         //back.titleLabel?.textColor = .black
-        back.setTitleColor(UIColor(patternImage: patternImage!),, for: .normal)
+        back.setTitleColor(UIColor(patternImage: patternImage!), for: .normal)
         back.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         return back
     }()

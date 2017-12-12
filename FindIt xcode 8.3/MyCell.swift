@@ -19,7 +19,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         sshowController()
     }
     
-    
+    var isItFoundOrLost = [String]()
     
     let cellId = "cellid"
     let allUsers = EveryUser()
@@ -155,12 +155,14 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
             self.date.removeAll()
             self.postId.removeAll()
             self.emails.removeAll()
+            self.isItFoundOrLost.removeAll()
+            
             if snapshot.exists(){
             
             
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for snap in snapshots {
-                
+                self.isItFoundOrLost.append("lost")
                 self.postId.append(snap.key)
                 self.allUsers.postName.append(snap.key)
                 
@@ -228,10 +230,11 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
             self.date.removeAll()
             self.postId.removeAll()
             self.emails.removeAll()*/
+            
             if snapshot.exists(){
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for snap in snapshots {
-                
+                self.isItFoundOrLost.append("found")
                 self.postId.append(snap.key)
                 self.allUsers.postName.append(snap.key)
                 
@@ -298,6 +301,12 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
                         date.insert(date[j], at: i)
                         date.remove(at: j + 1)
                         
+                        
+                        
+                        isItFoundOrLost.insert(isItFoundOrLost[j], at: i)
+                        isItFoundOrLost.remove(at: j + 1)
+                        
+                        
                         emails.insert(emails[j], at: i)
                         emails.remove(at: j + 1)
                         
@@ -339,6 +348,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         self.allUsers.descriptions.reverse()
         self.cities.reverse()
         self.locations.reverse()
+        self.isItFoundOrLost.reverse()
         self.postId.reverse()
       
         tableView.reloadData()
@@ -512,6 +522,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         toIdd = allUsers.uid[indexPath.row]
         imageUrl = profileImageURL
         
+        foundOrLost = isItFoundOrLost[indexPath.row]
         
         show()
     }
