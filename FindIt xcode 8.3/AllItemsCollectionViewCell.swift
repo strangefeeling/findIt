@@ -183,6 +183,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         let profileImageURL = allUsers.downloadUrls[indexPath.row]
         cell.womanImage.loadImageUsingCacheWithUrlString(profileImageURL)
         cell.locationLabel.text = locations[indexPath.item]
+        
         cell.locationLabel.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         let date = Date(timeIntervalSince1970:self.date[indexPath.item])
         cell.dateLabel.text = makeDate(date: date)

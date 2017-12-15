@@ -93,12 +93,13 @@ class AllItemsTableViewCell: UITableViewCell {
     
     let locationWord: UILabel = {
         let label = UILabel()
-        label.text = "Street: "
+        label.text = "Street:"
         label.textAlignment = .left
-        label.sizeToFit()
         
+        label.backgroundColor = .yellow
         label.textColor = .darkGray
         label.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
+        label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -119,8 +120,10 @@ class AllItemsTableViewCell: UITableViewCell {
         label.text = "Location"
         label.textAlignment = .left
         label.sizeToFit()
-        
+        label.numberOfLines = 0
         label.textColor = .darkGray
+        label.backgroundColor = .red
+        
         label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -151,9 +154,18 @@ class AllItemsTableViewCell: UITableViewCell {
         return line
     }()
     
+    var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+    
     func makeConstraints(){
         //contentView.addSubview(itemDescription)
         // contentView.addSubview(descriptionLabel)
+        if UIScreen.main.bounds.width > 500 {
+            myWidthConstant = myWidthConstant * 3 / 4// ipad pro 12.9 inch, ipad pro 10.5 inch - rek + 12, ipad 5th generation, ipdad 9.7 inch, ipad air 2 ir 1
+        }
+        
+        else {
+            myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+        }
         contentView.addSubview(womanImage)
         contentView.addSubview(locationWord)
         contentView.addSubview(locationLabel)
@@ -203,12 +215,15 @@ class AllItemsTableViewCell: UITableViewCell {
         locationWord.leftAnchor.constraint(equalTo: cityWord.leftAnchor, constant: 0).isActive = true
         locationWord.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
         locationWord.topAnchor.constraint(equalTo: cityWord.bottomAnchor, constant: 4).isActive = true
+        locationWord.widthAnchor.constraint(equalToConstant: myWidthConstant).isActive = true
         
-        locationLabel.leftAnchor.constraint(equalTo: locationWord.rightAnchor, constant: 0).isActive = true
+        
+        locationLabel.leftAnchor.constraint(equalTo: locationWord.rightAnchor, constant: 8).isActive = true
         locationLabel.topAnchor.constraint(equalTo: locationWord.topAnchor).isActive = true
-        locationLabel.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 33.35 + 8).isActive = true
+        locationLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UIScreen.main.bounds.width / 46.875).isActive = true
+        //locationLabel.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 33.35 + 8).isActive = true
         
-        dateLabel.topAnchor.constraint(equalTo: locationWord.bottomAnchor, constant: 8).isActive = true
+        dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
         dateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         dateLabel.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 33.35).isActive = true
         

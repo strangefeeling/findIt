@@ -125,7 +125,18 @@ class PostInfoStuff: UITableViewCell {
         
         setupView()
     }
+    
+    var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+    
     func setupView(){
+        
+        if UIScreen.main.bounds.width > 500 {
+            myWidthConstant = myWidthConstant * 3 / 4 + 12// ipad pro 12.9 inch, ipad pro 10.5 inch - rek + 12, ipad 5th generation, ipdad 9.7 inch, ipad air 2 ir 1
+        }
+            
+        else {
+            myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+        }
         
         contentView.addSubview(imagee)
         contentView.addSubview(posterUid)
@@ -172,6 +183,7 @@ class PostInfoStuff: UITableViewCell {
         locationWord.leftAnchor.constraint(equalTo: cityWord.leftAnchor).isActive = true
         locationWord.topAnchor.constraint(equalTo: cityWord.bottomAnchor, constant: 4).isActive = true
         locationWord.heightAnchor.constraint(equalTo: cityWord.heightAnchor).isActive = true
+        locationWord.widthAnchor.constraint(equalToConstant: myWidthConstant).isActive = true
         
         locationLabel.leftAnchor.constraint(equalTo: locationWord.rightAnchor).isActive = true
         locationLabel.topAnchor.constraint(equalTo: locationWord.topAnchor).isActive = true

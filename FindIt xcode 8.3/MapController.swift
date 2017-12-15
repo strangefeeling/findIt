@@ -243,21 +243,26 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
                         
                         if placemark.thoroughfare != nil {
                             title += placemark.thoroughfare!
+                            print(placemark.thoroughfare!, "<--------")
                         }
                         
                         if placemark.locality != nil{
                             city = placemark.locality!
+                            print(placemark.locality!, "<--------")
+                        }
+                        if placemark.location != nil{
+                            print(placemark.location!, "<--------")
                         }
                         
                     }
                 }
             
-                if title.isEmpty {
-                    title = "Unclear"
+                if title == "" {
+                    title = "Unknown"
                 }
                 
-                if city.isEmpty {
-                    title = "Unclear"
+                if city == "" {
+                    title = "Unknown"
                 }
             
             UserDefaults.standard.set(title, forKey: "title")

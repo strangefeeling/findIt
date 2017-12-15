@@ -35,8 +35,51 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         return view
     }()
     
-    @objc func doNothing(){
+    let deleteButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Delete", for: .normal)
+        button.backgroundColor = .red
+        button.layer.cornerRadius = 12
+        button.addTarget(self, action: #selector(deletePost), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.textAlignment = .center
+        return button
+    }()
+    
+    var whoFollows = [String]()
+    
+    @objc func deletePost(){
         print("susirasi darba")
+       let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+        ref.removeValue()
+        let imageRef = Storage.storage().reference(forURL: imageUrl)
+        imageRef.delete(completion: { (error) in
+            print(error as Any)
+        })
+        let refer = Database.database().reference().child("allPosts").child("comments").child(postName)
+        let commentRef = refer
+        commentRef.removeValue()
+        let userRef = Database.database().reference().child("users")
+        userRef.observe(.childAdded, with: { (snapshot) in
+            if let dict = snapshot.value as? [String: Any]{
+                
+                if dict["followed"] != nil{
+                    print(snapshot.key)
+                    self.deleteUsersFollowedPost(user: snapshot.key)
+               // print(dict["followed"])
+                }
+            }
+        })
+    }
+    
+    func deleteUsersFollowedPost(user: String){
+        let ref = Database.database().reference().child("users").child(user).child("followed").child(postName)
+       /* ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            print(snapshot)
+        })*/
+        let anotherRef = ref
+        anotherRef.removeValue()
+        
     }
     
     @objc func goBack()
@@ -51,6 +94,11 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
             print("user is editing")
             postButton.setTitle("Edit", for: .normal)
             postButton.addTarget(self, action: #selector(getEmail), for: .touchUpInside)
+            view.addSubview(deleteButton)
+            deleteButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
+            deleteButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+            deleteButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            deleteButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
             
             print(isUserEditing)
         } else {
@@ -233,10 +281,18 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             allRef.child("timeStamp").setValue(timeStamp)
                             allRef.child("uid").setValue(currUser!)
                             allRef.child("email").setValue(self.myEmail)
-                            allRef.child("lon").setValue(lon)
-                            allRef.child("lat").setValue(lat)
-                            allRef.child("locationName").setValue(locationName)
-                            allRef.child("city").setValue(city)
+                            if lon != nil{
+                                allRef.child("lon").setValue(lon)
+                                allRef.child("lat").setValue(lat)
+                                allRef.child("locationName").setValue(locationName)
+                                allRef.child("city").setValue(city)
+                            } else {
+                                allRef.child("lon").setValue("53")
+                                allRef.child("lat").setValue("53")
+                                allRef.child("locationName").setValue("unknown")
+                                allRef.child("city").setValue("unknown")
+                            }
+                            
                             
                         }
                         DispatchQueue.main.async {
@@ -480,7 +536,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         view.addSubview(backButton)
         
         backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: -UIScreen.main.bounds.height / 33.35).isActive = true
-        backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 2 * UIScreen.main.bounds.height / 33.35).isActive = true
+        backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
