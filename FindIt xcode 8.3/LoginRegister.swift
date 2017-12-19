@@ -16,11 +16,24 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     var keyboardHeight: CGFloat = 0
     
     @IBAction func registerTapped(_ sender: Any) {
+        activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         handleLoginRegister()
+        view.addSubview(activityIndicator)
     }
+    
+    var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        //indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .gray
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(patternImage: patternImage!)
+        activityIndicator.center = view.center
+        view.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         handleLoginButton()
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -87,7 +100,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     let emailSeparatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(patternImage: patternImage!)//myColor
+        view.backgroundColor = myColor//UIColor(patternImage: patternImage!)//myColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -110,9 +123,13 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         let sc = UISegmentedControl(items: ["Login","Register"])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.tintColor = UIColor(patternImage: patternImage!)//myColor
+        sc.tintColor = myColor//UIColor(patternImage: patternImage!)//myColor
         // automatiskai bus paselectintas register kai ijugsni appsa
         sc.selectedSegmentIndex = 1
+        sc.layer.borderWidth = 1
+        let borderColor = UIColor.white
+        sc.layer.borderColor = borderColor.cgColor
+        sc.tintColor = .white
         sc.addTarget(self, action: #selector(handleLoginRegisterChange), for: .valueChanged)
         
         return sc
@@ -125,10 +142,10 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     
     func handleLoginButton(){
-        loginButton.backgroundColor  = UIColor(patternImage: patternImage!)//myColor
-        //loginButton.layer.borderWidth = 1
-        // let borderColor = UIColor.darkGray
-        // loginButton.layer.borderColor = borderColor.cgColor
+        loginButton.backgroundColor  = myColor//UIColor(patternImage: patternImage!)//myColor
+        loginButton.layer.borderWidth = 1
+        let borderColor = UIColor.white
+        loginButton.layer.borderColor = borderColor.cgColor
         loginButton.setTitle("Register", for: .normal)
         loginButton.layer.cornerRadius = 5
         loginButton.translatesAutoresizingMaskIntoConstraints = false
@@ -139,9 +156,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     lazy var loginRegisterButton : UIButton = {
         // lazy var, nes it need access to  self
         let button = UIButton(type: .system)
-        button.backgroundColor  = UIColor(patternImage: patternImage!)//myColor
-        // button.layer.borderWidth = 1
-        let borderColor = UIColor.darkGray
+        button.backgroundColor  = myColor//UIColor(patternImage: patternImage!)//myColor
+        button.layer.borderWidth = 1
+        let borderColor = UIColor.white
         //button.layer.borderColor = borderColor.cgColor
         button.setTitle("Register", for: .normal)
         button.layer.cornerRadius = 5
@@ -182,6 +199,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                 Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
                     if let error = error {
                         self.presentAlert(alert: error.localizedDescription)
+                        UIApplication.shared.endIgnoringInteractionEvents()
+                        self.activityIndicator.stopAnimating()
                     } else{
                         
                         print("Log in succeded")
@@ -192,6 +211,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                         DispatchQueue.main.async {
                             // self.dismiss(animated: true, completion: nil)
                             UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
+                            UIApplication.shared.endIgnoringInteractionEvents()
+                            self.activityIndicator.stopAnimating()
                             self.performSegue(withIdentifier: "sss", sender: self)
                         }
                         
@@ -219,6 +240,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                 Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                     if let error = error {
                         self.presentAlert(alert: error.localizedDescription)
+                        UIApplication.shared.endIgnoringInteractionEvents()
+                        self.activityIndicator.stopAnimating()
                     } else{
                         
                         print("Sign up succeded")
@@ -233,6 +256,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                             DispatchQueue.main.async {
                                 //     let navController = UINavigationController(rootViewController: TabBarController())
                                 UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
+                                UIApplication.shared.endIgnoringInteractionEvents()
+                                self.activityIndicator.stopAnimating()
                                 self.performSegue(withIdentifier: "sss", sender: self)
                                 // self.present(tabBarController, animated: true, completion: nil)
                                 //self.show(tabBarController, sender: nil)
@@ -276,7 +301,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         inputsContainerView.addSubview(passwordTextField)
         inputsContainerView.backgroundColor = .white
         inputsContainerView.layer.cornerRadius = 5
-        let borderColor = UIColor(patternImage: patternImage!)//myColor
+        let borderColor = myColor//UIColor(patternImage: patternImage!)//myColor
         inputsContainerView.layer.borderColor = borderColor.cgColor
         inputsContainerView.layer.borderWidth = 1.2
         inputsContainerView.layer.masksToBounds = true

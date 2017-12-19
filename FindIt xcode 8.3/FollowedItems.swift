@@ -85,16 +85,18 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             for snap in snapshots{
                 
                 
-                self.postId.append(snap.key)
+               // self.postId.append(snap.key)
                 if let date = snap.childSnapshot(forPath: "timestamp").value as? Double{
-                    self.allUsers.date.append(date)
-                    //let datee = Date(timeIntervalSince1970:date)
-                    
-                    //self.whatDate.append(datee)
-                   self.keys.append(snap.key)
-                    self.getFollowedPosts(post: snap.key)
-                    
-                    
+                    DispatchQueue.main.async {
+                        self.allUsers.date.append(date)
+                        //let datee = Date(timeIntervalSince1970:date)
+                        
+                        //self.whatDate.append(datee)
+                        self.keys.append(snap.key)
+                        self.getFollowedPosts(post: snap.key)
+                        
+
+                    }
                     }
                 }
                
@@ -152,8 +154,8 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         foundRef.child("found").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dict = snapshot.value as? [String: Any]
                 if snapshot.exists(){
-                    
-                   // self.postId.append(snapshot.key)
+                 //     print("found snapshot ",snapshot)
+                    self.postId.append(snapshot.key)
                     self.isItFoundOrLost.append("found")
                     let date = dict?["timeStamp"] as! Double
                     self.datee.append(date)
@@ -178,9 +180,10 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     
                     DispatchQueue.main.async {
                         //self.tableView.reloadData()
-                        print("found")
-                        print(self.allUsers.date.count ," <--date")
-                        print(self.allUsers.email.count ," <--email")
+                        
+                        
+                        
+                        
                         self.getLostFollowed(post: post)
                         
                         foundRef.removeAllObservers()
@@ -193,10 +196,6 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     DispatchQueue.main.async {
                         
                         //self.tableView.reloadData()
-                       // print("du     ",self.allUsers.email.count, " " , self.allUsers.city.count, " ", self.allUsers.date.count)
-                        print("found")
-                        print(self.allUsers.date.count ," <--date")
-                        print(self.allUsers.email.count ," <--email")
                         self.getLostFollowed(post: post)
                         //self.refresh.endRefreshing()
                         foundRef.removeAllObservers()
@@ -217,8 +216,9 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         lostRef.child("lost").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
             let dict = snapshot.value as? [String: Any]
             if snapshot.exists(){
+               // print("lost snapshot ",snapshot)
                 self.isItFoundOrLost.append("lost")
-               // self.postId.append(snapshot.key)
+                self.postId.append(snapshot.key)
                 
                 let date = dict?["timeStamp"] as! Double
                 self.datee.append(date)
@@ -245,11 +245,9 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     self.tableView.reloadData()
                    
                     self.sortPosts(timee: self.allUsers.date)
-                    lostRef.removeAllObservers()
-                    print("lost")
-                    print(self.allUsers.date.count ," <--date")
-                    print(self.allUsers.email.count ," <--email")
-                    self.refresh.endRefreshing()
+                  //  lostRef.removeAllObservers()
+                 
+                    
                     
                 }
             } else{
@@ -257,11 +255,8 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     self.tableView.reloadData()
                    
                     self.sortPosts(timee: self.allUsers.date)
-                    print("lost")
-                    print(self.allUsers.date.count ," <--date")
-                    print(self.allUsers.email.count ," <--email")
-                    lostRef.removeAllObservers()
-                    //self.refresh.endRefreshing()
+                 //   lostRef.removeAllObservers()
+                    
                 }
                 
             }
@@ -270,12 +265,12 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 
     }
 
-    
+    var ciulpk = 0
     func sortPosts(timee: [Double]){
         var time = timee
         
         if allUsers.date.count == allUsers.email.count{
-            
+        ciulpk += 1
         if time.count > 1{
             var i = 0
             while i < time.count - 1{
@@ -326,6 +321,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                 i += 1
                 }// cia if date == email
             }
+            
             datee.reverse()
             self.allUsers.date.reverse()
             self.allUsers.email.reverse()
@@ -338,10 +334,12 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             self.allUsers.location.reverse()
             self.postId.reverse()
             self.isItFoundOrLost.reverse()
-            
+            // self.allUsers.date = datee
             
             tableView.reloadData()
             self.refresh.endRefreshing()
+            print(allUsers.descriptions)
+
         }
     
     }
@@ -391,7 +389,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
-        
+        print(indexPath.row)
         image.loadImageUsingCacheWithUrlString(profileImageURL)
         image.contentMode = .scaleAspectFit
         //postInfo.descriptiontextField.text = allUsers.descriptions[indexPath.item]
@@ -401,7 +399,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         dateLabel.text = currentCell.dateLabel.text!
         locationLabel.text = currentCell.locationLabel.text!
         cityLabel.text = currentCell.cityLabel.text!
-        postName = postId[indexPath.item]
+        postName = postId[indexPath.row]
         foundOrLost = isItFoundOrLost[indexPath.row]
         
         descriptiontextField.text = currentCell.infoLabel.text

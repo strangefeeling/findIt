@@ -74,7 +74,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     func handleSearch(){
         
         searchController.searchBar.delegate = self
-        searchController.searchBar.barTintColor = UIColor(patternImage: patternImage!)//myColor
+        searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
@@ -248,7 +248,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         
         let currUser = Auth.auth().currentUser?.uid
         
-        pinView.pinTintColor = UIColor(patternImage: patternImage!)
+        pinView.pinTintColor = myColor//UIColor(patternImage: patternImage!)
          /*   for user in uids{
                 if user == currUser {
                     pinView.pinTintColor = UIColor.red

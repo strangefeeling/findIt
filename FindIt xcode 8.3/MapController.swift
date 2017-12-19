@@ -25,7 +25,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         button.setTitle("Search", for: .normal)
         button.titleLabel?.textAlignment = .left
         //button.titleLabel?.textColor = .black
-        button.setTitleColor(UIColor(patternImage: patternImage!), for: .normal)
+        button.setTitleColor(myColor, for: .normal)
         button.addTarget(self, action: #selector(handleSearch), for: .touchUpInside)
         return button
     }()
@@ -51,7 +51,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
     func handleSearch(){
         
         searchController.searchBar.delegate = self
-        searchController.searchBar.barTintColor = UIColor(patternImage: patternImage!)//myColor
+        searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
 
@@ -206,7 +206,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         back.translatesAutoresizingMaskIntoConstraints = false
         back.setTitle("Back", for: .normal)
         //back.titleLabel?.textColor = .black
-        back.setTitleColor(UIColor(patternImage: patternImage!), for: .normal)
+        back.setTitleColor(myColor, for: .normal)
         back.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         return back
     }()

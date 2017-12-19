@@ -35,11 +35,12 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
         view.addSubview(tableView)
         tableView.separatorStyle = .none
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
-        view.addConstraintsWithFormat(format: "V:|-[v0]-50-|", views: tableView)
+        view.addConstraintsWithFormat(format: "V:|-[v0]-|", views: tableView)
         view.backgroundColor = .white
         setupAd()
         
@@ -51,6 +52,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     override func viewWillAppear(_ animated: Bool) {
         if didUserTappedSearch{
             getPosts()
+            didUserTappedSearch = false
             
         }
         //getPosts()
@@ -388,11 +390,28 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.postId.reverse()
         cellContent.reverse()
         self.isItFoundOrLost.reverse()
-        
+        noResults.removeFromSuperview()
         self.tableView.reloadData()
         let indexPath = IndexPath(item: 0, section: 0)
+        if date.count != 0{
         tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        } else {
+            view.addSubview(noResults)
+            noResults.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            noResults.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+            noResults.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            noResults.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        }
     }
+    
+    let noResults: UILabel = {
+       let label = UILabel()
+        label.text = "No Results"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .darkGray
+        label.textAlignment = .center
+        return label
+    }()
     
 }
 

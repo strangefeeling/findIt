@@ -28,10 +28,10 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     let lostFoundSegentedControll: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Found","Lost"])
-        sc.backgroundColor = UIColor(patternImage: patternImage!)
+        sc.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white
-        let borderColor = UIColor(patternImage: patternImage!)//myColor
+        let borderColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let attrs = [
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
@@ -70,11 +70,11 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(myImage)
+       /* view.addSubview(myImage)
         myImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
         myImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         myImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        myImage.topAnchor.constraint(equalTo: view.topAnchor, constant: -80).isActive = true
+        myImage.topAnchor.constraint(equalTo: view.topAnchor, constant: -80).isActive = true*/
         setup()
         
         collectionView?.register(AllItemsCollectionViewCell.self, forCellWithReuseIdentifier: cellId)

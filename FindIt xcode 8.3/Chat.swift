@@ -35,7 +35,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     func setup(){
 
-        
+        collectionView?.addSubview(refresh)
         collectionView?.alwaysBounceVertical = true
         //collectionView?.allowsSelection = false
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
@@ -191,7 +191,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                     recipientUseressagesRef.updateChildValues([messageId: 1])
                     DispatchQueue.main.async {
                         
-                       // self.moveToLastComment()
+                        self.moveToLastComment()
 
                     }
                 })
@@ -204,10 +204,11 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     var messages = [String]()
     var messageName = [String]()
-    
+    var a = 15
+    var times = [Double]()
     func observeMessages(){
         guard let uid = Auth.auth().currentUser?.uid else {return}
-        let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: 25)
+        let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: UInt(a))
         userMessageRef.observe(.childAdded, with: { (snapshot) in
             let messageId = snapshot.key
             
@@ -217,15 +218,18 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 let message = dictionary["text"] as! String
                 let fromIdd = dictionary["fromId"] as! String
                 let toIdd = dictionary["toId"] as! String
+                let time = dictionary["timeStamp"] as! Double
+                
                 
                 if (fromIdd == self.fromID && toIdd == self.toId) || (fromIdd == self.toId && toIdd == self.fromID) {
                     self.fromId.append(fromIdd)
-                    
+                    self.times.append(time)
                     self.messages.append(message)
                     DispatchQueue.main.async {
                         UserDefaults.standard.set(self.messages, forKey: "messages")
                         self.collectionView?.reloadData()
                         self.moveToLastComment()
+                      
                     }
                 }
                
@@ -267,8 +271,9 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: message).width + 32
         
         if fromId[indexPath.row] == Auth.auth().currentUser?.uid {
-            cell.bubbleView.backgroundColor = UIColor(patternImage: UIImage(named: "redBubble")!)//myColor//UIColor(red: 255/255, green: 129/255, blue: 117/255, alpha: 0.6)
+            cell.bubbleView.backgroundColor = myColor//UIColor(patternImage: UIImage(named: "redBubble")!)//myColor//UIColor(red: 255/255, green: 129/255, blue: 117/255, alpha: 0.6)
             cell.textView.textColor = .white
+            
             cell.bubbleViewRightAnchor?.isActive = true
             cell.bubbleViewLeftAnchor?.isActive = false
             
@@ -287,6 +292,59 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         return cell
     }
     
+    lazy var refresh: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(addMoreMessages), for: .valueChanged)
+        return refresh
+    }()
     
+   
     
+    func addMoreMessages(){
+       a += 10
+        var i = 0
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: UInt(a))
+        userMessageRef.observe(.childAdded, with: { (snapshot) in
+            let messageId = snapshot.key
+            
+            let messagesRef = Database.database().reference().child("messages").child(messageId).queryOrdered(byChild: "timeStamp")
+            messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dictionary = snapshot.value as? [String: Any] else {return}
+               // print(snapshot)
+                let message = dictionary["text"] as! String
+                let fromIdd = dictionary["fromId"] as! String
+                let toIdd = dictionary["toId"] as! String
+                let time = dictionary["timeStamp"] as! Double
+                //print(time)
+                
+                if self.times.contains(time) == false {
+
+                if (fromIdd == self.fromID && toIdd == self.toId) || (fromIdd == self.toId && toIdd == self.fromID) {
+                   
+                    // + i, kad nebutu atvirksciai uzloadintos naujos zinutes
+                    self.fromId.insert(fromIdd, at: 0 + i)
+                    self.times.insert(time, at: 0 + i)
+                    self.messages.insert(message, at: 0 + i)
+                    i += 1
+                    }
+                }
+                DispatchQueue.main.async {
+                   
+                    self.collectionView?.reloadData()
+                    // print(self.timeToreverse)
+                    self.refresh.endRefreshing()
+                }
+            }, withCancel: nil)
+            
+          
+
+
+            
+        }, withCancel: nil)
+        
+      
+        
+    }
+  
 }

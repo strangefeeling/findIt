@@ -96,7 +96,7 @@ class AllItemsTableViewCell: UITableViewCell {
         label.text = "Street:"
         label.textAlignment = .left
         
-        label.backgroundColor = .yellow
+       // label.backgroundColor = .yellow
         label.textColor = .darkGray
         label.font = UIFont(name: "Avenir Next", size: UIScreen.main.bounds.height / 33.35)
         label.sizeToFit()
@@ -122,7 +122,7 @@ class AllItemsTableViewCell: UITableViewCell {
         label.sizeToFit()
         label.numberOfLines = 0
         label.textColor = .darkGray
-        label.backgroundColor = .red
+       // label.backgroundColor = .red
         
         label.font = UIFont(name: "Avenir Next-Bold", size: UIScreen.main.bounds.height / 33.35)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -154,11 +154,12 @@ class AllItemsTableViewCell: UITableViewCell {
         return line
     }()
     
-    var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+    
     
     func makeConstraints(){
         //contentView.addSubview(itemDescription)
         // contentView.addSubview(descriptionLabel)
+        var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
         if UIScreen.main.bounds.width > 500 {
             myWidthConstant = myWidthConstant * 3 / 4// ipad pro 12.9 inch, ipad pro 10.5 inch - rek + 12, ipad 5th generation, ipdad 9.7 inch, ipad air 2 ir 1
         }

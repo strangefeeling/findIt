@@ -16,7 +16,7 @@ var messagesInPost = [String]()
 
 var imageUrl = String()
 
-var patternImage = UIImage(named: "iPhone 7 Plus1")
+//var patternImage = UIImage(named: "iPhone 7 Plus1")
 
 var toIdd = ""
 

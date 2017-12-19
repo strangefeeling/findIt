@@ -31,10 +31,10 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     let lostFoundSegentedControll: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["My Posts","Followed"])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.backgroundColor = UIColor(patternImage: patternImage!)
+        sc.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white
-        let borderColor = UIColor(patternImage: patternImage!)//myColor
+        let borderColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let attrs = [
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!

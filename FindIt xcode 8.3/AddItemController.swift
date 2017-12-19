@@ -18,6 +18,14 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     var isUserEditing = false
     var editPostName = ""
     
+    var activityIndicator: UIActivityIndicatorView = {
+       let indicator = UIActivityIndicatorView()
+        //indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .gray
+        return indicator
+    }()
+    
     let backButton: UIButton = {
        let button = UIButton()//(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -27,14 +35,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         return button
     }()
     
-    let imageView: UIImageView = {
-        let view = UIImageView()
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        
-        view.image = patternImage
-        return view
-    }()
-    
+ 
     let deleteButton: UIButton = {
        let button = UIButton()
         button.setTitle("Delete", for: .normal)
@@ -49,27 +50,9 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     var whoFollows = [String]()
     
     @objc func deletePost(){
-        print("susirasi darba")
-       let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
-        ref.removeValue()
-        let imageRef = Storage.storage().reference(forURL: imageUrl)
-        imageRef.delete(completion: { (error) in
-            print(error as Any)
-        })
-        let refer = Database.database().reference().child("allPosts").child("comments").child(postName)
-        let commentRef = refer
-        commentRef.removeValue()
-        let userRef = Database.database().reference().child("users")
-        userRef.observe(.childAdded, with: { (snapshot) in
-            if let dict = snapshot.value as? [String: Any]{
-                
-                if dict["followed"] != nil{
-                    print(snapshot.key)
-                    self.deleteUsersFollowedPost(user: snapshot.key)
-               // print(dict["followed"])
-                }
-            }
-        })
+    
+        presentAlert(alert: "Item will be deletd permanently")
+        
     }
     
     func deleteUsersFollowedPost(user: String){
@@ -87,24 +70,54 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         self.dismiss(animated: true, completion: nil)
     }
     
+    func beGone(){
+        print("susirasi darba")
+        let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+        ref.removeValue()
+        let imageRef = Storage.storage().reference(forURL: imageUrl)
+        imageRef.delete(completion: { (error) in
+            print(error as Any)
+        })
+        let refer = Database.database().reference().child("allPosts").child("comments").child(postName)
+        let commentRef = refer
+        commentRef.removeValue()
+        let userRef = Database.database().reference().child("users")
+        userRef.observe(.childAdded, with: { (snapshot) in
+            if let dict = snapshot.value as? [String: Any]{
+                
+                if dict["followed"] != nil{
+                    //print(snapshot.key)
+                    self.deleteUsersFollowedPost(user: snapshot.key)
+                    // print(dict["followed"])
+                }
+            }
+        })
+ 
+    }
+    
+    func presentAlert(alert:String){
+            let alertVC = UIAlertController(title: "Do you really want to delete this item?", message: alert, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+                self.beGone()
+                alertVC.dismiss(animated: true, completion: nil)
+                //UserDefaults.standard.removeObject(forKey: "emails")
+                //self.performSegue(withIdentifier: "lll", sender: self)
+            }
+            let cancelAction = UIAlertAction(title: "No", style: .default) { (action) in
+            
+            
+            alertVC.dismiss(animated: true, completion: nil)
+            }
+        
+            alertVC.addAction(cancelAction)
+            alertVC.addAction(okAction)
+            present(alertVC, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(imageView)
-        if isUserEditing {
-            print("user is editing")
-            postButton.setTitle("Edit", for: .normal)
-            postButton.addTarget(self, action: #selector(getEmail), for: .touchUpInside)
-            view.addSubview(deleteButton)
-            deleteButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
-            deleteButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
-            deleteButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
-            deleteButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            
-            print(isUserEditing)
-        } else {
-            postButton.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
-        }
-        
+        view.backgroundColor = myColor
+        activityIndicator.center = view.center
        // view.backgroundColor = UIColor(patternImage: patternImage!)
         
         NotificationCenter.default.addObserver(self, selector: #selector(AddItemController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -113,7 +126,27 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         view.addGestureRecognizer(tap)
         
         setupView()
-        print("image url ", imageUrl)
+        if isUserEditing {
+            print("user is editing")
+            postButton.setTitle("Edit", for: .normal)
+            postButton.addTarget(self, action: #selector(getEmail), for: .touchUpInside)
+            view.addSubview(deleteButton)
+            if foundOrLost == "lost" {
+                mySwitch.isOn = false
+            } else {
+                mySwitch.isOn = true
+            }
+            deleteButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor, constant: 0).isActive = true
+            deleteButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+            deleteButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            deleteButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+            
+            print(isUserEditing)
+        } else {
+            postButton.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
+        }
+
+        //print("image url ", imageUrl)
         
     }
     
@@ -239,7 +272,9 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     
     func post(){
-      
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         if imageToPost != nil && itemDescription.text != ""{
             
             let imageName = NSUUID().uuidString
@@ -305,7 +340,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             UserDefaults.standard.removeSuite(named: "city")
                             //let myCell = SecondPage()
                             //myCell.collectionView?.reloadData()
-                            
+                            self.activityIndicator.stopAnimating()
+                            UIApplication.shared.endIgnoringInteractionEvents()
                             self.dismiss(animated: true, completion: nil)
                             //self.navigationController?.popViewController(animated: true)
                             
@@ -365,6 +401,9 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     
     func editPost(){
+        activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        view.addSubview(activityIndicator)
         if imageToPost != nil && itemDescription.text != ""{
             
             
@@ -426,7 +465,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 UserDefaults.standard.removeSuite(named: "city")
                                 //let myCell = SecondPage()
                                 //myCell.collectionView?.reloadData()
-                                
+                                self.activityIndicator.stopAnimating()
+                                UIApplication.shared.endIgnoringInteractionEvents()
                                 self.dismiss(animated: true, completion: nil)
                                 //self.navigationController?.popViewController(animated: true)
                                 
@@ -506,7 +546,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 UserDefaults.standard.removeSuite(named: "city")
                                 //let myCell = SecondPage()
                                 //myCell.collectionView?.reloadData()
-                                
+                                self.activityIndicator.stopAnimating()
+                                UIApplication.shared.endIgnoringInteractionEvents()
                                 self.dismiss(animated: true, completion: nil)
                                 //self.navigationController?.popViewController(animated: true)
                                 

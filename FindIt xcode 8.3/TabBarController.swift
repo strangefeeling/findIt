@@ -73,14 +73,20 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     func handleSearch(){
         
         searchController.searchBar.delegate = self
+        
+        searchController.searchBar.layer.borderWidth = 1
+        searchController.searchBar.layer.borderColor = myColor.cgColor
         searchController.searchBar.placeholder = "Enter City Name"
-        searchController.searchBar.barTintColor = UIColor(patternImage: patternImage!)
+        searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
         self.searchController.hidesNavigationBarDuringPresentation = false;
         self.definesPresentationContext = false
+        self.searchController.dimsBackgroundDuringPresentation = false
+        
         present(searchController, animated: true, completion: nil)
+        
         
     }
     
@@ -127,8 +133,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         searchResults.searchText = searchBar.text!
         searchResults.didUserTappedSearch = true
         self.searchController.searchBar.isHidden = true
-        show(searchResults, sender: self)
         
+        show(searchResults, sender: self)
+        self.searchController.dismiss(animated: true, completion: nil)
         
         /*     let ref = Database.database().reference().child("allPosts").child("lost")
          ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
@@ -256,17 +263,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         // navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
+      /*  let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
         imageView.contentMode = .scaleAspectFit
-        let image = UIImage(named: "iPhone 7 Plus2")
-        imageView.image = image
+        let image = UIImage(named: "iPhone 7 Plus2")*/
+       // imageView.image = image
         //navigationController?.navigationBar.setBackgroundImage(image, for: .default)
         // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
-        //navigationController?.navigationBar.barTintColor = myColor
-        let myImage = UIImage(named: "iPhone 7 Plus2")
+        navigationController?.navigationBar.barTintColor = myColor
+        //let myImage = UIImage(named: "iPhone 7 Plus2")
         
         
-        self.navigationController?.navigationBar.setBackgroundImage(patternImage, for: .default)
+        //self.navigationController?.navigationBar.setBackgroundImage(myColor, for: .default)
         //UINavigationBar.appearance().setBackgroundImage(UIImage(named:"manoView1"), for:.default)
         navigationController?.navigationBar.isTranslucent = false
     }
@@ -298,7 +305,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     
     func setTabBarAppearence(){
         self.tabBar.isTranslucent = false
-        self.tabBar.barTintColor = UIColor(patternImage: patternImage!)
+        self.tabBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
         self.tabBar.tintColor = .white
         self.tabBar.alpha = 1
     }
@@ -306,7 +313,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     let myView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(patternImage: patternImage!)
+        view.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         return view
     }()
     
@@ -342,7 +349,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         let coverup = UIView()
         //coverup.backgroundColor = myColor
         
-        coverup.backgroundColor = UIColor(patternImage: patternImage!)
+        coverup.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         coverup.translatesAutoresizingMaskIntoConstraints = false
         return coverup
     }()

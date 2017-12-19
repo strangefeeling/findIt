@@ -22,7 +22,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = myColor//UIColor.white
         
         // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
         //descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 33.35)
@@ -49,6 +49,8 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         descriptiontextField.sizeToFit()
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 5
+        print(postName)
+        print(toIdd)
         tableView.rowHeight = UITableViewAutomaticDimension
         firstCellHeight = UIScreen.main.bounds.height / 2.5 + 7 * (UIScreen.main.bounds.height / 33.35 + 8)  + descriptiontextField.frame.height
         if toIdd == Auth.auth().currentUser?.uid{
@@ -120,7 +122,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
-        circle.backgroundColor = UIColor(patternImage: patternImage!)
+        circle.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         circle.addTarget(self, action: #selector(circleAction), for: .touchUpInside)
         
         circle.alpha = 0.5
@@ -136,7 +138,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
         button.alpha = 0
         
-        button.backgroundColor = UIColor(patternImage: patternImage!)
+        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         
         return button
     }()
@@ -152,7 +154,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.layer.cornerRadius = 6
         button.alpha = 0
         
-        button.backgroundColor = UIColor(patternImage: patternImage!)
+        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         return button
     }()
     
@@ -165,7 +167,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.layer.cornerRadius = 6
         button.alpha = 0
         
-        button.backgroundColor = UIColor(patternImage: patternImage!)
+        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         
         return button
         
@@ -251,7 +253,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             for snap in snapshots {
                 if let comment = snap.childSnapshot(forPath: "comment").value as? String {
                     self.comments.append(comment)
-                    
+                    print(self.comments)
                 }
                 
                 if let email = snap.childSnapshot(forPath: "email").value as? String {
@@ -485,7 +487,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PostInfoCell
             cell.awakeFromNib()
-            
+           // cell.backgroundColor = myColor
             cell.selectionStyle = UITableViewCellSelectionStyle.none
             tableView.isUserInteractionEnabled = true
             cell.message.sizeToFit()

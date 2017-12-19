@@ -126,10 +126,10 @@ class PostInfoStuff: UITableViewCell {
         setupView()
     }
     
-    var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
+    
     
     func setupView(){
-        
+        var myWidthConstant = UIScreen.main.bounds.width / 46.875 * 7.5
         if UIScreen.main.bounds.width > 500 {
             myWidthConstant = myWidthConstant * 3 / 4 + 12// ipad pro 12.9 inch, ipad pro 10.5 inch - rek + 12, ipad 5th generation, ipdad 9.7 inch, ipad air 2 ir 1
         }
