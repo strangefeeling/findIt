@@ -69,6 +69,8 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         return refresh
     }()
     
+   
+    
  /*   func refreshData() {
        
         let uid = Auth.auth().currentUser?.uid
@@ -526,5 +528,8 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         
         show()
     }
+    
+
+
     
 }

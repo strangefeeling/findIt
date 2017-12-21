@@ -55,9 +55,17 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(observeOneTime), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(refreshPosts), for: .valueChanged)
         return refresh
     }()
+    var a = 5
+    
+    func refreshPosts(){
+        a = 5
+        i = 0
+        self.howManySnaps.removeAll()
+        observeOneTime()
+    }
     
     func observeOneTime(){
         
@@ -66,9 +74,12 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
             
             let ref =  Database.database().reference().child("allPosts").child("found")//.child(uid)
             
-            ref.queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
+            ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
                 
+             //   self.a = 5
+             //   self.i = 5
                 
+                self.howManySnaps.removeAll()
                 self.allUsers.descriptions.removeAll()
                 self.allUsers.downloadUrls.removeAll()
                 self.allUsers.uid.removeAll()
@@ -84,13 +95,11 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                     
                     self.postId.append(snap.key)
                     self.allUsers.postName.append(snap.key)
-                    
+                    self.howManySnaps.append(snap.key)
                     if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
                         self.allUsers.timeStamp.append(timePosted)
                         self.allUsers.dictionary["timeStamp"] = timePosted
                         self.date.append(Double(timePosted))
-                        
-                        
                     }
                     
                     if let snaap = snap.childSnapshot(forPath: "description").value as? String{
@@ -132,7 +141,9 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
-                    
+                    self.i += 5
+
+                    ref.removeAllObservers()
                     self.refresh.endRefreshing()
                   
                 })
@@ -230,6 +241,99 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         imageUrl = profileImageURL
 
         show()
+    }
+    var i = 0
+    
+    var howManySnaps = [String]()
+    
+    
+    
+ /*   func addMoreRows(){
+        if Auth.auth().currentUser?.uid != nil{
+            
+            
+            
+            let ref =  Database.database().reference().child("allPosts").child("found")//.child(uid)
+            
+            ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+                for snap in snapshots {
+                    
+                    if self.howManySnaps.contains(snap.key) == false{
+                    
+                    self.howManySnaps.append(snap.key)
+                    
+                        
+                    self.postId.insert((snap.key), at: self.postId.count - 1)
+                    self.allUsers.postName.insert((snap.key), at: self.allUsers.postName.count - 1)
+                    
+                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                        self.allUsers.timeStamp.insert(timePosted, at: self.allUsers.timeStamp.count - 1)
+                        self.allUsers.dictionary["timeStamp"] = timePosted
+                        self.date.append(Double(timePosted))
+        
+                    }
+                    
+                    if let snaap = snap.childSnapshot(forPath: "description").value as? String{
+                        self.allUsers.descriptions.insert(snaap, at: self.allUsers.descriptions.count - 1)
+                        self.allUsers.dictionary["description"] = snaap
+                    }
+                    if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+                        //self.allUsers.downloadUrls.append(snaaap)
+                        self.allUsers.downloadUrls.insert(snaaap, at: self.allUsers.downloadUrls.count - 1)
+                        self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+                        self.allUsers.uid.append(uid)
+                        self.allUsers.uid.insert(uid, at: self.allUsers.uid.count - 1)
+                        // self.allUsers.dictionary["downloadURL"] = snaaap
+                    }
+                    
+                    if let city = snap.childSnapshot(forPath: "city").value as? String{
+                        self.cities.append(city)
+                        self.cities.insert(city, at: self.cities.count - 1)
+                    }
+                    
+                    if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+                        self.locations.append(location)
+                        self.locations.insert(location, at: self.locations.count - 1)
+                    }
+                    
+                    if let email = snap.childSnapshot(forPath: "email").value as? String{
+                        self.emails.append(email)
+                        self.emails.insert(email, at: self.emails.count - 1)
+                        }
+                    }
+                
+            }
+               
+                DispatchQueue.main.async(execute: {
+                    self.i += 5
+                    ref.removeAllObservers()
+                   print(self.allUsers.descriptions)
+                    self.tableView.reloadData()
+                })
+            })
+        }
+    }*/
+    
+    
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+       let lasItem = allUsers.descriptions.count - 3
+        print("count", howManySnaps.count, i, a)
+        if lasItem > 0 {
+        if indexPath.row == lasItem{
+           
+            if i <= howManySnaps.count{
+            print("load more ", i, a)
+            a += 5
+            //addMoreRows()
+                observeOneTime()
+            }
+            // handle your logic here to get more items, add it to dataSource and reload tableview
+        }
+    }
     }
     
 }

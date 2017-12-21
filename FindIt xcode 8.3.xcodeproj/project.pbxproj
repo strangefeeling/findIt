@@ -11,23 +11,18 @@
 		7B17CF951FAC773B00394879 /* AddItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF941FAC773B00394879 /* AddItemController.swift */; };
 		7B17CF971FAC775700394879 /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF961FAC775700394879 /* LoginRegister.swift */; };
 		7B17CF991FAC776A00394879 /* PostInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF981FAC776A00394879 /* PostInfo.swift */; };
-		7B17CF9B1FAC778D00394879 /* EdditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF9A1FAC778D00394879 /* EdditPost.swift */; };
 		7B17CF9D1FAC77B400394879 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF9C1FAC77B400394879 /* Chat.swift */; };
 		7B17CFA01FAC77D900394879 /* Userr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CF9F1FAC77D900394879 /* Userr.swift */; };
 		7B17CFA21FAC77F000394879 /* EveryUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFA11FAC77F000394879 /* EveryUser.swift */; };
 		7B17CFA41FAC780300394879 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFA31FAC780300394879 /* Messages.swift */; };
 		7B17CFA61FAC782300394879 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFA51FAC782300394879 /* Extensions.swift */; };
-		7B17CFA91FAC785200394879 /* MyItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFA81FAC785200394879 /* MyItems.swift */; };
-		7B17CFAB1FAC786B00394879 /* AllItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFAA1FAC786B00394879 /* AllItems.swift */; };
 		7B17CFAD1FAC788700394879 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFAC1FAC788700394879 /* MessagesController.swift */; };
-		7B17CFB01FAC78A800394879 /* MyItemsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFAF1FAC78A800394879 /* MyItemsCell.swift */; };
 		7B17CFB21FAC78BE00394879 /* MessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFB11FAC78BE00394879 /* MessagesCell.swift */; };
 		7B17CFB41FAC78CE00394879 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFB31FAC78CE00394879 /* InfoCell.swift */; };
 		7B17CFB61FAC78E400394879 /* PostInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFB51FAC78E400394879 /* PostInfoCell.swift */; };
 		7B18EF101FAF2C6A007742F4 /* FoundItemsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B18EF0F1FAF2C6A007742F4 /* FoundItemsMap.swift */; };
 		7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7B3A4D161FB89EAD00E5DDBF /* Model.xcdatamodeld */; };
 		7B4B06B61FC5DA5D005320B0 /* PostInfoStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */; };
-		7B4B06B81FC716E2005320B0 /* MyPostInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4B06B71FC716E2005320B0 /* MyPostInfo.swift */; };
 		7B4D597F1FD9643A001C2310 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */; };
 		7B69D0A61FD96E5A0073D6BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */; };
 		7B7E851A1FD6CAF80085C8F9 /* FollowedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */; };
@@ -44,6 +39,7 @@
 		7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */; };
 		7BBF48BB1FC9843D005414C1 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBF48BA1FC9843D005414C1 /* Variables.swift */; };
 		7BC2F9031FD033E900D0AE88 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC2F9021FD033E900D0AE88 /* SearchResults.swift */; };
+		7BDEA9A51FEA67FE0090CB79 /* MyItemsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDEA9A41FEA67FE0090CB79 /* MyItemsCell.swift */; };
 		7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */; };
 		7BEB4BF31FCD894300D1B990 /* SecondPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEB4BF21FCD894300D1B990 /* SecondPage.swift */; };
 		7BEB4BF51FCD8B7500D1B990 /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */; };
@@ -56,23 +52,18 @@
 		7B17CF941FAC773B00394879 /* AddItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemController.swift; sourceTree = "<group>"; };
 		7B17CF961FAC775700394879 /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRegister.swift; sourceTree = "<group>"; };
 		7B17CF981FAC776A00394879 /* PostInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfo.swift; sourceTree = "<group>"; };
-		7B17CF9A1FAC778D00394879 /* EdditPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdditPost.swift; sourceTree = "<group>"; };
 		7B17CF9C1FAC77B400394879 /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		7B17CF9F1FAC77D900394879 /* Userr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Userr.swift; sourceTree = "<group>"; };
 		7B17CFA11FAC77F000394879 /* EveryUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EveryUser.swift; sourceTree = "<group>"; };
 		7B17CFA31FAC780300394879 /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		7B17CFA51FAC782300394879 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		7B17CFA81FAC785200394879 /* MyItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyItems.swift; sourceTree = "<group>"; };
-		7B17CFAA1FAC786B00394879 /* AllItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItems.swift; sourceTree = "<group>"; };
 		7B17CFAC1FAC788700394879 /* MessagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
-		7B17CFAF1FAC78A800394879 /* MyItemsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyItemsCell.swift; sourceTree = "<group>"; };
 		7B17CFB11FAC78BE00394879 /* MessagesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesCell.swift; sourceTree = "<group>"; };
 		7B17CFB31FAC78CE00394879 /* InfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		7B17CFB51FAC78E400394879 /* PostInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoCell.swift; sourceTree = "<group>"; };
 		7B18EF0F1FAF2C6A007742F4 /* FoundItemsMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundItemsMap.swift; sourceTree = "<group>"; };
 		7B3A4D171FB89EAD00E5DDBF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoStuff.swift; sourceTree = "<group>"; };
-		7B4B06B71FC716E2005320B0 /* MyPostInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostInfo.swift; sourceTree = "<group>"; };
 		7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowedItems.swift; sourceTree = "<group>"; };
@@ -91,6 +82,7 @@
 		7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewCell.swift; sourceTree = "<group>"; };
 		7BBF48BA1FC9843D005414C1 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
 		7BC2F9021FD033E900D0AE88 /* SearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
+		7BDEA9A41FEA67FE0090CB79 /* MyItemsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyItemsCell.swift; sourceTree = "<group>"; };
 		7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllLostItems.swift; sourceTree = "<group>"; };
 		7BEB4BF21FCD894300D1B990 /* SecondPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondPage.swift; sourceTree = "<group>"; };
 		7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
@@ -130,8 +122,6 @@
 				7BB5AAF21FADDC86004BA02F /* MapController.swift */,
 				7BA44FC51FB115EE00667DA6 /* NavController.swift */,
 				7B17CF981FAC776A00394879 /* PostInfo.swift */,
-				7B17CF9A1FAC778D00394879 /* EdditPost.swift */,
-				7B4B06B71FC716E2005320B0 /* MyPostInfo.swift */,
 				7B17CF9C1FAC77B400394879 /* Chat.swift */,
 				7B18EF0F1FAF2C6A007742F4 /* FoundItemsMap.swift */,
 			);
@@ -148,22 +138,13 @@
 			name = Users;
 			sourceTree = "<group>";
 		};
-		7B17CFA71FAC783500394879 /* Tabs */ = {
-			isa = PBXGroup;
-			children = (
-				7B17CFA81FAC785200394879 /* MyItems.swift */,
-				7B17CFAA1FAC786B00394879 /* AllItems.swift */,
-			);
-			name = Tabs;
-			sourceTree = "<group>";
-		};
 		7B17CFAE1FAC789600394879 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				7B17CFAF1FAC78A800394879 /* MyItemsCell.swift */,
 				7B17CFB11FAC78BE00394879 /* MessagesCell.swift */,
 				7BA44FC91FB1CAEC00667DA6 /* MoreCell.swift */,
 				7B17CFB31FAC78CE00394879 /* InfoCell.swift */,
+				7BDEA9A41FEA67FE0090CB79 /* MyItemsCell.swift */,
 				7B17CFB51FAC78E400394879 /* PostInfoCell.swift */,
 				7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */,
 			);
@@ -202,7 +183,6 @@
 				7B17CF911FAC76D000394879 /* controllers */,
 				7B8F4C1C1FAC73D300E61996 /* LaunchScreen.storyboard */,
 				7BBF48B51FC874EC005414C1 /* NewTabs */,
-				7B17CFA71FAC783500394879 /* Tabs */,
 				7BBF48B41FC874D2005414C1 /* NewCells */,
 				7B17CFAE1FAC789600394879 /* Cells */,
 				7B8F4C1F1FAC73D300E61996 /* Info.plist */,
@@ -373,23 +353,20 @@
 				7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */,
 				7BEB4BF31FCD894300D1B990 /* SecondPage.swift in Sources */,
 				7B17CF931FAC76F000394879 /* TabBarController.swift in Sources */,
-				7B17CF9B1FAC778D00394879 /* EdditPost.swift in Sources */,
 				7B17CFB61FAC78E400394879 /* PostInfoCell.swift in Sources */,
 				7B4B06B61FC5DA5D005320B0 /* PostInfoStuff.swift in Sources */,
 				7B17CFB41FAC78CE00394879 /* InfoCell.swift in Sources */,
 				7BBF48BB1FC9843D005414C1 /* Variables.swift in Sources */,
 				7B18EF101FAF2C6A007742F4 /* FoundItemsMap.swift in Sources */,
-				7B4B06B81FC716E2005320B0 /* MyPostInfo.swift in Sources */,
 				7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */,
 				7B7E851A1FD6CAF80085C8F9 /* FollowedItems.swift in Sources */,
-				7B17CFB01FAC78A800394879 /* MyItemsCell.swift in Sources */,
 				7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */,
 				7B17CF9D1FAC77B400394879 /* Chat.swift in Sources */,
+				7BDEA9A51FEA67FE0090CB79 /* MyItemsCell.swift in Sources */,
 				7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */,
 				7B17CFAD1FAC788700394879 /* MessagesController.swift in Sources */,
 				7B17CFA01FAC77D900394879 /* Userr.swift in Sources */,
 				7BC2F9031FD033E900D0AE88 /* SearchResults.swift in Sources */,
-				7B17CFAB1FAC786B00394879 /* AllItems.swift in Sources */,
 				7B17CFA41FAC780300394879 /* Messages.swift in Sources */,
 				7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */,
 				7B17CFA61FAC782300394879 /* Extensions.swift in Sources */,
@@ -397,7 +374,6 @@
 				7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */,
 				7BBF48B31FC8735F005414C1 /* AllItemsCollectionViewCell.swift in Sources */,
 				7BEB4BF51FCD8B7500D1B990 /* MyCell.swift in Sources */,
-				7B17CFA91FAC785200394879 /* MyItems.swift in Sources */,
 				7B81EF8D1FBEF06E0036F982 /* AddCommentController.swift in Sources */,
 				7BE2B0721FCB0E6500418B11 /* AllLostItems.swift in Sources */,
 				7B17CF971FAC775700394879 /* LoginRegister.swift in Sources */,

@@ -78,26 +78,15 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         
         let user = Auth.auth().currentUser?.uid
         let ref = Database.database().reference().child("users").child(user!).child("followed")
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             
             for snap in snapshots{
+                print(snap.key)
+                self.allUsers.postName.append(snap.key) // ieskosim kuriu postu pavadinimas sutampa su followed pavadinimu
+                self.getFollowedPosts(post: snap.key)
                 
-                
-               // self.postId.append(snap.key)
-                if let date = snap.childSnapshot(forPath: "timestamp").value as? Double{
-                    DispatchQueue.main.async {
-                        self.allUsers.date.append(date)
-                        //let datee = Date(timeIntervalSince1970:date)
-                        
-                        //self.whatDate.append(datee)
-                        self.keys.append(snap.key)
-                        self.getFollowedPosts(post: snap.key)
-                        
-
-                    }
-                    }
                 }
                
             }//cia if exists
@@ -179,25 +168,14 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     self.allUsers.email.append(email)
                     
                     DispatchQueue.main.async {
-                        //self.tableView.reloadData()
-                        
-                        
-                        
-                        
                         self.getLostFollowed(post: post)
-                        
                         foundRef.removeAllObservers()
-                      //  self.refresh.endRefreshing()
-                        
                     }
                    
                 }
                 else{
                     DispatchQueue.main.async {
-                        
-                        //self.tableView.reloadData()
                         self.getLostFollowed(post: post)
-                        //self.refresh.endRefreshing()
                         foundRef.removeAllObservers()
                     }
                    
@@ -243,9 +221,10 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                   
-                    self.sortPosts(timee: self.allUsers.date)
-                  //  lostRef.removeAllObservers()
+                    self.refresh.endRefreshing()
+                    //self.sortPosts(timee: self.allUsers.date)
+                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
+                    lostRef.removeAllObservers()
                  
                     
                     
@@ -253,9 +232,10 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             } else{
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                   
-                    self.sortPosts(timee: self.allUsers.date)
-                 //   lostRef.removeAllObservers()
+                    self.refresh.endRefreshing()
+                    //self.sortPosts(timee: self.allUsers.date)
+                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
+                    lostRef.removeAllObservers()
                     
                 }
                 
@@ -265,12 +245,12 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 
     }
 
-    var ciulpk = 0
-    func sortPosts(timee: [Double]){
+    
+  /*  func sortPosts(timee: [Double]){
         var time = timee
         
-        if allUsers.date.count == allUsers.email.count{
-        ciulpk += 1
+        if allUsers.date.count == allUsers.postName.count{
+        
         if time.count > 1{
             var i = 0
             while i < time.count - 1{
@@ -320,10 +300,92 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                 }
                 i += 1
                 }// cia if date == email
+         /*   datee.reverse()
+            self.allUsers.date.reverse()
+            self.allUsers.email.reverse()
+            self.allUsers.uid.reverse()
+            // self.allUsers.postName.reverse()
+            self.allUsers.timeStamp.reverse()
+            self.allUsers.downloadUrls.reverse()
+            self.allUsers.descriptions.reverse()
+            self.allUsers.city.reverse()
+            self.allUsers.location.reverse()
+            self.postId.reverse()
+            self.isItFoundOrLost.reverse()
+            // self.allUsers.date = datee
+            */
+            tableView.reloadData()
+            self.refresh.endRefreshing()
+            print(allUsers.descriptions)
             }
             
+           
+
+        }
+    
+    }*/
+    
+
+    func findSameNumbers(gooNumbers: [String], SortNumbers: [String]){
+        var goodNumbers = gooNumbers
+        var toSortNumbers = SortNumbers
+        var i:Int = 0
+        if postId.count == allUsers.postName.count && postId.count > 1{
+        while i < goodNumbers.count{
+            //print(goodNumbers[i])
+            var j:Int = 0
+            while j < toSortNumbers.count{
+                // print(toSortNumbers[j])
+                
+                if toSortNumbers[j] == goodNumbers[i]{
+                    //print("sutamp ", goodNumbers[i], " ir ",toSortNumbers[j])
+                    toSortNumbers.insert(toSortNumbers[j], at: i)
+                    toSortNumbers.remove(at: j+1)
+                    
+              //      allUsers.date.insert(allUsers.date[j], at: i)
+              //      allUsers.date.remove(at: j + 1)
+                    
+                    datee.insert(datee[j], at: i)
+                    datee.remove(at: j + 1)
+                    
+                    isItFoundOrLost.insert(isItFoundOrLost[j], at: i)
+                    isItFoundOrLost.remove(at: j + 1)
+                    
+                    allUsers.email.insert(allUsers.email[j], at: i)
+                    allUsers.email.remove(at: j + 1)
+                    
+                    allUsers.city.insert(allUsers.city[j], at: i)
+                    allUsers.city.remove(at: j + 1)
+                    
+                    allUsers.location.insert(allUsers.location[j], at: i)
+                    allUsers.location.remove(at: j + 1)
+                    
+                    postId.insert(postId[j], at: i)
+                    postId.remove(at: j + 1)
+                    
+                    allUsers.uid.insert(allUsers.uid[j], at: i)
+                    allUsers.uid.remove(at: j + 1)
+                    
+                    // allUsers.timeStamp.insert(allUsers.timeStamp[j], at: i)
+                    //allUsers.timeStamp.remove(at: j + 1)
+                    
+                    // allUsers.postName.insert(allUsers.postName[j], at: i)
+                    //allUsers.postName.remove(at: j + 1)
+                    
+                    allUsers.downloadUrls.insert(allUsers.downloadUrls[j], at: i)
+                    allUsers.downloadUrls.remove(at: j + 1)
+                    
+                    allUsers.descriptions.insert(allUsers.descriptions[j], at: i)
+                    allUsers.descriptions.remove(at: j + 1)
+                }
+                
+                j += 1
+            }
+            
+            i += 1
+        }
             datee.reverse()
-            self.allUsers.date.reverse()
+          //  self.allUsers.date.reverse()
             self.allUsers.email.reverse()
             self.allUsers.uid.reverse()
             // self.allUsers.postName.reverse()
@@ -338,12 +400,8 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             
             tableView.reloadData()
             self.refresh.endRefreshing()
-            print(allUsers.descriptions)
-
-        }
-    
     }
-    
+    }
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

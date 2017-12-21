@@ -44,6 +44,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
                 UserDefaults.standard.set(email, forKey: "email")
                 
                 self.navigationItem.title = email
+                
             })
             
         }

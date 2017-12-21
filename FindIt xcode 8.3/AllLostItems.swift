@@ -48,9 +48,16 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         
     }
     
+    func refreshPosts(){
+        a = 5
+        i = 0
+        self.howManySnaps.removeAll()
+        observeOneTime()
+    }
+    
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(observeOneTime), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(refreshPosts), for: .valueChanged)
         return refresh
     }()
     
@@ -61,9 +68,12 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
             
             let ref =  Database.database().reference().child("allPosts").child("lost")//.child(uid)
             
-            ref.queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
+            ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
                 
+                //   self.a = 5
+                //   self.i = 5
                 
+                self.howManySnaps.removeAll()
                 self.allUsers.descriptions.removeAll()
                 self.allUsers.downloadUrls.removeAll()
                 self.allUsers.uid.removeAll()
@@ -79,13 +89,11 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
                     
                     self.postId.append(snap.key)
                     self.allUsers.postName.append(snap.key)
-                    
+                    self.howManySnaps.append(snap.key)
                     if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
                         self.allUsers.timeStamp.append(timePosted)
                         self.allUsers.dictionary["timeStamp"] = timePosted
                         self.date.append(Double(timePosted))
-                        
-                        
                     }
                     
                     if let snaap = snap.childSnapshot(forPath: "description").value as? String{
@@ -108,6 +116,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
                     if let location = snap.childSnapshot(forPath: "locationName").value as? String {
                         self.locations.append(location)
                     }
+                    
                     if let email = snap.childSnapshot(forPath: "email").value as? String{
                         self.emails.append(email)
                     }
@@ -126,9 +135,11 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
+                    self.i += 5
+                    
+                    ref.removeAllObservers()
                     self.refresh.endRefreshing()
-                    // self.getEmails()
-                    // ref.removeAllObservers()
+                    
                 })
             })
         }
@@ -229,4 +240,24 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         show()
     }
     
+    var i = 0
+    
+    var howManySnaps = [String]()
+    var a = 5
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lasItem = allUsers.descriptions.count - 3
+        print("count", howManySnaps.count, i, a)
+        if indexPath.row == lasItem{
+            
+            if i <= howManySnaps.count{
+                print("load more ", i, a)
+                a += 5
+                //addMoreRows()
+                observeOneTime()
+            }
+            // handle your logic here to get more items, add it to dataSource and reload tableview
+        }
+    }
+
 }

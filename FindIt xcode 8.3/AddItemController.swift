@@ -14,7 +14,7 @@ var didUserJustPosted = false
 class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     var imageToPost: UIImage?
-    let allItems = AllItems()
+   // let allItems = AllItems()
     var isUserEditing = false
     var editPostName = ""
     
