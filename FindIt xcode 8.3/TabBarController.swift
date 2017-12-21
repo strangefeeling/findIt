@@ -12,7 +12,7 @@ import Firebase
 
 
 
-class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearchBarDelegate, GADBannerViewDelegate {
+class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBannerViewDelegate {
     
     
     var addItemController = AddItemController()
@@ -55,10 +55,6 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationItem.title = "Back"
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,22 +68,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     }
     
     func handleSearch(){
-        
-        searchController.searchBar.delegate = self
-        
-        searchController.searchBar.layer.borderWidth = 1
-        searchController.searchBar.layer.borderColor = myColor.cgColor
-        searchController.searchBar.placeholder = "Enter City Name"
-        searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
-        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
-        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
-        
-        self.searchController.hidesNavigationBarDuringPresentation = false;
-        self.definesPresentationContext = false
-        self.searchController.dimsBackgroundDuringPresentation = false
-        
-        present(searchController, animated: true, completion: nil)
-        
+        //present(searchResults, animated: true, completion: nil)
+        searchResults.didUserTappedSearch = true
+        show(searchResults, sender: self)
         
     }
     
@@ -118,25 +101,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        //var i = 1
-        textInput = searchBar.text!
-        usersSearchResults.removeAll()
-        self.allUsers.descriptions.removeAll()
-        self.allUsers.downloadUrls.removeAll()
-        self.allUsers.uid.removeAll()
-        self.cities.removeAll()
-        self.locations.removeAll()
-        self.date.removeAll()
-        self.postId.removeAll()
-        self.emails.removeAll()
-        postNames.removeAll()
         
-        searchResults.searchText = searchBar.text!
-        searchResults.didUserTappedSearch = true
-        self.searchController.searchBar.isHidden = true
-        
-        show(searchResults, sender: self)
-        self.searchController.dismiss(animated: true, completion: nil)
         
         /*     let ref = Database.database().reference().child("allPosts").child("lost")
          ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
@@ -450,18 +415,31 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate, UISearch
         }
     }
     
+   /* let coverUp: UIView = {
+        let coverUp = UIView()
+        coverUp.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        coverUp.backgroundColor = myColor
+        return coverUp
+    }()*/
+    
     @objc func addIteem(){
         launchBool = !launchBool
         present(addItemController, animated: true, completion: nil)
         //show(addItemController, sender: self)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        view.backgroundColor = myColor
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         let email = UserDefaults.standard.object(forKey: "email")
         
         self.navigationItem.title = email as? String
         self.searchController.searchBar.isHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
         
         setTabBarAppearence()

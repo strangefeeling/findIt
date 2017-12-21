@@ -43,8 +43,11 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         
     }
     
+
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        self.navigationController?.isNavigationBarHidden = false
         print("this item is from ",foundOrLost)
         descriptiontextField.sizeToFit()
         tableView.separatorStyle = .none
