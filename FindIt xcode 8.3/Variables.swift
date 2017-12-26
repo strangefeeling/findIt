@@ -16,6 +16,10 @@ var messagesInPost = [String]()
 
 var imageUrl = String()
 
+var doINeedToSearch = false
+
+var foundCity = "Vilnius"
+
 //var patternImage = UIImage(named: "iPhone 7 Plus1")
 
 var toIdd = ""

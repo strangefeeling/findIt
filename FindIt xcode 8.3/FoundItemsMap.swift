@@ -17,6 +17,9 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(title: "X", style: .plain, target: self, action: #selector(back))
+        self.navigationItem.leftBarButtonItem = newBackButton
         view.addSubview(mapView)
         //view.addSubview(backButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
@@ -27,6 +30,28 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         getLocations()
         // Do any additional setup after loading the view.
         
+    }
+    
+    func back() {
+        // Perform your custom actions
+        // ...
+        // Go back to the previous ViewController
+        self.dismiss(animated: true, completion: nil)
+       
+        _ = navigationController?.popViewController(animated: true)
+       /* mapView.removeFromSuperview()
+        self.emails.removeAll()
+        self.dates.removeAll()
+        self.locations.removeAll()
+        self.cities.removeAll()
+        self.uids.removeAll()
+        self.downloadURL.removeAll()
+        self.toId.removeAll()
+        self.postNames.removeAll()
+        self.lon.removeAll()
+        self.lat.removeAll()
+        self.descriptions.removeAll()
+        ref.removeAllObservers()*/
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -97,6 +122,8 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         backButton.heightAnchor.constraint(equalToConstant: 60).isActive = true */
     }
     
+    let ref = Database.database().reference().child("allPosts").child("found")
+    
     func getLocations(){
         var long = ""
         var lat = ""
@@ -117,7 +144,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         dates.removeAll()
         emails.removeAll()
         descriptions.append(description)
-        let ref = Database.database().reference().child("allPosts").child("found")
+        
         ref.queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
             
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -160,7 +187,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     DispatchQueue.main.async {
                         self.getAnnotations(lat: lati, lon: long, description: description)
                         print(self.emails)
-                        ref.removeAllObservers()
+                        self.ref.removeAllObservers()
                     }
                 }
 

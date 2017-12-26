@@ -22,6 +22,9 @@
 		7B17CFB61FAC78E400394879 /* PostInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B17CFB51FAC78E400394879 /* PostInfoCell.swift */; };
 		7B18EF101FAF2C6A007742F4 /* FoundItemsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B18EF0F1FAF2C6A007742F4 /* FoundItemsMap.swift */; };
 		7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7B3A4D161FB89EAD00E5DDBF /* Model.xcdatamodeld */; };
+		7B45D7BB1FED075A00A5A6A6 /* NewSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45D7BA1FED075A00A5A6A6 /* NewSearchResults.swift */; };
+		7B45D7BD1FED433C00A5A6A6 /* SearchedFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45D7BC1FED433C00A5A6A6 /* SearchedFoundCell.swift */; };
+		7B45D7BF1FED738100A5A6A6 /* SearchedLostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45D7BE1FED738100A5A6A6 /* SearchedLostCell.swift */; };
 		7B4B06B61FC5DA5D005320B0 /* PostInfoStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */; };
 		7B4D597F1FD9643A001C2310 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */; };
 		7B69D0A61FD96E5A0073D6BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */; };
@@ -63,6 +66,9 @@
 		7B17CFB51FAC78E400394879 /* PostInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoCell.swift; sourceTree = "<group>"; };
 		7B18EF0F1FAF2C6A007742F4 /* FoundItemsMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundItemsMap.swift; sourceTree = "<group>"; };
 		7B3A4D171FB89EAD00E5DDBF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		7B45D7BA1FED075A00A5A6A6 /* NewSearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewSearchResults.swift; sourceTree = "<group>"; };
+		7B45D7BC1FED433C00A5A6A6 /* SearchedFoundCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchedFoundCell.swift; sourceTree = "<group>"; };
+		7B45D7BE1FED738100A5A6A6 /* SearchedLostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchedLostCell.swift; sourceTree = "<group>"; };
 		7B4B06B51FC5DA5D005320B0 /* PostInfoStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoStuff.swift; sourceTree = "<group>"; };
 		7B4D597E1FD9643A001C2310 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		7B69D0A51FD96E5A0073D6BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -118,6 +124,7 @@
 				7B17CF941FAC773B00394879 /* AddItemController.swift */,
 				7B17CF961FAC775700394879 /* LoginRegister.swift */,
 				7B81EF8C1FBEF06E0036F982 /* AddCommentController.swift */,
+				7B45D7BA1FED075A00A5A6A6 /* NewSearchResults.swift */,
 				7BC2F9021FD033E900D0AE88 /* SearchResults.swift */,
 				7BB5AAF21FADDC86004BA02F /* MapController.swift */,
 				7BA44FC51FB115EE00667DA6 /* NavController.swift */,
@@ -195,6 +202,8 @@
 			isa = PBXGroup;
 			children = (
 				7BBF48B21FC8735F005414C1 /* AllItemsCollectionViewCell.swift */,
+				7B45D7BC1FED433C00A5A6A6 /* SearchedFoundCell.swift */,
+				7B45D7BE1FED738100A5A6A6 /* SearchedLostCell.swift */,
 				7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */,
 				7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */,
 				7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */,
@@ -350,6 +359,7 @@
 				7B17CFB21FAC78BE00394879 /* MessagesCell.swift in Sources */,
 				7B3A4D181FB89EAD00E5DDBF /* Model.xcdatamodeld in Sources */,
 				7B17CFA21FAC77F000394879 /* EveryUser.swift in Sources */,
+				7B45D7BB1FED075A00A5A6A6 /* NewSearchResults.swift in Sources */,
 				7BBF48B71FC8759E005414C1 /* FirstPage.swift in Sources */,
 				7BEB4BF31FCD894300D1B990 /* SecondPage.swift in Sources */,
 				7B17CF931FAC76F000394879 /* TabBarController.swift in Sources */,
@@ -365,6 +375,7 @@
 				7BDEA9A51FEA67FE0090CB79 /* MyItemsCell.swift in Sources */,
 				7BB5AAF31FADDC86004BA02F /* MapController.swift in Sources */,
 				7B17CFAD1FAC788700394879 /* MessagesController.swift in Sources */,
+				7B45D7BF1FED738100A5A6A6 /* SearchedLostCell.swift in Sources */,
 				7B17CFA01FAC77D900394879 /* Userr.swift in Sources */,
 				7BC2F9031FD033E900D0AE88 /* SearchResults.swift in Sources */,
 				7B17CFA41FAC780300394879 /* Messages.swift in Sources */,
@@ -372,6 +383,7 @@
 				7B17CFA61FAC782300394879 /* Extensions.swift in Sources */,
 				7B17CF951FAC773B00394879 /* AddItemController.swift in Sources */,
 				7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */,
+				7B45D7BD1FED433C00A5A6A6 /* SearchedFoundCell.swift in Sources */,
 				7BBF48B31FC8735F005414C1 /* AllItemsCollectionViewCell.swift in Sources */,
 				7BEB4BF51FCD8B7500D1B990 /* MyCell.swift in Sources */,
 				7B81EF8D1FBEF06E0036F982 /* AddCommentController.swift in Sources */,

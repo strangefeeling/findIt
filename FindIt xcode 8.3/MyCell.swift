@@ -217,8 +217,15 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
 
         })
      
-     
     }
+    
+    var noResults: UILabel = {
+       let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "You haven't posted yet"
+        label.font = UIFont(name: "Avenir Next", size: 16)
+        return label
+    }()
     
     func getFoundItems(){
         let uid = Auth.auth().currentUser?.uid
@@ -282,11 +289,26 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
                 self.sortPosts(timee: self.date)
                 ref.removeAllObservers()
             })
-            }
+            }// if snapshot exists
+                
             else {
+                if self.allUsers.descriptions.count == 0 {
+                self.showNoResults()
+                } else if self.allUsers.descriptions.count > 0{
+                    self.noResults.removeFromSuperview()
+                }
                 self.sortPosts(timee: self.date)
             }
         })
+    }
+    
+    func showNoResults(){
+        contentView.addSubview(self.noResults)
+        noResults.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        noResults.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        noResults.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        noResults.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        
     }
     
     func sortPosts(timee: [Double]){

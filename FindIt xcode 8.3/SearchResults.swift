@@ -37,6 +37,8 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         return view
     }()
     
+ 
+
 
     
     let lostFoundSegentedControll: UISegmentedControl = {
@@ -49,7 +51,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             NSForegroundColorAttributeName: UIColor.white,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
         ]
-        sc.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 30)
+        sc.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
         sc.layer.borderColor = borderColor.cgColor
         sc.layer.borderWidth = 0.5
@@ -69,6 +71,9 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             searchWhat = "found"
             getPosts()
         }
+        a = 4
+        i = 0
+        self.howManySnaps.removeAll()
     }
 
     
@@ -80,7 +85,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
         tableView.delegate = self
         tableView.dataSource = self
-        
+        handleSearch()
         view.addSubview(lostFoundSegentedControll)
         /*searchTextField.delegate = self
         self.setNeedsStatusBarAppearanceUpdate()
@@ -107,32 +112,17 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         view.addSubview(tableView)
         tableView.separatorStyle = .none
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
-        view.addConstraintsWithFormat(format: "V:|-30-[v0]-|", views: tableView)
+        view.addConstraintsWithFormat(format: "V:|-40-[v0]-|", views: tableView)
         view.backgroundColor = .white
         setupAd()
         
         // Do any additional setup after loading the view.
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        
-        self.allUsers.timeStamp.removeAll()
-        self.cellContent.removeAll()
-        self.allUsers.uid.removeAll()
-        self.cities.removeAll()
-        self.allUsers.downloadUrls.removeAll()
-        self.locations.removeAll()
-        self.emails.removeAll()
-        self.date.removeAll()
-        postNames.removeAll()
-        tableView.reloadData()
-
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
        // navigationController?.isNavigationBarHidden = true
         if didUserTappedSearch{
-            handleSearch()
+            
             didUserTappedSearch = false
             
         }
@@ -142,7 +132,10 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
         didUserTappedSearch = true
         self.searchController.dismiss(animated: true, completion: nil)
-        getPosts()
+        
+       
+        whatToSearch()
+        
    
                
     }
@@ -151,6 +144,8 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var usersSearchResults = [String]()
     
     func handleSearch(){
+        
+       
         
         searchController.searchBar.delegate = self
         
@@ -270,9 +265,15 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     func getPosts(){
         
+        if lostFoundSegentedControll.selectedSegmentIndex == 1{
+            searchWhat = "lost"
+        } else {
+            searchWhat = "found"
+        }
+
         
         let ref = Database.database().reference().child("allPosts").child(searchWhat)
-        ref.queryOrdered(byChild: "city").queryStarting(atValue: searchController.searchBar.text).queryEnding(atValue: searchController.searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.queryLimited(toFirst: UInt(a)).queryOrdered(byChild: "city").queryStarting(atValue: searchController.searchBar.text).queryEnding(atValue: searchController.searchBar.text!+"\u{f8ff}").observe( .value, with: { (snapshot) in
             
             self.allUsers.timeStamp.removeAll()
             self.cellContent.removeAll()
@@ -284,15 +285,19 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
             self.date.removeAll()
             postNames.removeAll()
             
-            print(snapshot.key)
+            
+            
             
             
             
             if snapshot.exists(){
                 self.noResults.removeFromSuperview()
                 //postNames.append(snapshot.key)
+                
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
+                   
+                    self.howManySnaps.append(snap.key)
                     self.isItFoundOrLost.append("lost")
                     postNames.append(snap.key)
                     
@@ -350,8 +355,11 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
                 
                 DispatchQueue.main.async {
+                   // self.sortPosts(timee: self.date)
                     self.tableView.reloadData()
                     self.didUserTappedSearch = false
+                    self.i += 4
+                    
                 }
             }   else {
                 self.allUsers.timeStamp.removeAll()
@@ -514,17 +522,10 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cellContent.reverse()
         self.isItFoundOrLost.reverse()
         noResults.removeFromSuperview()
+        
         self.tableView.reloadData()
-        let indexPath = IndexPath(item: 0, section: 0)
-        if date.count != 0{
-        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-        } else {
-            view.addSubview(noResults)
-            noResults.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            noResults.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-            noResults.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            noResults.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        }
+        
+       
     }
     
     let noResults: UILabel = {
@@ -535,13 +536,28 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         label.textAlignment = .center
         return label
     }()
+
+    var a = 4
+    var i = 0
+    var howManySnaps = [String]()
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        getPosts()
-        textField.resignFirstResponder()
-        return true
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lasItem = cellContent.count - 2
+        print("count", howManySnaps.count, i, a)
+        if lasItem > 0 {
+            if indexPath.row == lasItem{
+                
+                if i <= howManySnaps.count{
+                    print("load more ", i, a)
+                    a += 4
+                    //addMoreRows()
+                    getPosts()
+                }
+                // handle your logic here to get more items, add it to dataSource and reload tableview
+            }
+        }
     }
-    
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

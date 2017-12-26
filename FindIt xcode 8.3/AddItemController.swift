@@ -298,10 +298,13 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             let locationName = UserDefaults.standard.string(forKey: "title")
                             let city = UserDefaults.standard.string(forKey: "city")
                             var allRef = Database.database().reference().child("allPosts")
+                            var anotherRef = allRef
                             if self.mySwitch.isOn{
-                                allRef = Database.database().reference().child("allPosts").child("found").child(postName)
+                                allRef = Database.database().reference().child("allPosts").child("found").child(city!).child(postName)
+                                anotherRef = Database.database().reference().child("allPosts").child("found").child(postName)
                             } else {
-                              allRef = Database.database().reference().child("allPosts").child("lost").child(postName)
+                              allRef = Database.database().reference().child("allPosts").child("lost").child(city!).child(postName)
+                                anotherRef = Database.database().reference().child("allPosts").child("lost").child(postName)
                             }
                             
                             
@@ -316,16 +319,31 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                             allRef.child("timeStamp").setValue(timeStamp)
                             allRef.child("uid").setValue(currUser!)
                             allRef.child("email").setValue(self.myEmail)
+                            anotherRef.child("downloadURL").setValue(downloadURL)
+                            anotherRef.child("description").setValue(self.itemDescription.text!)
+                            anotherRef.child("timeStamp").setValue(timeStamp)
+                            anotherRef.child("uid").setValue(currUser!)
+                            anotherRef.child("email").setValue(self.myEmail)
                             if lon != nil{
                                 allRef.child("lon").setValue(lon)
                                 allRef.child("lat").setValue(lat)
                                 allRef.child("locationName").setValue(locationName)
                                 allRef.child("city").setValue(city)
+                                
+                                anotherRef.child("lon").setValue(lon)
+                                anotherRef.child("lat").setValue(lat)
+                                anotherRef.child("locationName").setValue(locationName)
+                                anotherRef.child("city").setValue(city)
                             } else {
                                 allRef.child("lon").setValue("53")
                                 allRef.child("lat").setValue("53")
-                                allRef.child("locationName").setValue("unknown")
-                                allRef.child("city").setValue("unknown")
+                                allRef.child("locationName").setValue("Unknown")
+                                allRef.child("city").setValue("Unknown")
+                                
+                                anotherRef.child("lon").setValue("53")
+                                anotherRef.child("lat").setValue("53")
+                                anotherRef.child("locationName").setValue("Unknown")
+                                anotherRef.child("city").setValue("Unknown")
                             }
                             
                             

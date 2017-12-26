@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllItemsTableViewCell: UITableViewCell {
+class AllItemsTableViewCell: UITableViewCell  {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,6 +24,7 @@ class AllItemsTableViewCell: UITableViewCell {
  }
 
     let allUsers = EveryUser()
+    
     
     var womanImage: UIImageView = {
         let wI = UIImageView()
@@ -176,11 +177,7 @@ class AllItemsTableViewCell: UITableViewCell {
         contentView.addSubview(dateLabel)
         contentView.addSubview(nameLabel)
         contentView.addSubview(separatorLine)
-
-      
-        
-      
-        
+              
        /* womanImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48).isActive = true
         womanImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: UIScreen.main.bounds.width / 46.875).isActive = true
         womanImage.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UIScreen.main.bounds.width / 46.875).isActive = true

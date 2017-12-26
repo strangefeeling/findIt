@@ -19,6 +19,15 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         show(vc, sender: self)
     }
     
+    var didRemoveItems = false {
+        didSet{
+            if didRemoveItems{
+                collectionView?.reloadData()
+                print("reloadinau")
+            }
+        }
+    }
+    
     let myImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -125,8 +134,11 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        
+        
         if indexPath.item == 0{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AllItemsCollectionViewCell
+        
             cell.awakeFromNib()
             cell.delegate = self
             //lostFoundSegentedControll.selectedSegmentIndex = 1
@@ -135,6 +147,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         } else {
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId2, for: indexPath) as! AllLostItems
+          
             cell.awakeFromNib()
             cell.delegate = self
             

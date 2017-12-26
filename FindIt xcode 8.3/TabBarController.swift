@@ -9,20 +9,18 @@
 import UIKit
 import Firebase
 
+protocol SomeDelegate {
+    func reloadData()
+}
 
-
-
-class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBannerViewDelegate {
+class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBannerViewDelegate, UISearchBarDelegate , printSomething {
     
-    
+    var someDelegate: SomeDelegate?
+
     var addItemController = AddItemController()
-    
     let searchController = UISearchController(searchResultsController: nil)
-    
     let allUsers = EveryUser()
-    
     var usersSearchResults = [String]()
-    
     let cellId = "cellid"
     let tableView = UITableView()
     var postId = [String]()
@@ -33,6 +31,23 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     var date = [Double]()
     var emails = [String]()
     
+    func makeSomething() {
+        print("peep")
+        let tabOne = FirstPage()
+        let tabTwo = SecondPage()
+        let tabThree = MessagesController()
+        let tabOneBarItem = UITabBarItem(title: "All Items", image: UIImage(named:"group"), selectedImage: UIImage(named: "group (2)"))
+        let taTwoBarItem = UITabBarItem(title: "My Posts", image: UIImage(named:"user (2)"), selectedImage: UIImage(named: "user (2)"))
+        let taThreeBarItem = UITabBarItem(title: "Messages", image: UIImage(named:"speech-bubble (1)"), selectedImage: UIImage(named: "speech-bubble (1)"))
+        tabOne.tabBarItem = tabOneBarItem
+        tabTwo.tabBarItem = taTwoBarItem
+        tabThree.tabBarItem = taThreeBarItem
+        
+        //foundCity = searchBar.text!
+        
+        setViewControllers([tabOne,tabTwo, tabThree], animated: false)
+        searchController.dismiss(animated: true, completion: nil)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -67,15 +82,49 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         self.delegate = self
     }
     
-    func handleSearch(){
-        //present(searchResults, animated: true, completion: nil)
-        searchResults.didUserTappedSearch = true
-        show(searchResults, sender: self)
+      func handleSearch(){
+
+        searchController.searchBar.delegate = self
+        
+        searchController.searchBar.layer.borderWidth = 1
+        searchController.searchBar.layer.borderColor = myColor.cgColor
+        searchController.searchBar.placeholder = "Enter City Name"
+        searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
+        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
+        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
+        
+        self.searchController.hidesNavigationBarDuringPresentation = false;
+        self.definesPresentationContext = false
+        self.searchController.dimsBackgroundDuringPresentation = false
+        
+        present(searchController, animated: true, completion: nil)
+        
+        
         
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+       let tabOne = NewSearchResults()
+        let tabTwo = SecondPage()
+        let tabThree = MessagesController()
+         let tabOneBarItem = UITabBarItem(title: "City", image: UIImage(named:"skyline (2)"), selectedImage: UIImage(named: "skyline (2)"))
+        let taTwoBarItem = UITabBarItem(title: "My Posts", image: UIImage(named:"user (2)"), selectedImage: UIImage(named: "user (2)"))
+        let taThreeBarItem = UITabBarItem(title: "Messages", image: UIImage(named:"speech-bubble (1)"), selectedImage: UIImage(named: "speech-bubble (1)"))
+        tabOne.tabBarItem = tabOneBarItem
+        tabTwo.tabBarItem = taTwoBarItem
+        tabThree.tabBarItem = taThreeBarItem
+        
+        foundCity = searchBar.text!
+
+        setViewControllers([tabOne,tabTwo, tabThree], animated: false)
+        searchController.dismiss(animated: true, completion: nil)
+        //tabOneBarItem.badgeColor = .red
+    }
+
+   
+    
     var textInput = ""
-    let searchResults = SearchResults()
+    let searchResults = NewSearchResults()
     
     let ad: GADBannerView = {
         let ad = GADBannerView()
@@ -99,30 +148,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        
-        
-        /*     let ref = Database.database().reference().child("allPosts").child("lost")
-         ref.queryOrdered(byChild: "city").queryStarting(atValue: searchBar.text!).queryEnding(atValue: searchBar.text!+"\u{f8ff}").observeSingleEvent(of: .childAdded, with: { (snapshot) in
-         print(snapshot.key)
-         
-         postNames.append(snapshot.key)
-         //print("1 ",postNames)
-         
-         
-         DispatchQueue.main.async {
-         let anotherRef = Database.database().reference().child("allPosts").child("lost")
-         anotherRef.observeSingleEvent(of: .value, with: { (snapshot) in
-         })
-         
-         }
-         
-         
-         
-         })*/
-        
-    }
+
     
     /*   func searchFound(){
      var i = 1
@@ -357,11 +383,13 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
             alertVC.dismiss(animated: true, completion: nil)
             
             
+            
         }
         let cancelAction = UIAlertAction(title: "Yes", style: .default) { (action) in
             try! Auth.auth().signOut()
             alertVC.dismiss(animated: true, completion: nil)
             UserDefaults.standard.removeObject(forKey: "emails")
+            doINeedToSearch = false
             self.performSegue(withIdentifier: "lll", sender: self)
         }
         alertVC.addAction(okAction)

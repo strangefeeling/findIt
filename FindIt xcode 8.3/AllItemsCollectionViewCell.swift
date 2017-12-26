@@ -13,16 +13,26 @@ protocol ShowController {
     func showController()
 }
 
+protocol printSomething {
+    func makeSomething()
+}
 
-class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
+
+class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource   { //some delegate, tai destination
     
     var delegate: ShowController!
     
+    var actionDelegate: printSomething!
+    
+    
+
     func show(){
         sshowController()
     }
     
-    
+    func printMyText(){
+        self.actionDelegate.makeSomething()
+    }
     
     let cellId = "cellid"
     let allUsers = EveryUser()
@@ -37,6 +47,9 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     
     override func awakeFromNib() {
         observeOneTime()
+        
+        
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -50,8 +63,23 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
         contentView.addConstraintsWithFormat(format: "V:|-50-[v0]-85-|", views: tableView)
-
+        
     }
+    
+    let getAllItemsButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("View all posts", for: .normal)
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(TabBarController.makeSomething), for: .touchUpInside)
+        return button
+    }()
+    
+    func getAllItems(){
+        printMyText()
+    }
+    
+
     
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
@@ -68,13 +96,15 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     }
     
     func observeOneTime(){
-        
+      
         if Auth.auth().currentUser?.uid != nil{
-            
+
             
             let ref =  Database.database().reference().child("allPosts").child("found")//.child(uid)
             
-            ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observeSingleEvent(of: .value, with: { (snapshot) in
+            ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
+                
+                print(snapshot)
                 
              //   self.a = 5
              //   self.i = 5
@@ -89,6 +119,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 self.postId.removeAll()
                 self.emails.removeAll()
                 
+                
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
                     
@@ -100,6 +131,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                         self.allUsers.timeStamp.append(timePosted)
                         self.allUsers.dictionary["timeStamp"] = timePosted
                         self.date.append(Double(timePosted))
+                        
                     }
                     
                     if let snaap = snap.childSnapshot(forPath: "description").value as? String{
@@ -148,29 +180,25 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                   
                 })
             })
-        }
+
+        }// if auth
     }
     
+    func removeShit(){
+        self.howManySnaps.removeAll()
+        self.allUsers.descriptions.removeAll()
+        self.allUsers.downloadUrls.removeAll()
+        self.allUsers.uid.removeAll()
+        self.cities.removeAll()
+        self.locations.removeAll()
+        self.date.removeAll()
+        self.postId.removeAll()
+        self.emails.removeAll()
+        tableView.reloadData()
+        
 
-  /*  func getEmails(){
-        let ref = Database.database().reference().child("users").child(emails[index])
-        ref.observe(.value, with: { (snapshot) in
-            
-            
-            
-            let dictionary = snapshot.value as! [String: Any]
-            let name = dictionary["email"] as! String
-            self.emails.append(name)
-            
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-            
-            
-        }, withCancel: nil)
+    }
 
-    }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
@@ -208,6 +236,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     func sshowController() {
         self.delegate.showController()
     }
+    
     
     func makeDate(date: Date) -> String{
         let dateFormatter = DateFormatter()
@@ -336,4 +365,9 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     }
     }
     
+}
+extension AllItemsCollectionViewCell: SomeDelegate {
+    func reloadData() {
+        tableView.reloadData()
+    }
 }
