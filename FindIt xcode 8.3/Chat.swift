@@ -342,9 +342,24 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
 
             
         }, withCancel: nil)
-        
-      
+  
+    }
+    
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
         
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+       /* let lastItem = messages.count - 5
+        if indexPath.item == lastItem {
+            print("paskutinis")
+            //addMoreMessages()
+        }*/
+        
+    }
+ 
   
 }

@@ -50,7 +50,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        print("selected index ", tabBarController?.selectedIndex)
         if let user = Auth.auth().currentUser?.uid{
             let ref = Database.database().reference().child("users").child(user).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String: Any]
@@ -118,6 +118,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
 
         setViewControllers([tabOne,tabTwo, tabThree], animated: false)
         searchController.dismiss(animated: true, completion: nil)
+        self.tabBarController?.selectedIndex = 0
         //tabOneBarItem.badgeColor = .red
     }
 

@@ -91,6 +91,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("View all posts", for: .normal)
         button.backgroundColor = .red
+        button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
         button.addTarget(self, action: #selector(TabBarController.makeSomething), for: .touchUpInside)
         return button
