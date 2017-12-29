@@ -146,41 +146,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     }
     
     
-    /* func keyboardWillChangeFrame(notification: NSNotification) {
-     if let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-     let keybrdHeight = keyboardFrame.size.height
-     keyboardHeight = keybrdHeight
-     self.view.frame = CGRect(x: 0, y: 58 , width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keybrdHeight - 58)
-     
-     print("1 ","view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
-     //collectionView?.invalidateIntrinsicContentSize()
-     collectionView?.contentInset.bottom = -self.view.frame.height
-     //  collectionView?.contentInset = UIEdgeInsets(top: 58 , left: 0, bottom: -keybrdHeight * 2 , right: 0)
-     //  collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0 , left: 0, bottom: 0  , right: 0)
-     collectionView?.setNeedsLayout()
-     print("2 ","view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
-     moveToLastComment()
-     //do the chnages according ot this height
-     }
-     }*/
-    
-    /*   func keyboardWillHide(sender: NSNotification) {
-     //self.view.frame.origin.y += keyboardHeight
-     
-     self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-     collectionView?.invalidateIntrinsicContentSize()
-     collectionView?.contentInset.bottom = keyboardHeight * 2
-     //collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 58, left: 0, bottom: 8, right: 0)
-     collectionView?.setNeedsLayout()
-     
-     // collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50 , left: 0, bottom: 70 + keyboardHeight, right: 0)
-     
-     keyboardHeight = 0
-     
-     moveToLastComment()
-     
-     
-     }*/
+   
 
     
     var fromId = [String]()
@@ -288,7 +254,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                         let recipientUseressagesRef = Database.database().reference().child("user-messages").child(self.toId).child(self.fromID)
                         recipientUseressagesRef.updateChildValues([messageId: 1])
                         DispatchQueue.main.async {
-                            
+                            self.howManyMessagesIsSent += 1
                             self.moveToLastComment()
                             
                         }
@@ -304,6 +270,8 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     var messageName = [String]()
     var a = 15
     var times = [Double]()
+    
+    
     func observeMessages(){
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: UInt(a))
@@ -443,6 +411,8 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         }, withCancel: nil)
         
     }
+    
+    var howManyMessagesIsSent = 0
     
     var i = 0
     
