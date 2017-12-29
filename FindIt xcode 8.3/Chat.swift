@@ -36,7 +36,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     func setup(){
         
         
-        //collectionView?.alwaysBounceVertical = true
+        collectionView?.alwaysBounceVertical = true
         //collectionView?.allowsSelection = false
         collectionView?.contentInset = UIEdgeInsets(top: 58, left: 0, bottom: 8, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -47,38 +47,44 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         // NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         //    NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+       
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide(sender:)))
         view.addGestureRecognizer(tap)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification: )), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        
         
     }
     
     var e = 0
     
-    func dismissKeyboard() {
-        print("iiiiiiiiiiii ",e)
-        if shouldKeyboardHeightChange == false {
-            //Causes the view (or one of its embedded text fields) to resign the first responder status.
-            
-            self.view.frame.origin.y += self.keyboardHeight
-            self.view.endEditing(true)
-            
-            DispatchQueue.main.async {
-                
-                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight, 0)
-                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
-                
-                self.shouldKeyboardHeightChange = true
-                
-            }
+  func dismissKeyboard() {
+    self.view.endEditing(true)
+     self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+    //   inputTextField.resignFirstResponder()
+//        print("iiiiiiiiiiii ",e)
+//        if shouldKeyboardHeightChange == false {
+//            //Causes the view (or one of its embedded text fields) to resign the first responder status.
+//            
+//            self.view.frame.origin.y += self.keyboardHeight
+//            self.view.endEditing(true)
+//            
+//            DispatchQueue.main.async {
+//                
+//                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight, 0)
+//                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
+//                
+//                self.shouldKeyboardHeightChange = true
+//
+//            }
 
             //print("view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
             
             // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+    
             
-            
-        }
+
     }
  
     
@@ -88,7 +94,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         e += 1
         print("iiiiiiiiiiii ",e)
         
-        if shouldKeyboardHeightChange { // nes kazkodel du kartus sita suda paleidzia
+      // nes kazkodel du kartus sita suda paleidzia
             self.shouldKeyboardHeightChange = false
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 keyboardHeight = keyboardSize.height
@@ -104,47 +110,35 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 }
                 
             }
-        }
+        
         
     }
     
-    func keyboardWillHide(sender: NSNotification) {
-        
-//        UIView.animate(withDuration: 0.5) {
-//            
-//            self.view.frame.origin.y += self.keyboardHeight
-//            DispatchQueue.main.async {
-//                //self.collectionView?.contentInset.bottom -= self.keyboardHeight
-//                print("leidziames ",self.collectionView?.contentInset.bottom )
-//                self.keyboardHeight = 0
-//            }
-//            
-//            
-//        }
-//        
-//        
+    func keyboardWillHide(notification: NSNotification) {
         print("iiiiiiiiiiii ",e)
+         self.view.endEditing(true)
         if shouldKeyboardHeightChange == false {
+            self.shouldKeyboardHeightChange = true
             //Causes the view (or one of its embedded text fields) to resign the first responder status.
             
-            self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+           // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
             
             
-            DispatchQueue.main.async {
+            
                 
-                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, 8, 0)
-                self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
+                self.collectionView?.contentInset = UIEdgeInsets(top: 58, left: 0, bottom: 8, right: 0)
+                self.collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                //print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
                 
-                self.shouldKeyboardHeightChange = true
-                self.inputTextField.resignFirstResponder()
-                //self.view.endEditing(true)
+            
+                //self.inputTextField.resignFirstResponder()
+            
                 
-            }
+            
             
             //print("view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
             
-            // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+            
             
             
         }
