@@ -45,6 +45,8 @@ class InfoCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubview(bubbleView)
         addSubview(textView)
+        bubbleView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        textView.transform = CGAffineTransform(scaleX: 1, y: -1)
         bubbleWidthAnchor =  bubbleView.widthAnchor.constraint(equalToConstant: 200)
         bubbleWidthAnchor?.isActive = true
         // -----right

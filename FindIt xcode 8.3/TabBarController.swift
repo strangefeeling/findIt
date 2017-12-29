@@ -72,7 +72,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+   //     print(navigationController?.navigationBar.frame.height, "<------") // 6s plus 44, visi 44
         DispatchQueue.main.async {
             self.checkIfUserIsLoggedIn()
         }

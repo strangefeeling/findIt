@@ -24,56 +24,170 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     
     override func viewDidLoad() {
-     
+        view.backgroundColor = .white
         observeMessages()
- 
+        
         setUpInputComponents()
         setup()
-        
+        collectionView?.transform = CGAffineTransform(scaleX: 1, y: -1)
         fromID = (Auth.auth().currentUser?.uid)!
     }
     
     func setup(){
-
-        collectionView?.addSubview(refresh)
-        collectionView?.alwaysBounceVertical = true
+        
+        
+        //collectionView?.alwaysBounceVertical = true
         //collectionView?.allowsSelection = false
-        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 58, left: 0, bottom: 8, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         collectionView?.backgroundColor = .white
-        //collectionView?.transform = CGAffineTransformMakeScale(1, -1)
-        //collectionView?.transform = __CGAffineTransformMake(1, 0, 0, -1, 0, 0)
-        collectionView?.register(InfoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-       // NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillChangeFrame), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        print("pradzioj ", collectionView?.contentInset, "edgeInsets ", collectionView?.scrollIndicatorInsets)
 
+        collectionView?.register(InfoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        // NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        //    NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(Chat.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide(sender:)))
+        view.addGestureRecognizer(tap)
+        
     }
+    
+    var e = 0
     
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
-        self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        
-   
-    }
-    
-    func keyboardWillChangeFrame(notification: NSNotification) {
-        if let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keybrdHeight = keyboardFrame.size.height
-           
-            self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keybrdHeight)
-            collectionView?.contentInset = UIEdgeInsets(top: 70 , left: 0, bottom: 58, right: 0)
-            collectionView?.scrollIndicatorInsets = UIEdgeInsets(top:  70, left: 0, bottom: 50, right: 0)
+        print("iiiiiiiiiiii ",e)
+        if shouldKeyboardHeightChange == false {
+            //Causes the view (or one of its embedded text fields) to resign the first responder status.
+            
+            self.view.frame.origin.y += self.keyboardHeight
+            self.view.endEditing(true)
+            
+            DispatchQueue.main.async {
+                
+                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight, 0)
+                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
+                
+                self.shouldKeyboardHeightChange = true
+                
+            }
 
-            moveToLastComment()
-            //do the chnages according ot this height
+            //print("view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
+            
+            // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+            
+            
         }
     }
+ 
+    
+    var shouldKeyboardHeightChange = true
+    
+    func keyboardWillShow(notification: NSNotification) {
+        e += 1
+        print("iiiiiiiiiiii ",e)
+        
+        if shouldKeyboardHeightChange { // nes kazkodel du kartus sita suda paleidzia
+            self.shouldKeyboardHeightChange = false
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                keyboardHeight = keyboardSize.height
+                
+                self.view.frame.origin.y -= keyboardHeight
+                DispatchQueue.main.async {
+                    
+                    self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight + 8, 0)//.bottom = self.keyboardHeight + 8
+                    self.collectionView?.scrollIndicatorInsets.bottom = self.keyboardHeight
+                    
+                    print("kylam ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    func keyboardWillHide(sender: NSNotification) {
+        
+//        UIView.animate(withDuration: 0.5) {
+//            
+//            self.view.frame.origin.y += self.keyboardHeight
+//            DispatchQueue.main.async {
+//                //self.collectionView?.contentInset.bottom -= self.keyboardHeight
+//                print("leidziames ",self.collectionView?.contentInset.bottom )
+//                self.keyboardHeight = 0
+//            }
+//            
+//            
+//        }
+//        
+//        
+        print("iiiiiiiiiiii ",e)
+        if shouldKeyboardHeightChange == false {
+            //Causes the view (or one of its embedded text fields) to resign the first responder status.
+            
+            self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+            
+            
+            DispatchQueue.main.async {
+                
+                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, 8, 0)
+                self.collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
+                
+                self.shouldKeyboardHeightChange = true
+                self.inputTextField.resignFirstResponder()
+                //self.view.endEditing(true)
+                
+            }
+            
+            //print("view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
+            
+            // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
+            
+            
+        }
+
+    }
+    
+    
+    /* func keyboardWillChangeFrame(notification: NSNotification) {
+     if let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+     let keybrdHeight = keyboardFrame.size.height
+     keyboardHeight = keybrdHeight
+     self.view.frame = CGRect(x: 0, y: 58 , width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keybrdHeight - 58)
+     
+     print("1 ","view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
+     //collectionView?.invalidateIntrinsicContentSize()
+     collectionView?.contentInset.bottom = -self.view.frame.height
+     //  collectionView?.contentInset = UIEdgeInsets(top: 58 , left: 0, bottom: -keybrdHeight * 2 , right: 0)
+     //  collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0 , left: 0, bottom: 0  , right: 0)
+     collectionView?.setNeedsLayout()
+     print("2 ","view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
+     moveToLastComment()
+     //do the chnages according ot this height
+     }
+     }*/
+    
+    /*   func keyboardWillHide(sender: NSNotification) {
+     //self.view.frame.origin.y += keyboardHeight
+     
+     self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+     collectionView?.invalidateIntrinsicContentSize()
+     collectionView?.contentInset.bottom = keyboardHeight * 2
+     //collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 58, left: 0, bottom: 8, right: 0)
+     collectionView?.setNeedsLayout()
+     
+     // collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50 , left: 0, bottom: 70 + keyboardHeight, right: 0)
+     
+     keyboardHeight = 0
+     
+     moveToLastComment()
+     
+     
+     }*/
+
     
     var fromId = [String]()
     
@@ -90,17 +204,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     
     
-    func keyboardWillHide(sender: NSNotification) {
-        //self.view.frame.origin.y += keyboardHeight
-        keyboardHeight = 0
-        self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
-        collectionView?.contentInset = UIEdgeInsets(top: 70 , left: 0, bottom: 58, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 70 , left: 0, bottom: 50, right: 0)
-        
-        moveToLastComment()
-
-      
-    }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()
@@ -110,11 +214,11 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     
     func moveToLastComment() {
-        if messages.count > 0{
-            let item = messages.count - 1
-            let lastIndex = IndexPath(item: item, section: 0)
-            collectionView?.scrollToItem(at: lastIndex, at: .bottom, animated: true)
-            }
+        /*  if messages.count > 0{
+         let item = messages.count - 1
+         let lastIndex = IndexPath(item: item, section: 0)
+         collectionView?.scrollToItem(at: lastIndex, at: .bottom, animated: true)
+         }*/
     }
     
     func setUpInputComponents(){
@@ -172,32 +276,32 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         if let message = inputTextField.text{
             if message != ""{
                 self.inputTextField.text = ""
-            let userInfoRef = Database.database().reference().child("users").child(uid!)
-            userInfoRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                let dictionary = snapshot.value as! [String: Any]
-                
-                
-                let values = ["text": message, "toId": self.toId,"fromId": self.fromID, "timeStamp": timeStamp ] as [String : Any]
-                childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                    if error != nil {
-                        print(error)
-                        return
-                    }
-                    let userMessagesref = Database.database().reference().child("user-messages").child(self.fromID).child(self.toId)
-                    let messageId = childRef.key
-                    userMessagesref.updateChildValues([messageId: 1])
+                let userInfoRef = Database.database().reference().child("users").child(uid!)
+                userInfoRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                    let dictionary = snapshot.value as! [String: Any]
                     
-                    let recipientUseressagesRef = Database.database().reference().child("user-messages").child(self.toId).child(self.fromID)
-                    recipientUseressagesRef.updateChildValues([messageId: 1])
-                    DispatchQueue.main.async {
+                    
+                    let values = ["text": message, "toId": self.toId,"fromId": self.fromID, "timeStamp": timeStamp ] as [String : Any]
+                    childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print(error)
+                            return
+                        }
+                        let userMessagesref = Database.database().reference().child("user-messages").child(self.fromID).child(self.toId)
+                        let messageId = childRef.key
+                        userMessagesref.updateChildValues([messageId: 1])
                         
-                        self.moveToLastComment()
-
-                    }
+                        let recipientUseressagesRef = Database.database().reference().child("user-messages").child(self.toId).child(self.fromID)
+                        recipientUseressagesRef.updateChildValues([messageId: 1])
+                        DispatchQueue.main.async {
+                            
+                            self.moveToLastComment()
+                            
+                        }
+                    })
                 })
-            })
-            
-            
+                
+                
             }
         }
     }
@@ -222,17 +326,22 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 
                 
                 if (fromIdd == self.fromID && toIdd == self.toId) || (fromIdd == self.toId && toIdd == self.fromID) {
-                    self.fromId.append(fromIdd)
-                    self.times.append(time)
-                    self.messages.append(message)
+                    self.fromId.insert(fromIdd, at: 0)
+                    self.times.insert(time, at: 0)
+                    self.messages.insert(message, at: 0)
                     DispatchQueue.main.async {
                         UserDefaults.standard.set(self.messages, forKey: "messages")
                         self.collectionView?.reloadData()
                         self.moveToLastComment()
-                      
+                        
                     }
                 }
-               
+                //                DispatchQueue.main.async {
+                //                    self.fromId.reverse()
+                //                    self.times.reverse()
+                //                    self.messages.reverse()
+                //                    self.collectionView?.reloadData()
+                //                }
             }, withCancel: nil)
             
         }, withCancel: nil)
@@ -292,16 +401,12 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         return cell
     }
     
-    lazy var refresh: UIRefreshControl = {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(addMoreMessages), for: .valueChanged)
-        return refresh
-    }()
     
-   
+    
+    
     
     func addMoreMessages(){
-       a += 10
+        a += 10
         var i = 0
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: UInt(a))
@@ -311,7 +416,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
             let messagesRef = Database.database().reference().child("messages").child(messageId).queryOrdered(byChild: "timeStamp")
             messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let dictionary = snapshot.value as? [String: Any] else {return}
-               // print(snapshot)
+                // print(snapshot)
                 let message = dictionary["text"] as! String
                 let fromIdd = dictionary["fromId"] as! String
                 let toIdd = dictionary["toId"] as! String
@@ -319,47 +424,47 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 //print(time)
                 
                 if self.times.contains(time) == false {
-
-                if (fromIdd == self.fromID && toIdd == self.toId) || (fromIdd == self.toId && toIdd == self.fromID) {
-                   
-                    // + i, kad nebutu atvirksciai uzloadintos naujos zinutes
-                    self.fromId.insert(fromIdd, at: 0 + i)
-                    self.times.insert(time, at: 0 + i)
-                    self.messages.insert(message, at: 0 + i)
-                    i += 1
+                    
+                    if (fromIdd == self.fromID && toIdd == self.toId) || (fromIdd == self.toId && toIdd == self.fromID) {
+                        
+                        // + i, kad nebutu atvirksciai uzloadintos naujos zinutes
+                        self.fromId.insert(fromIdd, at: self.fromId.count - i)
+                        self.times.insert(time, at: self.times.count - i)
+                        self.messages.insert(message, at: self.messages.count - i)
+                        i += 1
                     }
                 }
                 DispatchQueue.main.async {
-                   
+                    
                     self.collectionView?.reloadData()
                     // print(self.timeToreverse)
-                    self.refresh.endRefreshing()
+                    
                 }
             }, withCancel: nil)
             
-          
-
-
+            
+            
+            
             
         }, withCancel: nil)
-  
-    }
-    
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
         
     }
+    
+    var i = 0
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
-       /* let lastItem = messages.count - 5
-        if indexPath.item == lastItem {
-            print("paskutinis")
-            //addMoreMessages()
-        }*/
-        
+        if messages.count > 14{
+            if messages.count >= i {
+                let lastItem = messages.count - 1
+                if indexPath.item == lastItem {
+                    i += 15
+                    
+                    addMoreMessages()
+                }
+            }
+        }
     }
- 
-  
+    
+    
 }
