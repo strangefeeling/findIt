@@ -399,6 +399,8 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 DispatchQueue.main.async {
                     
                     self.collectionView?.reloadData()
+                    userMessageRef.removeAllObservers()
+                    messagesRef.removeAllObservers()
                     // print(self.timeToreverse)
                     
                 }
