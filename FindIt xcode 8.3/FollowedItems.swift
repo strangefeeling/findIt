@@ -61,24 +61,27 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     var keys = [String]()
     
     func getFollowed(){
-        self.allUsers.date.removeAll()
-        datee.removeAll()
-        //self.allUsers.date.removeAll()
-        self.allUsers.email.removeAll()
-        self.allUsers.uid.removeAll()
-        self.allUsers.postName.removeAll()
-        self.allUsers.timeStamp.removeAll()
-        self.allUsers.downloadUrls.removeAll()
-        self.allUsers.descriptions.removeAll()
-        self.allUsers.city.removeAll()
-        self.allUsers.location.removeAll()
-        self.postId.removeAll()
-        isItFoundOrLost.removeAll()
+       
     
         
         let user = Auth.auth().currentUser?.uid
         let ref = Database.database().reference().child("users").child(user!).child("followed")
         ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            self.allUsers.date.removeAll()
+            self.datee.removeAll()
+            //self.allUsers.date.removeAll()
+            self.allUsers.email.removeAll()
+            self.allUsers.uid.removeAll()
+            self.allUsers.postName.removeAll()
+            self.allUsers.timeStamp.removeAll()
+            self.allUsers.downloadUrls.removeAll()
+            self.allUsers.descriptions.removeAll()
+            self.allUsers.city.removeAll()
+            self.allUsers.location.removeAll()
+            self.postId.removeAll()
+            self.isItFoundOrLost.removeAll()
+            
             if snapshot.exists(){
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             

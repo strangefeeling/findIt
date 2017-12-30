@@ -16,7 +16,7 @@ protocol SomeDelegate {
 class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBannerViewDelegate, UISearchBarDelegate , printSomething {
     
     var someDelegate: SomeDelegate?
-
+    
     var addItemController = AddItemController()
     let searchController = UISearchController(searchResultsController: nil)
     let allUsers = EveryUser()
@@ -32,7 +32,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     var emails = [String]()
     
     func makeSomething() {
-        print("peep")
+        
         let tabOne = FirstPage()
         let tabTwo = SecondPage()
         let tabThree = MessagesController()
@@ -50,7 +50,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("selected index ", tabBarController?.selectedIndex)
+        
         if let user = Auth.auth().currentUser?.uid{
             let ref = Database.database().reference().child("users").child(user).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String: Any]
@@ -72,7 +72,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     
     override func viewDidLoad() {
         super.viewDidLoad()
-   //     print(navigationController?.navigationBar.frame.height, "<------") // 6s plus 44, visi 44
+        //     print(navigationController?.navigationBar.frame.height, "<------") // 6s plus 44, visi 44
         DispatchQueue.main.async {
             self.checkIfUserIsLoggedIn()
         }
@@ -80,10 +80,24 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         handleNavigation()
         setupAd()
         self.delegate = self
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeLaunchBool))
+        dimScreen.addGestureRecognizer(tap)
     }
     
-      func handleSearch(){
-
+    func changeLaunchBool(){
+        launchBool = false
+    }
+    
+    let dimScreen: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        view.backgroundColor = .black
+        view.alpha = 0
+        return view
+    }()
+    
+    func handleSearch(){
+        
         searchController.searchBar.delegate = self
         
         searchController.searchBar.layer.borderWidth = 1
@@ -104,10 +118,11 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-       let tabOne = NewSearchResults()
+        
+        let tabOne = NewSearchResults()
         let tabTwo = SecondPage()
         let tabThree = MessagesController()
-         let tabOneBarItem = UITabBarItem(title: "City", image: UIImage(named:"skyline (2)"), selectedImage: UIImage(named: "skyline (2)"))
+        let tabOneBarItem = UITabBarItem(title: "City", image: UIImage(named:"skyline (2)"), selectedImage: UIImage(named: "skyline (2)"))
         let taTwoBarItem = UITabBarItem(title: "My Posts", image: UIImage(named:"user (2)"), selectedImage: UIImage(named: "user (2)"))
         let taThreeBarItem = UITabBarItem(title: "Messages", image: UIImage(named:"speech-bubble (1)"), selectedImage: UIImage(named: "speech-bubble (1)"))
         tabOne.tabBarItem = tabOneBarItem
@@ -115,14 +130,14 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         tabThree.tabBarItem = taThreeBarItem
         
         foundCity = searchBar.text!
-
+        self.selectedIndex = 0
         setViewControllers([tabOne,tabTwo, tabThree], animated: false)
         searchController.dismiss(animated: true, completion: nil)
-        self.tabBarController?.selectedIndex = 0
+        
         //tabOneBarItem.badgeColor = .red
     }
-
-   
+    
+    
     
     var textInput = ""
     let searchResults = NewSearchResults()
@@ -136,7 +151,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     func setupAd(){
         let request = GADRequest()
         request.testDevices = [kGADSimulatorID]
-       // request.testDevices = [ "55a4e7c8d80f58b53b5f39bb7c2685e2" ];// mobui
+        // request.testDevices = [ "55a4e7c8d80f58b53b5f39bb7c2685e2" ];// mobui
         ad.delegate = self
         ad.adUnitID = "ca-app-pub-8501633358477205/8183851861"
         ad.rootViewController = self
@@ -149,7 +164,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         
     }
     
-
+    
     
     /*   func searchFound(){
      var i = 1
@@ -256,10 +271,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         // navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
         navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
-      /*  let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
-        imageView.contentMode = .scaleAspectFit
-        let image = UIImage(named: "iPhone 7 Plus2")*/
-       // imageView.image = image
+        /*  let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
+         imageView.contentMode = .scaleAspectFit
+         let image = UIImage(named: "iPhone 7 Plus2")*/
+        // imageView.image = image
         //navigationController?.navigationBar.setBackgroundImage(image, for: .default)
         // navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         navigationController?.navigationBar.barTintColor = myColor
@@ -416,12 +431,13 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     var launchBool: Bool = false {
         didSet {
             if launchBool == true {
-                
+                view.addSubview(dimScreen)
                 view.addSubview(coverupView)
                 view.addSubview(myView)
                 coverupView.center.y = 0
                 UIView.animate(withDuration: 0.34, animations: {
                     self.coverupView.center.y = 150
+                    self.dimScreen.alpha = 0.5
                 })
                 self.myView.center.y = 0
                 UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5.0, options: [], animations: {
@@ -433,8 +449,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
                 UIView.animate(withDuration: 0.34, animations: {
                     self.myView.center.y = -150
                     self.coverupView.center.y = -110
+                    self.dimScreen.alpha = 0
                 }, completion: { (true) in
                     self.myView.removeFromSuperview()
+                    self.dimScreen.removeFromSuperview()
                     self.coverupView.removeFromSuperview()
                     
                 })
@@ -444,12 +462,12 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         }
     }
     
-   /* let coverUp: UIView = {
-        let coverUp = UIView()
-        coverUp.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        coverUp.backgroundColor = myColor
-        return coverUp
-    }()*/
+    /* let coverUp: UIView = {
+     let coverUp = UIView()
+     coverUp.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+     coverUp.backgroundColor = myColor
+     return coverUp
+     }()*/
     
     @objc func addIteem(){
         launchBool = !launchBool
@@ -469,6 +487,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         self.navigationItem.title = email as? String
         self.searchController.searchBar.isHidden = false
         self.navigationController?.isNavigationBarHidden = false
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
         
         setTabBarAppearence()

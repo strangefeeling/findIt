@@ -189,6 +189,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         vc.imageToPost = editableImage
         vc.isUserEditing = true
         vc.editPostName = postName
+        vc.cityForEdit = cityLabel.text!
         present(vc, animated: true, completion: nil)
     }
     

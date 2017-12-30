@@ -254,7 +254,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                         let recipientUseressagesRef = Database.database().reference().child("user-messages").child(self.toId).child(self.fromID)
                         recipientUseressagesRef.updateChildValues([messageId: 1])
                         DispatchQueue.main.async {
-                            self.howManyMessagesIsSent += 1
+                            
                             self.moveToLastComment()
                             
                         }
@@ -414,7 +414,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
         
     }
     
-    var howManyMessagesIsSent = 0
+  
     
     var i = 0
     
