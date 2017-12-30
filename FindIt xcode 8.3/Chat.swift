@@ -368,7 +368,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     
     func addMoreMessages(){
-        a += 10
+        a += 15
         var i = 0
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let userMessageRef = Database.database().reference().child("user-messages").child(uid).child(toId).queryLimited(toLast: UInt(a))
@@ -417,7 +417,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     var i = 0
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
+       // print("i ", i, " a ", a, " messages.count ", messages.count)
         if messages.count > 14{
             if messages.count >= i {
                 let lastItem = messages.count - 1
