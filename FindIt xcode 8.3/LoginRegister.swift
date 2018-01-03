@@ -30,6 +30,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         return indicator
     }()
     
+    lazy var animationimages: [UIImage] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.center = view.center
@@ -48,14 +50,54 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         view.addSubview(logoView)
         logoView.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -10).isActive = true
         logoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoView.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        logoView.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
+        logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
+        logoView.startAnimating()
+        
+        
+        
+        var i = 0
+        while i <= 37{
+//            let bundlePath = Bundle.main.path(forResource: "ani\(i)", ofType: "png")
+//            let image = UIImage(contentsOfFile: bundlePath!)
+//            animationimages.append(image!)
+            animationimages.append(UIImage(named:"animation\(i)")!)
+            i += 1
+        }
+
+        
+        
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
+            self.runAnimation()
+           // self.animationTimer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.stopAnimation), userInfo: nil, repeats: false)
+            self.animationTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.runAnimation), userInfo: nil, repeats: true)
+            
+        }
+        
+        
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now()+3) { 
+//            self.logoView.image = UIImage(named:"Comp 33")
+//        }
+        
+        
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
     }
+
     
+    var animationTimer: Timer!
+    
+    func runAnimation(){
+        logoView.animationImages = animationimages
+        logoView.animationDuration = 4
+        logoView.animationRepeatCount = 1
+        logoView.startAnimating()
+    }
     
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -94,7 +136,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     let logoView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "binoculars (1)")
+        logo.image = UIImage(named: "ani19")
+        logo.contentMode = .scaleAspectFit
+//        logo.backgroundColor = .red
         return logo
     }()
     

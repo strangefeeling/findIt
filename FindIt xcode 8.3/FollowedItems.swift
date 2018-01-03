@@ -58,10 +58,41 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         return refresh
     }()
     
+    var noResults: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "To follow a post you need to write a comment under it"
+        label.font = UIFont(name: "Avenir Next", size: 16)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
+    func showNoResults(){
+        contentView.addSubview(self.noResults)
+        noResults.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        noResults.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        noResults.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        noResults.widthAnchor.constraint(equalToConstant: 210).isActive = true
+        
+    }
+    
     var keys = [String]()
     
     func getFollowed(){
-       
+        self.allUsers.date.removeAll()
+        self.datee.removeAll()
+        //self.allUsers.date.removeAll()
+        self.allUsers.email.removeAll()
+        self.allUsers.uid.removeAll()
+        self.allUsers.postName.removeAll()
+        self.allUsers.timeStamp.removeAll()
+        self.allUsers.downloadUrls.removeAll()
+        self.allUsers.descriptions.removeAll()
+        self.allUsers.city.removeAll()
+        self.allUsers.location.removeAll()
+        self.postId.removeAll()
+        self.isItFoundOrLost.removeAll()
     
         
         let user = Auth.auth().currentUser?.uid
@@ -94,6 +125,14 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                
             }//cia if exists
             else {
+                
+                if self.allUsers.descriptions.count == 0 {
+                self.tableView.reloadData()
+                    self.showNoResults()
+                }
+                if self.allUsers.postName.count > 0{
+                    self.noResults.removeFromSuperview()
+                }
                 self.refresh.endRefreshing()
             }
         })
@@ -171,6 +210,13 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     self.allUsers.email.append(email)
                     
                     DispatchQueue.main.async {
+                        if self.allUsers.descriptions.count == 0 {
+                            self.tableView.reloadData()
+                            self.showNoResults()
+                        }
+                        if self.allUsers.postName.count > 0{
+                            self.noResults.removeFromSuperview()
+                        }
                         self.getLostFollowed(post: post)
                         foundRef.removeAllObservers()
                     }
@@ -229,10 +275,19 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
                     lostRef.removeAllObservers()
                  
-                    
+                    if self.allUsers.descriptions.count == 0 {
+                        self.tableView.reloadData()
+                        self.showNoResults()
+                    }
+                    if self.allUsers.postName.count > 0{
+                        self.noResults.removeFromSuperview()
+                    }
                     
                 }
             } else{
+                
+              
+
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.refresh.endRefreshing()

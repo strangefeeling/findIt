@@ -86,9 +86,10 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     let infoText: UITextView = {
         let text = UITextView()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Add a location where you found your item or if you are searching for it, just add a location anywhere in your city area."
+        text.text = "Add the location of where the item was found. If you are looking for an item, just select a location anywhere in your city area."
         text.font = UIFont(name: "Avenir Next", size: 16)
         text.layer.cornerRadius = 20
+        text.textColor = .darkGray
         text.isEditable = false
         text.isScrollEnabled = false
         text.alpha = 0
@@ -110,39 +111,32 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     var infoBool: Bool = false {
         didSet {
             
-            let myConstraint =  infoText.heightAnchor.constraint(equalToConstant: 100)
-            myConstraint.isActive = false
+            
 
             if infoBool{
                 view.addSubview(dimScreen)
-                view.addSubview(infoText)
-                myConstraint.isActive = true
-                infoText.widthAnchor.constraint(equalToConstant: 245).isActive = true
-                infoText.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-                infoText.bottomAnchor.constraint(equalTo: info.topAnchor, constant: -16).isActive = true
+                infoTextConstraints()
                 infoText.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                infoText.center = info.center
                 
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.dimScreen.alpha = 0.5
-                    //myConstraint.constant = 100
+                    self.dimScreen.alpha = 0.6
+                    self.infoText.center = self.view.center
                     self.infoText.transform = CGAffineTransform(scaleX: 1, y: 1)
-                    //self.infoText.layoutIfNeeded()
+                    
+                    //self.infoText.center.x = self.view.center.x
                     self.infoText.alpha = 1
                 })
 
             } else {
-                myConstraint.constant = 100
+                
                 
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.infoText.alpha = 0
                     self.dimScreen.alpha = 0
                     self.infoText.center = self.info.center
-                    //myConstraint.constant = 0
                     self.infoText.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-                   // self.infoText.layoutIfNeeded()
                     
                 }, completion: { (true) in
-                   // myConstraint.isActive = false
                     self.infoText.removeFromSuperview()
                     self.dimScreen.removeFromSuperview()
                 })
@@ -153,6 +147,16 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     
     
+    var myConstraint =  NSLayoutConstraint()
+  
+    func infoTextConstraints(){
+        view.addSubview(infoText)
+        myConstraint =  infoText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        myConstraint.isActive = true
+        infoText.widthAnchor.constraint(equalToConstant: 270).isActive = true
+        infoText.heightAnchor.constraint(equalToConstant: 110).isActive = true
+        infoText.bottomAnchor.constraint(equalTo: info.topAnchor, constant: -16).isActive = true
+    }
     
     func beGone(){
         print("susirasi darba")
@@ -725,7 +729,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     func setupView(){
         view.addSubview(backButton)
         
-        backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: -UIScreen.main.bounds.height / 33.35).isActive = true
+        backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true

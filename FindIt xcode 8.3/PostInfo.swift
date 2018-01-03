@@ -30,7 +30,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         tableView.delegate = self
         setupView()
-        getComment()
+        //getComment()
         
         
         
@@ -54,6 +54,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         tableView.estimatedRowHeight = 5
         print(postName)
         print(toIdd)
+        getComment()
         tableView.rowHeight = UITableViewAutomaticDimension
         firstCellHeight = UIScreen.main.bounds.height / 2.5 + 7 * (UIScreen.main.bounds.height / 33.35 + 8)  + descriptiontextField.frame.height
         if toIdd == Auth.auth().currentUser?.uid{

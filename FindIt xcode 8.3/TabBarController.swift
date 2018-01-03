@@ -122,7 +122,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         let tabOne = NewSearchResults()
         let tabTwo = SecondPage()
         let tabThree = MessagesController()
-        let tabOneBarItem = UITabBarItem(title: "City", image: UIImage(named:"skyline (2)"), selectedImage: UIImage(named: "skyline (2)"))
+        let tabOneBarItem = UITabBarItem(title: "Posts by City", image: UIImage(named:"skyline (2)"), selectedImage: UIImage(named: "skyline (2)"))
         let taTwoBarItem = UITabBarItem(title: "My Posts", image: UIImage(named:"user (2)"), selectedImage: UIImage(named: "user (2)"))
         let taThreeBarItem = UITabBarItem(title: "Messages", image: UIImage(named:"speech-bubble (1)"), selectedImage: UIImage(named: "speech-bubble (1)"))
         tabOne.tabBarItem = tabOneBarItem

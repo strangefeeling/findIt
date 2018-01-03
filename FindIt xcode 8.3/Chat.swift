@@ -22,6 +22,8 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     var fromID = String()
     var keyboardHeight: CGFloat = 0
     
+    var shouldKeyboardChangeFrame = true
+    
     
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -51,7 +53,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         
-        view.addGestureRecognizer(tap)
+        collectionView?.addGestureRecognizer(tap)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification: )), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         
         
@@ -60,31 +62,9 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     var e = 0
     
   func dismissKeyboard() {
-    self.view.endEditing(true)
+     self.view.endEditing(true)
      self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
-    //   inputTextField.resignFirstResponder()
-//        print("iiiiiiiiiiii ",e)
-//        if shouldKeyboardHeightChange == false {
-//            //Causes the view (or one of its embedded text fields) to resign the first responder status.
-//            
-//            self.view.frame.origin.y += self.keyboardHeight
-//            self.view.endEditing(true)
-//            
-//            DispatchQueue.main.async {
-//                
-//                self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight, 0)
-//                print("leidziames ",self.collectionView?.contentInset, "edgeInsets ", self.collectionView?.scrollIndicatorInsets)
-//                
-//                self.shouldKeyboardHeightChange = true
-//
-//            }
-
-            //print("view height is " , self.view.frame.height, " bottom inset is ", collectionView?.contentInset.bottom, " keyboard height is ", keyboardHeight , " collectionview, frame ", collectionView?.frame.height)
-            
-            // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
-    
-            
-
+    shouldKeyboardChangeFrame = true
     }
  
     
@@ -92,14 +72,16 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
     
     func keyboardWillShow(notification: NSNotification) {
         e += 1
-        print("iiiiiiiiiiii ",e)
+        //if shouldKeyboardChangeFrame{
+        print("pristatau kvaletura, kale")
         
       // nes kazkodel du kartus sita suda paleidzia
-            self.shouldKeyboardHeightChange = false
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 keyboardHeight = keyboardSize.height
                 
-                self.view.frame.origin.y -= keyboardHeight
+                self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
+                shouldKeyboardChangeFrame = false
                 DispatchQueue.main.async {
                     
                     self.collectionView?.contentInset = UIEdgeInsetsMake(58, 0, self.keyboardHeight + 8, 0)//.bottom = self.keyboardHeight + 8
@@ -110,15 +92,15 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
                 }
                 
             }
-        
+        //}
         
     }
     
     func keyboardWillHide(notification: NSNotification) {
         print("iiiiiiiiiiii ",e)
-         self.view.endEditing(true)
-        if shouldKeyboardHeightChange == false {
-            self.shouldKeyboardHeightChange = true
+         //self.view.endEditing(true)
+        //if shouldKeyboardChangeFrame == false {
+            self.shouldKeyboardChangeFrame = true
             //Causes the view (or one of its embedded text fields) to resign the first responder status.
             
            // self.view.frame = CGRect(x: 0, y: 58, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 58)
@@ -141,7 +123,7 @@ class Chat: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITe
             
             
             
-        }
+      //  }
 
     }
     

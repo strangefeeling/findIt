@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class AddCommentController: UIViewController {
+class AddCommentController: UIViewController, UITextViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +82,7 @@ class AddCommentController: UIViewController {
         let ref = Database.database().reference().child("allPosts").child("comments").child(postName).child(commentName)//.child(commentName).child(user!)
         let anotherRef = Database.database().reference().child("users").child(user!).child("followed").child(postName)
         anotherRef.setValue(dict)
-        
+        commentTextView.text = ""
        // postInfo.tableView.frame.origin.y += 48
 
         

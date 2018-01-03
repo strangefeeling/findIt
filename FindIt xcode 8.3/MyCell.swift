@@ -292,11 +292,12 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
             }// if snapshot exists
                 
             else {
+                
                 if self.allUsers.descriptions.count == 0 {
                 self.showNoResults()
-                } else if self.allUsers.descriptions.count > 0{
-                    self.noResults.removeFromSuperview()
                 }
+              
+                
                 self.sortPosts(timee: self.date)
             }
         })
@@ -375,6 +376,9 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         self.isItFoundOrLost.reverse()
         self.postId.reverse()
       
+        if allUsers.descriptions.count > 0{
+            noResults.removeFromSuperview()
+        }
         tableView.reloadData()
         self.refresh.endRefreshing()
     }
