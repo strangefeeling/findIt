@@ -19,11 +19,16 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     var isCommentByPoster: Bool = false
     
+    var lat: String?
+    
+    var lon: String?
+    
+    var locationName: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = myColor//UIColor.white
-        
+        getCoordinates()
         // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
         //descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 33.35)
         
@@ -246,6 +251,24 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
+    
+    func getCoordinates(){
+        let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+        
+        ref.observeSingleEvent(of: .value, with: { (snapshoot) in
+            let dict = snapshoot.value as! [String: Any]
+          //  print(dict["lat"], " ",dict["lon"]," <------")
+            self.lat = dict["lat"] as? String
+            self.lon = dict["lon"] as? String
+            self.locationName = dict["locationName"] as? String
+        
+            
+            UserDefaults.standard.set(self.lat, forKey: "lat")//.string(forKey: "lat")
+            UserDefaults.standard.set(self.lon, forKey: "lon")
+            UserDefaults.standard.set(self.locationName, forKey: "title")
+        })
+    }
+    
     //-------------------------------------------------------------------------------------------------------
     func getComment(){
         

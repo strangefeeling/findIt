@@ -45,6 +45,8 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         setUpMap()
         setUpLocationManager()
     }
+    
+
 
     let searchController = UISearchController(searchResultsController: nil)
     

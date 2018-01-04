@@ -731,7 +731,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
-        backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        backButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         view.addSubview(tempButtonWithImage)

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+
 class LoginRegister: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var inputsContainerView: UIView!
@@ -32,6 +33,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     lazy var animationimages: [UIImage] = []
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.center = view.center
@@ -40,6 +43,18 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        
+        var i = 0
+        while i <= 37{
+            //            let bundlePath = Bundle.main.path(forResource: "ani\(i)", ofType: "png")
+            //            let image = UIImage(contentsOfFile: bundlePath!)
+            //            animationimages.append(image!)
+            animationimages.append(UIImage(named:"animation\(i)")!)
+            i += 1
+        }
+        
+        
         
         //view.backgroundColor = myColor
         navigationController?.navigationBar.isHidden = true
@@ -52,22 +67,10 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         logoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
         logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
-        logoView.startAnimating()
         
+       // logoView.image = animatedImage
         
-        
-        var i = 0
-        while i <= 37{
-//            let bundlePath = Bundle.main.path(forResource: "ani\(i)", ofType: "png")
-//            let image = UIImage(contentsOfFile: bundlePath!)
-//            animationimages.append(image!)
-            animationimages.append(UIImage(named:"animation\(i)")!)
-            i += 1
-        }
-
-        
-        
-        
+         logoView.startAnimating()
         
         DispatchQueue.main.asyncAfter(deadline: .now()+5) {
             self.runAnimation()
@@ -78,7 +81,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         
         
-//        DispatchQueue.main.asyncAfter(deadline: .now()+3) { 
+//        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
 //            self.logoView.image = UIImage(named:"Comp 33")
 //        }
         
@@ -136,7 +139,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     let logoView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "ani19")
+        logo.image = UIImage(named: "animation14")
         logo.contentMode = .scaleAspectFit
 //        logo.backgroundColor = .red
         return logo
@@ -257,7 +260,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                             UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
                             UIApplication.shared.endIgnoringInteractionEvents()
                             self.activityIndicator.stopAnimating()
+//                            self.animationTimer.invalidate()
+//                            self.logoView.stopAnimating()
                             self.performSegue(withIdentifier: "sss", sender: self)
+//                            self.logoView.removeFromSuperview()
+//                            self.dismiss(animated: true, completion: nil)
                         }
                         
                         
@@ -296,13 +303,17 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                             Database.database().reference().child("users").child(user.uid).child("password").setValue(password)
                             
                             
-                            let tabBarController = TabBarController()
+                           // let tabBarController = TabBarController()
                             DispatchQueue.main.async {
                                 //     let navController = UINavigationController(rootViewController: TabBarController())
                                 UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
                                 UIApplication.shared.endIgnoringInteractionEvents()
                                 self.activityIndicator.stopAnimating()
+//                                self.animationTimer.invalidate()
+//                                self.logoView.stopAnimating()
                                 self.performSegue(withIdentifier: "sss", sender: self)
+                                self.dismiss(animated: true, completion: nil)
+//                                self.logoView.removeFromSuperview()
                                 // self.present(tabBarController, animated: true, completion: nil)
                                 //self.show(tabBarController, sender: nil)
                             }
@@ -370,6 +381,8 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         
     }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
