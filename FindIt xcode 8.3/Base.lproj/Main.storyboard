@@ -6,8 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -171,39 +169,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uaV-7f-HTk">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uaV-7f-HTk">
                                 <rect key="frame" x="16" y="443.5" width="343" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="au7-uh-HRg"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="registerTapped:" destination="xyr-40-uLV" eventType="touchUpInside" id="7Mb-9k-XBi"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y7B-nK-WNQ">
-                                <rect key="frame" x="16" y="233.5" width="343" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="RLW-5O-NGD"/>
-                                    <constraint firstAttribute="width" secondItem="y7B-nK-WNQ" secondAttribute="height" multiplier="343:200" id="akm-af-zcw"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="y7B-nK-WNQ" firstAttribute="trailing" secondItem="ExJ-h5-UBN" secondAttribute="trailingMargin" id="7XJ-ae-gRU"/>
-                            <constraint firstItem="y7B-nK-WNQ" firstAttribute="centerX" secondItem="ExJ-h5-UBN" secondAttribute="centerX" id="Nsz-4z-rHA"/>
-                            <constraint firstItem="y7B-nK-WNQ" firstAttribute="leading" secondItem="ExJ-h5-UBN" secondAttribute="leadingMargin" id="ZUH-1Z-mp3"/>
-                            <constraint firstItem="uaV-7f-HTk" firstAttribute="top" secondItem="y7B-nK-WNQ" secondAttribute="bottom" constant="10" id="bTS-NA-6EW"/>
-                            <constraint firstItem="y7B-nK-WNQ" firstAttribute="centerY" secondItem="ExJ-h5-UBN" secondAttribute="centerY" id="dtV-On-p2j"/>
-                            <constraint firstItem="uaV-7f-HTk" firstAttribute="trailing" secondItem="ExJ-h5-UBN" secondAttribute="trailingMargin" id="eV4-nP-8qs"/>
-                            <constraint firstItem="uaV-7f-HTk" firstAttribute="leading" secondItem="ExJ-h5-UBN" secondAttribute="leadingMargin" id="vQM-eb-Csx"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="inputsContainerView" destination="y7B-nK-WNQ" id="XVi-jb-Coc"/>
                         <outlet property="loginButton" destination="uaV-7f-HTk" id="eBM-fL-XtI"/>
                         <segue destination="Ig0-gR-Su5" kind="show" identifier="sss" id="PSY-Ev-ZrE"/>
                     </connections>
