@@ -103,10 +103,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
             let ref =  Database.database().reference().child("allPosts").child("found")//.child(uid)
             
             ref.queryLimited(toLast: UInt(a)).queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
-                
-                print(snapshot)
-                
-             //   self.a = 5
+            //   self.a = 5
              //   self.i = 5
                 
                 self.howManySnaps.removeAll()
@@ -155,9 +152,10 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                         self.locations.append(location)
                     }
                     
-                    if let email = snap.childSnapshot(forPath: "email").value as? String{
+                    if let email = snap.childSnapshot(forPath: "name").value as? String{ // cia istikro vardas!
                         self.emails.append(email)
                     }
+                    
                     
                 }
                 self.date.reverse()
@@ -350,12 +348,12 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
        let lasItem = allUsers.descriptions.count - 3
-        print("count", howManySnaps.count, i, a)
+        //print("count", howManySnaps.count, i, a)
         if lasItem > 0 {
         if indexPath.row == lasItem{
            
             if i <= howManySnaps.count{
-            print("load more ", i, a)
+            //print("load more ", i, a)
             a += 5
             //addMoreRows()
                 observeOneTime()

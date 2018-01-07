@@ -163,7 +163,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     let uid = dictionary["uid"] as! String
                     let city = dictionary["city"] as! String
                     let location = dictionary["locationName"] as! String
-                    let email = dictionary["email"] as! String
+                    let email = dictionary["name"] as! String
                     //let date = dictionary["timeStamp"] as! Double
                     let date = Date(timeIntervalSince1970:dictionary["timeStamp"] as! Double)
                     

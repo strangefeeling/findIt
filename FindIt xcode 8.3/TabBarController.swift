@@ -50,12 +50,11 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         if let user = Auth.auth().currentUser?.uid{
             let ref = Database.database().reference().child("users").child(user).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String: Any]
                 
-                let email = dictionary["email"] as! String
+                let email = dictionary["name"] as! String
                 UserDefaults.standard.set(email, forKey: "email")
                 
                 self.navigationItem.title = email

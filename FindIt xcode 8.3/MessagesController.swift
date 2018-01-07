@@ -84,7 +84,7 @@ class MessagesController: UITableViewController {
         let ref = Database.database().reference().child("users").child(name)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             let dictionary = snapshot.value as! [String: Any]
-            let email = dictionary["email"] as! String
+            let email = dictionary["name"] as! String
             
             if self.emails.contains(email) == false{
                 self.emails.append(email)
@@ -104,7 +104,7 @@ class MessagesController: UITableViewController {
             }, withCancel: nil)
             DispatchQueue.main.async {
                 
-                UserDefaults.standard.set(self.emails, forKey: "emails")
+                //UserDefaults.standard.set(self.emails, forKey: "emails")
             }
         })
     }

@@ -254,18 +254,19 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     func getCoordinates(){
         let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
-        
-        ref.observeSingleEvent(of: .value, with: { (snapshoot) in
-            let dict = snapshoot.value as! [String: Any]
-          //  print(dict["lat"], " ",dict["lon"]," <------")
-            self.lat = dict["lat"] as? String
-            self.lon = dict["lon"] as? String
-            self.locationName = dict["locationName"] as? String
-        
-            
-            UserDefaults.standard.set(self.lat, forKey: "lat")//.string(forKey: "lat")
-            UserDefaults.standard.set(self.lon, forKey: "lon")
-            UserDefaults.standard.set(self.locationName, forKey: "title")
+        print("foundOrLost ",foundOrLost)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            print("Sssssssssssssss ",snapshot)
+//            let dict = snapshot.value as! [String: Any]
+//          //  print(dict["lat"], " ",dict["lon"]," <------")
+//            self.lat = dict["lat"] as? String
+//            self.lon = dict["lon"] as? String
+//            self.locationName = dict["locationName"] as? String
+//        
+//            
+//            UserDefaults.standard.set(self.lat, forKey: "lat")//.string(forKey: "lat")
+//            UserDefaults.standard.set(self.lon, forKey: "lon")
+//            UserDefaults.standard.set(self.locationName, forKey: "title")
         })
     }
     
@@ -284,7 +285,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     print(self.comments)
                 }
                 
-                if let email = snap.childSnapshot(forPath: "email").value as? String {
+                if let email = snap.childSnapshot(forPath: "name").value as? String {
                     self.fromEmail.append(email)
                 }
                 

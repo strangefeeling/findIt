@@ -21,7 +21,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
     }()
     
-    var keyboardHeight: CGFloat = 0
+    
     
     @IBAction func registerTapped(_ sender: Any) {
         activityIndicator.startAnimating()
@@ -50,8 +50,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         view.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         handleLoginButton()
         
+        if UserDefaults.standard.object(forKey: "loginEmail") != nil {
+            emailTextField.text = UserDefaults.standard.object(forKey: "loginEmail") as? String
+            passwordTextField.text = UserDefaults.standard.object(forKey: "password") as? String
+        }
    
-        
         inputsContainerView.translatesAutoresizingMaskIntoConstraints = false
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -76,9 +79,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         
         
         
-        //view.backgroundColor = myColor
+        
         navigationController?.navigationBar.isHidden = true
-        //  view.addSubview(loginRegisterButton)
+        
         view.addSubview(loginRegisterSegmentedControl)
         setupInputsContainerView()
         setupLoginRegisterSegmentedControl()
@@ -88,22 +91,16 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
         logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
         
-       // logoView.image = animatedImage
+       
         
          logoView.startAnimating()
         
         DispatchQueue.main.asyncAfter(deadline: .now()+5) {
             self.runAnimation()
-           // self.animationTimer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.stopAnimation), userInfo: nil, repeats: false)
+           
             self.animationTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.runAnimation), userInfo: nil, repeats: true)
             
         }
-        
-        
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-//            self.logoView.image = UIImage(named:"Comp 33")
-//        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -124,15 +121,15 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        
         view.endEditing(true)
     }
     
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            //self.view.frame.origin.y -= keyboardHeight
+           let keyboardHeight = keyboardSize.height
+            
             
             self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - keyboardHeight)
             
@@ -141,14 +138,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     
     func keyboardWillHide(sender: NSNotification) {
-        //self.view.frame.origin.y += keyboardHeight
+        
         UIView.animate(withDuration: 0.5) {
             self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
         
-//        setupInputsContainerView()
-//        setupLoginRegisterSegmentedControl()
-        keyboardHeight = 0
         
     }
     
@@ -162,7 +156,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.image = UIImage(named: "animation14")
         logo.contentMode = .scaleAspectFit
-//        logo.backgroundColor = .red
+
         return logo
     }()
     
@@ -179,7 +173,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         tf.placeholder = "Password"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.isSecureTextEntry = true
-        tf.text = "abc123"
+        //tf.text = "abc123"
     
         tf.delegate = self
         
@@ -197,7 +191,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     lazy var nameTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Username"
+        tf.placeholder = "Username:"
         tf.translatesAutoresizingMaskIntoConstraints = false
         
         
@@ -314,7 +308,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                         //  let navController = UINavigationController(rootViewController: tabBarController)
                         DispatchQueue.main.async {
                             // self.dismiss(animated: true, completion: nil)
-                            UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
+                            UserDefaults.standard.set(email, forKey: "loginEmail")
+                            UserDefaults.standard.set(password, forKey: "password")
+                           // UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
                             UIApplication.shared.endIgnoringInteractionEvents()
                             self.activityIndicator.stopAnimating()
 //                            self.animationTimer.invalidate()
@@ -340,7 +336,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     
     func handleRegister(){
-        
+        if let name = nameTextField.text{
         if let email = emailTextField.text {
             let user = Userr()
             user.email = emailTextField.text
@@ -358,21 +354,21 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                             //add user into the app
                             Database.database().reference().child("users").child(user.uid).child("email").setValue(email)
                             Database.database().reference().child("users").child(user.uid).child("password").setValue(password)
+                            Database.database().reference().child("users").child(user.uid).child("name").setValue(name)
                             
-                            
-                           // let tabBarController = TabBarController()
+
                             DispatchQueue.main.async {
-                                //     let navController = UINavigationController(rootViewController: TabBarController())
-                                UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
+                               // UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
+                                UserDefaults.standard.set(email, forKey: "loginEmail")
+                                UserDefaults.standard.set(password, forKey: "password")
                                 UIApplication.shared.endIgnoringInteractionEvents()
                                 self.activityIndicator.stopAnimating()
 //                                self.animationTimer.invalidate()
 //                                self.logoView.stopAnimating()
                                 self.performSegue(withIdentifier: "sss", sender: self)
                                 self.dismiss(animated: true, completion: nil)
-//                                self.logoView.removeFromSuperview()
-                                // self.present(tabBarController, animated: true, completion: nil)
-                                //self.show(tabBarController, sender: nil)
+
+
                             }
                             
                         }
@@ -380,7 +376,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                 })
             }
         }
-        
+        }
     }
     
     lazy var emailTextField: UITextField = {
@@ -389,7 +385,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         //  tf.backgroundColor = UIColor.blue
         tf.placeholder = "Email Address"
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.text = "rytis@gmail.com"
+       // tf.text = "rytis@gmail.com"
         tf.delegate = self
         
         return tf
@@ -435,10 +431,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         nameHeightAnchor?.isActive = true
         
         
-//        emailSeparatorView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 0).isActive = true
-//        emailSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        emailSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
-//        emailSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        nameSeparatorView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 0).isActive = true
+        nameSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        nameSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
+        nameSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 0).isActive = true
         emailTextField.widthAnchor.constraint(equalTo: nameTextField.widthAnchor).isActive = true
@@ -446,49 +443,16 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         emailHeightAnchor = emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1 / 3)
         emailHeightAnchor?.isActive = true
         
+        emailSeparatorView.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 0).isActive = true
+        emailSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        emailSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
+        emailSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
         passwordTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
         passwordTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         passwordheightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1 / 3)
         passwordheightAnchor?.isActive = true
-
-        
-        
-        
-//        nameTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive = true
-//        nameTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-//        nameTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        nameHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1 / 3)
-//        nameHeightAnchor.isActive = true
-//        
-//        nameSeparatorView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-//        nameSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        nameSeparatotViewHeightAnhor = nameSeparatorView.heightAnchor.constraint(equalToConstant: 1)
-//        nameSeparatotViewHeightAnhor.isActive = true
-//        nameSeparatorView.centerXAnchor.constraint(equalTo: inputsContainerView.centerXAnchor).isActive = true
-//        
-//        
-////        emailTopAnchor = emailTextField.topAnchor.constraint(equalTo: nameSeparatorView.bottomAnchor)
-////        emailTopAnchor.isActive = true
-//        
-//        
-//        passwordheightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1 / 3)
-//        passwordheightAnchor.isActive = true
-//        passwordTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        passwordTextField.bottomAnchor.constraint(equalTo: inputsContainerView.bottomAnchor).isActive = true
-//        passwordTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-//        
-//        emailSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
-//        emailSeparatorView.bottomAnchor.constraint(equalTo: passwordTextField.topAnchor).isActive = true
-//        emailSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        emailSeparatorView .heightAnchor.constraint(equalToConstant: 1).isActive = true
-//        
-//        emailTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-//        emailHeightAnchor =  emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1 / 3)
-//        emailHeightAnchor.isActive = true
-//        emailTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-//        emailTextField.bottomAnchor.constraint(equalTo: emailSeparatorView.topAnchor).isActive = true
-//        
         
     }
     

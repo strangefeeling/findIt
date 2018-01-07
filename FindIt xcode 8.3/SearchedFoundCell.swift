@@ -156,7 +156,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
                         self.locations.append(location)
                     }
                     
-                    if let email = snap.childSnapshot(forPath: "email").value as? String{
+                    if let email = snap.childSnapshot(forPath: "name").value as? String{// cia vardas!!!
                         self.emails.append(email)
                     }
                     self.i += 1

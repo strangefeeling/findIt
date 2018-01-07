@@ -206,7 +206,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                     let uid = dict?["uid"] as! String
                     self.allUsers.uid.append(uid)
                     
-                    let email = dict?["email"] as! String
+                    let email = dict?["name"] as! String// cia vardas!!!
                     self.allUsers.email.append(email)
                     
                     DispatchQueue.main.async {
@@ -265,7 +265,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                 let uid = dict?["uid"] as! String
                 self.allUsers.uid.append(uid)
                 
-                let email = dict?["email"] as! String
+                let email = dict?["name"] as! String// cia vardas!!!
                 self.allUsers.email.append(email)
                
                 DispatchQueue.main.async {
