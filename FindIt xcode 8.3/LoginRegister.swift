@@ -38,7 +38,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         return indicator
     }()
     
-    lazy var animationimages: [UIImage] = []
+    //lazy
     
     var inputsContainerViewHeightAnchor: NSLayoutConstraint?
     
@@ -67,17 +67,20 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
+        var animationimages: [UIImage] = []
         var i = 0
-        while i <= 37{
-            //            let bundlePath = Bundle.main.path(forResource: "ani\(i)", ofType: "png")
-            //            let image = UIImage(contentsOfFile: bundlePath!)
-            //            animationimages.append(image!)
-            animationimages.append(UIImage(named:"animation\(i)")!)
+        while i <= 35{
+            
+                        let bundlePath = Bundle.main.path(forResource: "f\(i)", ofType: "png")
+                        let image = UIImage(contentsOfFile: bundlePath!)
+                        animationimages.append(image!)
+            
+            
+            //animationimages.append(UIImage(named:"animation\(i)")!)
             i += 1
         }
         
-        
+        logoView.animationImages = animationimages
         
         
         navigationController?.navigationBar.isHidden = true
@@ -91,31 +94,40 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         logoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
         logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16).isActive = true
         
-       
-        
-         logoView.startAnimating()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now()+5) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
             self.runAnimation()
-           
-            self.animationTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.runAnimation), userInfo: nil, repeats: true)
             
+            self.animationTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(self.setImage), userInfo: nil, repeats: false)
+            
+
         }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+               NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginRegister.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
     }
+    
+    func setImage(){
+    print("cbb")
+        logoView.stopAnimating()
+        logoView.image = UIImage(named: "f35")
+        logoView.animationImages = nil
+    }
+    
+    func stopAnimating(){
+        
+       // logoView.stopAnimating()
+       // animationTimer.invalidate()
+        logoView.animationImages = nil
+    }
 
     
     var animationTimer: Timer!
     
     func runAnimation(){
-        logoView.animationImages = animationimages
-        logoView.animationDuration = 4
+        logoView.animationDuration = 1.5
         logoView.animationRepeatCount = 1
         logoView.startAnimating()
     }
@@ -154,7 +166,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     let logoView: UIImageView = {
         let logo = UIImageView()
         logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "animation14")
+        //logo.image = UIImage(named: "animation14")
         logo.contentMode = .scaleAspectFit
 
         return logo
@@ -310,6 +322,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                             // self.dismiss(animated: true, completion: nil)
                             UserDefaults.standard.set(email, forKey: "loginEmail")
                             UserDefaults.standard.set(password, forKey: "password")
+                            //self.stopAnimating()
                            // UserDefaults.standard.set(Auth.auth().currentUser?.uid, forKey: "userUid")
                             UIApplication.shared.endIgnoringInteractionEvents()
                             self.activityIndicator.stopAnimating()
@@ -362,6 +375,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                                 UserDefaults.standard.set(email, forKey: "loginEmail")
                                 UserDefaults.standard.set(password, forKey: "password")
                                 UIApplication.shared.endIgnoringInteractionEvents()
+                               // self.stopAnimating()
                                 self.activityIndicator.stopAnimating()
 //                                self.animationTimer.invalidate()
 //                                self.logoView.stopAnimating()

@@ -37,6 +37,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         // ...
         // Go back to the previous ViewController
         self.dismiss(animated: true, completion: nil)
+       //mapView.removeFromSuperview()
        
         _ = navigationController?.popViewController(animated: true)
        /* mapView.removeFromSuperview()

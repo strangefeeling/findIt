@@ -120,39 +120,54 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             //print(snapshot.key)
             if snapshot.exists(){
+                guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+                for snap in snapshots{
+                    if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                    print(timePosted)
+                    }
+                }
                 let dict = snapshot.value as? [String: Any]
                 
                 if let description = dict?["description"] as? String {
                     //print(description)
-                    self.allUsers.descriptions.insert(description, at: 0)
+                    self.allUsers.descriptions.append(description)//.insert(description, at: 0)
                 }
                 
                 
                 if let downloadUrl = dict?["downloadURL"] as? String {
-                    self.allUsers.downloadUrls.insert(downloadUrl, at: 0)
+                    self.allUsers.downloadUrls.append(downloadUrl)//insert(downloadUrl, at: 0)
                 }
                 
                 if let city = dict?["city"] as? String {
-                    self.cities.insert(city, at: 0)
+                    self.cities.append(city)//insert(city, at: 0)
                 }
                 
                 if let location = dict?["locationName"] as? String {
-                    self.locations.insert(location, at: 0)
+                    self.locations.append(location)//insert(location, at: 0)
                 }
                 
                 if let date = dict?["timeStamp"] as? Double {
-                    self.date.insert(date, at: 0)
+                    self.date.append(date)//insert(date, at: 0)
                     //print(date)
                 }
                 
                 if let name = dict?["name"] as? String {
-                    self.emails.insert(name, at: 0)
+                    self.emails.append(name)//insert(name, at: 0)
                 }
                 
                 if let uid = dict?["uid"] as? String {
-                    self.allUsers.uid.insert(uid, at: 0)
+                    self.allUsers.uid.append(uid)//insert(uid, at: 0)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute: {
+//                self.allUsers.descriptions.reverse()
+//                self.allUsers.downloadUrls.reverse()
+//                self.allUsers.uid.reverse()
+//                self.cities.reverse()
+//                self.locations.reverse()
+//                self.date.reverse()
+//                self.postId.reverse()
+//                self.emails.reverse()
+//                self.isItFoundOrLost.reverse()
+                DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
                     
                     self.tableView.reloadData()
                     self.refresh.endRefreshing()
