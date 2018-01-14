@@ -80,8 +80,18 @@ class AddCommentController: UIViewController, UITextViewDelegate {
         let timeStamp = Int(NSDate().timeIntervalSince1970)
         let dict = ["timestamp": timeStamp,"comment": commentTextView.text,"uid": user, "name": email] as [String : Any]
         let ref = Database.database().reference().child("allPosts").child("comments").child(postName).child(commentName)//.child(commentName).child(user!)
-        let anotherRef = Database.database().reference().child("users").child(user!).child("followed").child(postName)
-        anotherRef.setValue(dict)
+//        let anotherRef = Database.database().reference().child("users").child(user!).child("followed").child(postName)
+//        anotherRef.setValue(dict)
+        let anotherRef = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+        anotherRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            let dict = snapshot.value as? [String: Any]
+            let posterUid = dict?["uid"] as? String
+            if posterUid != user! {
+                let myRef = Database.database().reference().child("users").child(user!).child("followed").child(self.postName)
+                myRef.setValue(snapshot.value)
+            }
+            
+        })
         commentTextView.text = ""
        // postInfo.tableView.frame.origin.y += 48
 

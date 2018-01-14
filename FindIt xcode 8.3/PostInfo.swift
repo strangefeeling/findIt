@@ -27,38 +27,30 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = myColor//UIColor.white
-        getCoordinates()
-        // descriptiontextField.text = UserDefaults.standard.object(forKey: "descriptiontextField") as! String
-        //descriptiontextField.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 33.35)
+        view.backgroundColor = myColor
         
         tableView.dataSource = self
         tableView.delegate = self
         setupView()
-        //getComment()
-        
-        
-        
-        
-        //scrollView.frame = view.bounds
-        //scrollView.contentSize = CGSize(width: view.bounds.width, height: 1000)
+
         tableView.register(PostInfoCell.self, forCellReuseIdentifier: cellId)
         tableView.register(PostInfoStuff.self, forCellReuseIdentifier: cellIdTwo)
         
         
     }
     
-
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
+        checkIfPostIsInFollowed()
         print("this item is from ",foundOrLost)
+        if shouldIDismiss{
+            popRoot()
+            shouldIDismiss = false
+        }
         descriptiontextField.sizeToFit()
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 5
-        print(postName)
-        print(toIdd)
         getComment()
         tableView.rowHeight = UITableViewAutomaticDimension
         firstCellHeight = UIScreen.main.bounds.height / 2.5 + 7 * (UIScreen.main.bounds.height / 33.35 + 8)  + descriptiontextField.frame.height
@@ -120,18 +112,14 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    
-    
-    
+
     let pliusas = UIImageView(image: (UIImage(named: "pliusas2")))//((UIImage(named: "Pliusas")))
     
     let circle: UIButton = {
         let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
-        circle.backgroundColor = myColor//UIColor(patternImage: patternImage!)
+        circle.backgroundColor = myColor//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         circle.addTarget(self, action: #selector(circleAction), for: .touchUpInside)
         
         circle.alpha = 0.5
@@ -147,7 +135,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
         button.alpha = 0
         
-        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         
         return button
     }()
@@ -163,7 +151,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.layer.cornerRadius = 6
         button.alpha = 0
         
-        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         return button
     }()
     
@@ -176,13 +164,85 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         button.layer.cornerRadius = 6
         button.alpha = 0
         
-        button.backgroundColor = myColor//UIColor(patternImage: patternImage!)
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//.red//UIColor(patternImage: patternImage!)
         
         return button
         
     }()
+    
+    let unfollowButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Unfollow", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(unfollow), for: .touchUpInside)
+        button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
+        button.layer.cornerRadius = 6
+        button.alpha = 0
+        
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
+        return button
+    }()
+    
+    @objc func unfollow(){
+        
+//        unfollowButton.removeTarget(self, action: #selector(unfollow), for: .touchUpInside)
+//        unfollowButton.addTarget(self, action: #selector(followPost), for: .touchUpInside)
+        let uid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+        let anotherRef = ref
+        anotherRef.removeValue()
+    }
+    
+    @objc func followPost(){
+        followBool = !followBool
+        
+//        followButton.removeTarget(self, action: #selector(followPost), for: .touchUpInside)
+//        followButton.addTarget(self, action: #selector(unfollow), for: .touchUpInside)
+//        let uid = Auth.auth().currentUser?.uid
+//        let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+//        ref.observe(.value, with: { (snapshot) in
+//            print(snapshot)
+//            let followedRef = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+//            followedRef.setValue(snapshot.value)
+//        })
+    }
+    
+    var isItFollowed = false
+    
+    
+    func checkIfPostIsInFollowed(){
+        let uid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() == false {
+                print("not in followed")
+                
+                self.isItFollowed = false
+                self.followBool = true
+                
+            }
+            else {
+                print("followed")
+                self.isItFollowed = true
+                self.followBool = false
+                
+            }
+        })
+    }
+    
+    let followButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Follow", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(followPost), for: .touchUpInside)
+        button.titleLabel?.font = UIFont(name: "Avenir Next", size: 16)
+        button.layer.cornerRadius = 6
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor
+        button.alpha = 0
+        return button
+    }()
     //_________________________________________________________//_________________________________________________________
-    @objc func toEditPost(){
+        @objc func toEditPost(){
         print("fuck")
         let vc = AddItemController()
         let indexPath = IndexPath(row: 0, section: 0)
@@ -198,14 +258,60 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         vc.cityForEdit = cityLabel.text!
         present(vc, animated: true, completion: nil)
     }
+
+    func popRoot(){
+        print("FUUUUUUCK")
+        navigationController?.popViewController(animated: true)
+    }
+    
+    var followBool: Bool = false{
+        didSet {
+            if followBool {
+                
+                followButton.setTitle("Follow", for: .normal)
+                let uid = Auth.auth().currentUser?.uid
+                let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+                let anotherRef = ref
+                anotherRef.removeValue()
+            
+            }
+            else {
+                followButton.setTitle("Unfollow", for: .normal)
+                let uid = Auth.auth().currentUser?.uid
+                let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
+                ref.observe(.value, with: { (snapshot) in
+                    print(snapshot)
+                    let followedRef = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+                    followedRef.setValue(snapshot.value)
+                })
+            }
+        }
+    }
+    
+    var followUnfollow = UIButton()
     
     var circleBool:Bool = false{
         didSet {
+            
             if circleBool == true{
+                //navigationController?.popViewController(animated: true)
+                
+                
+                
+//                if isItFollowed {
+//                    followUnfollow = unfollowButton
+//                    followUnfollow.setTitle("unfollow", for: .normal)
+//                } else {
+//                    followUnfollow = followButton
+//                    followUnfollow.setTitle("follow", for: .normal)
+//                }
+                
                 view.addSubview(addCommentButton)
+                
                 
                 UIView.animate(withDuration: 0.34, animations: {
                     self.circle.alpha = 1
+                    self.followButton.alpha = 1
                     self.toMessagesButton.alpha = 1
                     self.addCommentButton.alpha = 1
                     self.editButton.alpha = 1
@@ -218,11 +324,17 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                 
                 if toIdd != Auth.auth().currentUser?.uid{
                     view.addSubview(toMessagesButton)
+                    view.addSubview(followButton)
                     
                     toMessagesButton.bottomAnchor.constraint(equalTo: addCommentButton.topAnchor, constant: -8).isActive = true
                     toMessagesButton.rightAnchor.constraint(equalTo: addCommentButton.rightAnchor, constant: 0).isActive = true
                     toMessagesButton.heightAnchor.constraint(equalTo: addCommentButton.heightAnchor, constant: 0).isActive = true
                     toMessagesButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
+                    
+                    followButton.bottomAnchor.constraint(equalTo: toMessagesButton.topAnchor, constant: -8).isActive = true
+                    followButton.rightAnchor.constraint(equalTo: toMessagesButton.rightAnchor).isActive = true
+                    followButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+                    followButton.heightAnchor.constraint(equalTo: toMessagesButton.heightAnchor).isActive = true
                 }
                 else if toIdd == Auth.auth().currentUser?.uid {
                     
@@ -241,34 +353,20 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     self.circle.alpha = 0.5
                     self.toMessagesButton.alpha = 0
                     self.addCommentButton.alpha = 0
+                    self.followButton.alpha = 0
                     self.editButton.alpha = 0
                 }, completion: { (true) in
+                    self.followButton.removeFromSuperview()
                     self.toMessagesButton.removeFromSuperview()
                     self.addCommentButton.removeFromSuperview()
                     self.editButton.removeFromSuperview()
+                    self.addCommentButton.removeFromSuperview()
                     
                 })
             }
         }
     }
     
-    func getCoordinates(){
-        let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
-        print("foundOrLost ",foundOrLost)
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            print("Sssssssssssssss ",snapshot)
-//            let dict = snapshot.value as! [String: Any]
-//          //  print(dict["lat"], " ",dict["lon"]," <------")
-//            self.lat = dict["lat"] as? String
-//            self.lon = dict["lon"] as? String
-//            self.locationName = dict["locationName"] as? String
-//        
-//            
-//            UserDefaults.standard.set(self.lat, forKey: "lat")//.string(forKey: "lat")
-//            UserDefaults.standard.set(self.lon, forKey: "lon")
-//            UserDefaults.standard.set(self.locationName, forKey: "title")
-        })
-    }
     
     //-------------------------------------------------------------------------------------------------------
     func getComment(){
@@ -290,15 +388,6 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 DispatchQueue.main.async {
-                    //self.tableView.removeFromSuperview()
-                    //self.tableView.heightAnchor.constraint(equalToConstant: CGFloat(48 * self.comments.count)).isActive = true
-                    
-                    // self.tableViewHeightConstraint?.constant = CGFloat(self.comments.count * 48)
-                    //self.setupTableView()
-                    //self.tableViewHeightConstraint = self.tableView.heightAnchor.constraint(equalToConstant: CGFloat(48 * self.comments.count));
-                    //self.tableViewHeightConstraint?.isActive = true
-                    
-                    //   self.tableView.layoutIfNeeded()
                     self.tableView.reloadData()
                     
                 }
@@ -351,7 +440,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         //self.comments.removeAll()
         let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            
+            if snapshot.exists(){
             if let dictionary = snapshot.value as? [String: Any] {
                 self.toId = dictionary["uid"] as! String
                 self.allUsers.toId = dictionary["uid"] as! String
@@ -363,7 +452,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                 self.circleBool = false
                 self.navigationController?.pushViewController(self.chat, animated: true)
             }
-            
+            }
         }, withCancel: nil)
         
     }

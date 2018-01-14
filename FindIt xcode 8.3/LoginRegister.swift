@@ -312,7 +312,6 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
                         UIApplication.shared.endIgnoringInteractionEvents()
                         self.activityIndicator.stopAnimating()
                     } else{
-                        
                         print("Log in succeded")
                         // self.tabBarController.collectionView?.reloadData()
                         // self.dismiss(animated: true, completion: nil)

@@ -36,7 +36,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         let tabOne = FirstPage()
         let tabTwo = SecondPage()
         let tabThree = MessagesController()
-        let tabOneBarItem = UITabBarItem(title: "All Items", image: UIImage(named:"group"), selectedImage: UIImage(named: "group (2)"))
+        let tabOneBarItem = UITabBarItem(title: "All Posts", image: UIImage(named:"group"), selectedImage: UIImage(named: "group (2)"))
         let taTwoBarItem = UITabBarItem(title: "My Posts", image: UIImage(named:"user (2)"), selectedImage: UIImage(named: "user (2)"))
         let taThreeBarItem = UITabBarItem(title: "Messages", image: UIImage(named:"speech-bubble (1)"), selectedImage: UIImage(named: "speech-bubble (1)"))
         tabOne.tabBarItem = tabOneBarItem
@@ -128,7 +128,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         tabTwo.tabBarItem = taTwoBarItem
         tabThree.tabBarItem = taThreeBarItem
         
-        foundCity = searchBar.text!
+        foundCity = searchBar.text!.folding(options: .diacriticInsensitive, locale: .current).capitalized
+        print(foundCity)
         self.selectedIndex = 0
         setViewControllers([tabOne,tabTwo, tabThree], animated: false)
         searchController.dismiss(animated: true, completion: nil)

@@ -37,7 +37,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     override func awakeFromNib() {
        // observeOneTime()
-        getFollowed()
+        getMyPosts()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
@@ -54,7 +54,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(getFollowed), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(getMyPosts), for: .valueChanged)
         return refresh
     }()
     
@@ -78,66 +78,144 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     var keys = [String]()
-    
-    func getFollowed(){
-        self.allUsers.date.removeAll()
-        self.datee.removeAll()
-        //self.allUsers.date.removeAll()
-        self.allUsers.email.removeAll()
-        self.allUsers.uid.removeAll()
-        self.allUsers.postName.removeAll()
-        self.allUsers.timeStamp.removeAll()
-        self.allUsers.downloadUrls.removeAll()
-        self.allUsers.descriptions.removeAll()
-        self.allUsers.city.removeAll()
-        self.allUsers.location.removeAll()
-        self.postId.removeAll()
-        self.isItFoundOrLost.removeAll()
-    
-        
-        let user = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference().child("users").child(user!).child("followed")
-        ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            self.allUsers.date.removeAll()
-            self.datee.removeAll()
-            //self.allUsers.date.removeAll()
-            self.allUsers.email.removeAll()
-            self.allUsers.uid.removeAll()
-            self.allUsers.postName.removeAll()
-            self.allUsers.timeStamp.removeAll()
-            self.allUsers.downloadUrls.removeAll()
+    var a = 3
+    var i = 0
+    func getMyPosts(){
+        let uid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference().child("users").child(uid!).child("followed")
+        ref.queryOrdered(byChild: "timeStamp").queryLimited(toFirst: UInt(a)).observe(.value, with: { (snapshot) in
             self.allUsers.descriptions.removeAll()
+            self.allUsers.downloadUrls.removeAll()
+            self.allUsers.uid.removeAll()
             self.allUsers.city.removeAll()
             self.allUsers.location.removeAll()
+            self.datee.removeAll()
             self.postId.removeAll()
+            self.allUsers.email.removeAll()
             self.isItFoundOrLost.removeAll()
             
-            if snapshot.exists(){
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             
-            for snap in snapshots{
-                print(snap.key)
-                self.allUsers.postName.append(snap.key) // ieskosim kuriu postu pavadinimas sutampa su followed pavadinimu
-                self.getFollowedPosts(post: snap.key)
+            for snap in snapshots {
                 
-                }
-               
-            }//cia if exists
-            else {
                 
-                if self.allUsers.descriptions.count == 0 {
-                self.tableView.reloadData()
-                    self.showNoResults()
+                self.postId.append(snap.key)
+                self.allUsers.postName.append(snap.key)
+                
+                if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
+                    self.allUsers.timeStamp.append(timePosted)
+                    self.allUsers.dictionary["timeStamp"] = timePosted
+                    self.datee.append(Double(timePosted))
+                    
                 }
-                if self.allUsers.postName.count > 0{
-                    self.noResults.removeFromSuperview()
+                
+                if let snaap = snap.childSnapshot(forPath: "description").value as? String{
+                    self.allUsers.descriptions.append(snaap)
+                    self.allUsers.dictionary["description"] = snaap
                 }
-                self.refresh.endRefreshing()
+                if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
+                    self.allUsers.downloadUrls.append(snaaap)
+                    self.allUsers.dictionary["downloadURL"] = snaaap
+                }
+                if let uid = snap.childSnapshot(forPath: "uid").value as? String {
+                    self.allUsers.uid.append(uid)
+                    // self.allUsers.dictionary["downloadURL"] = snaaap
+                }
+                
+                if let city = snap.childSnapshot(forPath: "city").value as? String{
+                    self.allUsers.city.append(city)
+                }
+                
+                if let location = snap.childSnapshot(forPath: "locationName").value as? String {
+                    self.allUsers.location.append(location)
+                }
+                
+                if let email = snap.childSnapshot(forPath: "name").value as? String{ // cia istikro vardas!
+                    self.allUsers.email.append(email)
+                }
+                
+                if let foundLost = snap.childSnapshot(forPath: "foundOrLost").value as? String {
+                    self.isItFoundOrLost.append(foundLost)
+                }
+                
+                
             }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.refresh.endRefreshing()
+                self.i += 2
+                
+            }
+            if self.postId.count == 0 {
+                self.showNoResults()
+                self.refresh.endRefreshing()
+            } else {
+                self.noResults.removeFromSuperview()
+            }
+            
         })
     }
+
     
+//    func getFollowed(){
+//        self.allUsers.date.removeAll()
+//        self.datee.removeAll()
+//        //self.allUsers.date.removeAll()
+//        self.allUsers.email.removeAll()
+//        self.allUsers.uid.removeAll()
+//        self.allUsers.postName.removeAll()
+//        self.allUsers.timeStamp.removeAll()
+//        self.allUsers.downloadUrls.removeAll()
+//        self.allUsers.descriptions.removeAll()
+//        self.allUsers.city.removeAll()
+//        self.allUsers.location.removeAll()
+//        self.postId.removeAll()
+//        self.isItFoundOrLost.removeAll()
+//    
+//        
+//        let user = Auth.auth().currentUser?.uid
+//        let ref = Database.database().reference().child("users").child(user!).child("followed")
+//        ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
+//            
+//            self.allUsers.date.removeAll()
+//            self.datee.removeAll()
+//            //self.allUsers.date.removeAll()
+//            self.allUsers.email.removeAll()
+//            self.allUsers.uid.removeAll()
+//            self.allUsers.postName.removeAll()
+//            self.allUsers.timeStamp.removeAll()
+//            self.allUsers.downloadUrls.removeAll()
+//            self.allUsers.descriptions.removeAll()
+//            self.allUsers.city.removeAll()
+//            self.allUsers.location.removeAll()
+//            self.postId.removeAll()
+//            self.isItFoundOrLost.removeAll()
+//            
+//            if snapshot.exists(){
+//            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+//            
+//            for snap in snapshots{
+//                print(snap.key)
+//                self.allUsers.postName.append(snap.key) // ieskosim kuriu postu pavadinimas sutampa su followed pavadinimu
+//                self.getFollowedPosts(post: snap.key)
+//                
+//                }
+//               
+//            }//cia if exists
+//            else {
+//                
+//                if self.allUsers.descriptions.count == 0 {
+//                self.tableView.reloadData()
+//                    self.showNoResults()
+//                }
+//                if self.allUsers.postName.count > 0{
+//                    self.noResults.removeFromSuperview()
+//                }
+//                self.refresh.endRefreshing()
+//            }
+//        })
+//    }
+//    
     
   /*  func observeOneTime(){
         let ref = Database.database().reference().child("allPosts").child("comments")

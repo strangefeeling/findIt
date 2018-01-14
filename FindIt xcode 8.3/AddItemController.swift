@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 
 var didUserJustPosted = false
+var shouldIDismiss = false
 
 class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
@@ -116,7 +117,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         didSet {
             
             
-
+            
             if infoBool{
                 view.addSubview(dimScreen)
                 infoTextConstraints()
@@ -131,7 +132,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                     //self.infoText.center.x = self.view.center.x
                     self.infoText.alpha = 1
                 })
-
+                
             } else {
                 
                 
@@ -152,7 +153,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     
     var myConstraint =  NSLayoutConstraint()
-  
+    
     func infoTextConstraints(){
         view.addSubview(infoText)
         myConstraint =  infoText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -164,13 +165,17 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     func beGone(){
         print("susirasi darba")
+        shouldIDismiss = true
         let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
-        let cityRef = Database.database().reference().child("allPosts").child(foundOrLost).child(cityForEdit).child(postName)
+        let cityRef = Database.database().reference().child("allPosts").child(foundOrLost).child(cityForEdit.folding(options: .diacriticInsensitive, locale: .current).capitalized).child(postName)
         ref.removeValue()
         cityRef.removeValue()
         let imageRef = Storage.storage().reference(forURL: imageUrl)
         imageRef.delete(completion: { (error) in
             print(error as Any)
+            
+            
+            
         })
         let refer = Database.database().reference().child("allPosts").child("comments").child(postName)
         let commentRef = refer
@@ -179,12 +184,14 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         userRef.observe(.childAdded, with: { (snapshot) in
             if let dict = snapshot.value as? [String: Any]{
                 
-//                if dict["followed"] != nil{
-                    //print(snapshot.key)
-                    self.deleteUsersFollowedPost(user: snapshot.key)
-                    self.dismiss(animated: true, completion: nil)
-                    // print(dict["followed"])
-//                }
+                //                if dict["followed"] != nil{
+                //print(snapshot.key)
+                self.deleteUsersFollowedPost(user: snapshot.key)
+                
+                self.dismiss(animated: true, completion: nil)
+                
+                // print(dict["followed"])
+                //                }
             }
         })
         
@@ -195,6 +202,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         activityIndicator.stopAnimating()
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             alertVc.dismiss(animated: true, completion: nil)
+            
         }
         alertVc.addAction(okAction)
         present(alertVc, animated: true, completion: nil)
@@ -233,7 +241,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         let tap2: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showExplanation))
         dimScreen.addGestureRecognizer(tap2)
-        print(cityForEdit.capitalized)
+        print(cityForEdit.capitalized,"<------")
         setupView()
         if isUserEditing {
             print("user is editing")
@@ -383,14 +391,18 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     func post(){
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
-        if imageToPost != nil && itemDescription.text != "" && UserDefaults.standard.string(forKey: "lat") != nil {
+        if  itemDescription.text != "" && UserDefaults.standard.string(forKey: "lat") != nil {
             
             UIApplication.shared.beginIgnoringInteractionEvents()
-            if imageToPost != nil && itemDescription.text != ""{
+            if  itemDescription.text != ""{
                 
                 let imageName = NSUUID().uuidString
                 let postName = NSUUID().uuidString
                 let imagesFolder = Storage.storage().reference().child("images")
+                
+                if imageToPost == nil {
+                    imageToPost = UIImage(named: "camera")
+                }
                 
                 if let imageData = UIImageJPEGRepresentation(imageToPost!, 0.1){
                     imagesFolder.child("\(imageName).jpg").putData(imageData, metadata: nil, completion:{
@@ -408,15 +420,16 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 let lon = UserDefaults.standard.string(forKey: "lon")
                                 let locationName = UserDefaults.standard.string(forKey: "title")
                                 let city = UserDefaults.standard.string(forKey: "city")
+                                let cityForSearch = city?.folding(options: .diacriticInsensitive, locale: .current).capitalized
                                 var allRef = Database.database().reference().child("allPosts")
                                 var isItFoundOrLost = ""
                                 var anotherRef = allRef
                                 if self.mySwitch.isOn{
-                                    allRef = Database.database().reference().child("allPosts").child("found").child(city!).child(postName)
+                                    allRef = Database.database().reference().child("allPosts").child("found").child(cityForSearch!).child(postName)
                                     anotherRef = Database.database().reference().child("allPosts").child("found").child(postName)
                                     isItFoundOrLost = "found"
                                 } else {
-                                    allRef = Database.database().reference().child("allPosts").child("lost").child(city!).child(postName)
+                                    allRef = Database.database().reference().child("allPosts").child("lost").child(cityForSearch!).child(postName)
                                     anotherRef = Database.database().reference().child("allPosts").child("lost").child(postName)
                                     isItFoundOrLost = "lost"
                                 }
@@ -434,6 +447,10 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 allRef.child("uid").setValue(currUser!)
                                 allRef.child("name").setValue(self.myEmail)
                                 allRef.child("foundOrLost").setValue(isItFoundOrLost)
+                                allRef.child("city").setValue(city)
+                                allRef.child("locationName").setValue(locationName)
+                                allRef.child("lat").setValue(lat)
+                                allRef.child("lon").setValue(lon)
                                 
                                 anotherRef.child("downloadURL").setValue(downloadURL)
                                 anotherRef.child("description").setValue(self.itemDescription.text!)
@@ -441,42 +458,26 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 anotherRef.child("uid").setValue(currUser!)
                                 anotherRef.child("name").setValue(self.myEmail)
                                 anotherRef.child("foundOrLost").setValue(isItFoundOrLost)
+                                anotherRef.child("city").setValue(city)
+                                anotherRef.child("locationName").setValue(locationName)
+                                anotherRef.child("lat").setValue(lat)
+                                anotherRef.child("lon").setValue(lon)
                                 
-                                myRef.child("timeStamp").setValue(timeStamp)
+                                myRef.child("timeStamp").setValue(timeStamp * -1)
                                 myRef.child("foundOrLost").setValue(isItFoundOrLost)
-                                
-                                if lon != nil{
-                                    allRef.child("lon").setValue(lon)
-                                    allRef.child("lat").setValue(lat)
-                                    allRef.child("locationName").setValue(locationName)
-                                    allRef.child("city").setValue(city)
-                                    
-                                    anotherRef.child("lon").setValue(lon)
-                                    anotherRef.child("lat").setValue(lat)
-                                    anotherRef.child("locationName").setValue(locationName)
-                                    anotherRef.child("city").setValue(city)
-                                } else {
-                                    allRef.child("lon").setValue("53")
-                                    allRef.child("lat").setValue("53")
-                                    allRef.child("locationName").setValue("Unknown")
-                                    allRef.child("city").setValue("Unknown")
-                                    
-                                    anotherRef.child("lon").setValue("53")
-                                    anotherRef.child("lat").setValue("53")
-                                    anotherRef.child("locationName").setValue("Unknown")
-                                    anotherRef.child("city").setValue("Unknown")
-                                }
-                                
+                                myRef.child("downloadURL").setValue(downloadURL)
+                                myRef.child("description").setValue(self.itemDescription.text!)
+                                myRef.child("uid").setValue(currUser!)
+                                myRef.child("name").setValue(self.myEmail)
+                                myRef.child("locationName").setValue(locationName)
+                                myRef.child("city").setValue(city)
+   
                                 
                             }
                             DispatchQueue.main.async {
                                 
                                 didUserJustPosted = true
                                 
-                                UserDefaults.standard.removeSuite(named: "lat")
-                                UserDefaults.standard.removeSuite(named: "lon")
-                                UserDefaults.standard.removeSuite(named: "title")
-                                UserDefaults.standard.removeSuite(named: "city")
                                 //let myCell = SecondPage()
                                 //myCell.collectionView?.reloadData()
                                 self.activityIndicator.stopAnimating()
@@ -574,6 +575,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 let lon = UserDefaults.standard.string(forKey: "lon")
                                 let locationName = UserDefaults.standard.string(forKey: "title")
                                 let city = UserDefaults.standard.string(forKey: "city")
+                                //let cityForSearch = city?.folding(options: .diacriticInsensitive, locale: .current).capitalized
                                 let allRef = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
                                 let cityRef = Database.database().reference().child("allPosts").child(foundOrLost).child(self.cityForEdit).child(postName)
                                 let myRef = Database.database().reference().child("users").child(currUser!).child("myPosts").child(postName)
@@ -598,9 +600,16 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 allRef.child("lat").setValue(lat)
                                 allRef.child("locationName").setValue(locationName)
                                 allRef.child("city").setValue(city)
+                                // allRef.child("cityForSearch").setValue(cityForSearch)
                                 
-                                myRef.child("timeStamp").setValue(timeStamp)
-                                myRef.child("foundOrLost").setValue(foundOrLost)
+                                myRef.child("timeStamp").setValue(timeStamp * -1)
+                                myRef.child("downloadURL").setValue(downloadURL)
+                                myRef.child("description").setValue(self.itemDescription.text!)
+                                myRef.child("uid").setValue(currUser!)
+                                myRef.child("name").setValue(self.myEmail)
+                                myRef.child("locationName").setValue(locationName)
+                                myRef.child("city").setValue(city)
+                                // myRef.child("cityForSearch").setValue(cityForSearch)
                                 
                                 cityRef.child("downloadURL").setValue(downloadURL)
                                 cityRef.child("description").setValue(self.itemDescription.text!)
@@ -611,6 +620,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 cityRef.child("lat").setValue(lat)
                                 cityRef.child("locationName").setValue(locationName)
                                 cityRef.child("city").setValue(city)
+                                // cityRef.child("cityForSearch").setValue(cityForSearch)
                                 
                             }
                             DispatchQueue.main.async {
@@ -669,6 +679,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 let lon = UserDefaults.standard.string(forKey: "lon")
                                 let locationName = UserDefaults.standard.string(forKey: "title")
                                 let city = UserDefaults.standard.string(forKey: "city")
+                                //let cityForSearch = city?.folding(options: .diacriticInsensitive, locale: .current).capitalized
                                 var allRef = Database.database().reference().child("allPosts")
                                 var cityRef = Database.database().reference().child("allPosts")//.child(self.cityForEdit).child(postName)
                                 if self.mySwitch.isOn{
@@ -696,8 +707,16 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 allRef.child("locationName").setValue(locationName)
                                 allRef.child("city").setValue(city)
                                 
-                                myRef.child("timeStamp").setValue(timeStamp)
-                                myRef.child("foundOrLost").setValue(foundOrLost)
+                                
+                                
+                                myRef.child("timeStamp").setValue(timeStamp * -1)
+                                myRef.child("downloadURL").setValue(downloadURL)
+                                myRef.child("description").setValue(self.itemDescription.text!)
+                                myRef.child("uid").setValue(currUser!)
+                                myRef.child("name").setValue(self.myEmail)
+                                myRef.child("locationName").setValue(locationName)
+                                myRef.child("city").setValue(city)
+                                
                                 
                                 cityRef.child("downloadURL").setValue(downloadURL)
                                 cityRef.child("description").setValue(self.itemDescription.text!)
@@ -708,6 +727,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
                                 cityRef.child("lat").setValue(lat)
                                 cityRef.child("locationName").setValue(locationName)
                                 cityRef.child("city").setValue(city)
+                                
                                 
                             }
                             DispatchQueue.main.async {

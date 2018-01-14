@@ -91,8 +91,8 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     func getPosts(){
         
-        let ref = Database.database().reference().child("allPosts").child("lost")
-        ref.queryLimited(toFirst: UInt(a)).queryOrdered(byChild: "city").queryStarting(atValue: foundCity).queryEnding(atValue: foundCity+"\u{f8ff}").observe( .value, with: { (snapshot) in
+        let ref = Database.database().reference().child("allPosts").child("lost").child(foundCity)
+        ref.queryLimited(toFirst: UInt(a)).queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
             
             self.allUsers.timeStamp.removeAll()
             self.cellContent.removeAll()
