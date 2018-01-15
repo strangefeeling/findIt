@@ -25,10 +25,12 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
     var locationName: String?
     
+    var bandymas = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = myColor
-        
+        print("BANDYMAS ",bandymas)
         tableView.dataSource = self
         tableView.delegate = self
         setupView()
@@ -119,7 +121,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
-        circle.backgroundColor = myColor//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
+        circle.backgroundColor = UIColor(red: 255/255, green: 209/255, blue: 151/255, alpha: 1)//myColor//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         circle.addTarget(self, action: #selector(circleAction), for: .touchUpInside)
         
         circle.alpha = 0.5
@@ -243,9 +245,9 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     }()
     //_________________________________________________________//_________________________________________________________
         @objc func toEditPost(){
-        print("fuck")
+        
         let vc = AddItemController()
-        let indexPath = IndexPath(row: 0, section: 0)
+    
         //let cellTwo = tableView.dequeueReusableCell(withIdentifier: cellIdTwo, for: indexPath) as! PostInfoStuff
         vc.itemDescription.text = descriptiontextField.text//cellTwo.descriptiontextField.text
         let img = UIImageView()

@@ -34,6 +34,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         button.setTitle("Back", for: .normal)
         button.titleLabel?.textAlignment = .left
         button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        button.setTitleColor(myTextColor, for: .normal)
         return button
     }()
     
@@ -81,7 +82,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     var info: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named:"information")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
-        button.tintColor = .white
+        button.tintColor = myTextColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(showExplanation), for: .touchUpInside)
         
@@ -309,7 +310,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     let lostLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.textColor = myTextColor
         label.text = "Lost"
         label.font = UIFont(name: "Avenir Next", size: 20)
         
@@ -318,7 +319,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     let foundLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = myTextColor
         label.text = "Found"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Avenir Next", size: 20)
@@ -337,7 +338,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         tbwi.translatesAutoresizingMaskIntoConstraints = false
         tbwi.setImage(UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate), for: .normal)
         tbwi.imageView?.contentMode = .scaleAspectFit
-        tbwi.tintColor = UIColor.white
+        tbwi.tintColor = myTextColor
         tbwi.addTarget(self, action: #selector(postPhoto), for: .touchUpInside)
         
         return tbwi
@@ -347,17 +348,21 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = .white
+        button.tintColor = myTextColor
         button.setTitle("Add Location", for: .normal)
         button.addTarget(self, action: #selector(toMaps), for: .touchUpInside)
-        
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.cornerRadius = 5
+        button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        button.layer.borderWidth = 1
+        button.layer.borderColor = myTextColor.cgColor
         return button
         
     }()
     
     let itemDescription: UITextField = {
         let id = UITextField()
-        let borderColor = UIColor.white
+        let borderColor = myTextColor
         id.translatesAutoresizingMaskIntoConstraints = false
         id.placeholder = "Describe your item..."
         id.textAlignment = .natural
@@ -376,8 +381,13 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         // pb.addTarget(self, action: #selector(postToServer), for: .touchUpInside)
         pb.tintColor = UIColor.white
         pb.titleLabel?.textAlignment = .center
+        pb.setTitleColor(myTextColor, for: .normal)
         pb.translatesAutoresizingMaskIntoConstraints = false
-        
+        pb.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        pb.setTitleColor(UIColor.white, for: .normal)
+        pb.layer.cornerRadius = 5
+        pb.layer.borderWidth = 1
+        pb.layer.borderColor = myTextColor.cgColor
         return pb
     }()
     
@@ -504,7 +514,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     var myEmail = String()
     
     @objc func postToServer(){
-        var i = 0
+        
         let currUser = Auth.auth().currentUser?.uid
         // if isUserEditing == false{
         
@@ -787,8 +797,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         openMapsButton.topAnchor.constraint(equalTo: tempButtonWithImage.bottomAnchor, constant: 8).isActive = true
         openMapsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        openMapsButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 2 ).isActive = true
-        openMapsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 12).isActive = true
+        openMapsButton.widthAnchor.constraint(equalToConstant: 140 ).isActive = true
+        openMapsButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
         view.addSubview(info)
         
@@ -847,7 +857,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     // status bar spalva keiciam
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

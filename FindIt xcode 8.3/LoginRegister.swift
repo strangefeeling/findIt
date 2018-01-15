@@ -17,11 +17,11 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
         
     }()
-    
-    
+
     
     @IBAction func registerTapped(_ sender: Any) {
         activityIndicator.startAnimating()
@@ -44,7 +44,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.white], for: .selected)
         view.addSubview(inputsContainerView)
         activityIndicator.center = view.center
         view.backgroundColor = myColor//UIColor(patternImage: patternImage!)
@@ -176,7 +176,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         let view = UIView()
         view.backgroundColor = myColor//UIColor(patternImage: patternImage!)//myColor
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+        view.layer.borderColor = myTextColor.cgColor
         return view
     }()
     
@@ -186,7 +186,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.isSecureTextEntry = true
         //tf.text = "abc123"
-    
+        tf.layer.borderColor = myTextColor.cgColor
         tf.delegate = self
         
         return tf
@@ -197,7 +197,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         let view = UIView()
         view.backgroundColor = myColor//UIColor(patternImage: patternImage!)//myColor
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+        view.layer.borderColor = myTextColor.cgColor
         return view
     }()
     
@@ -206,7 +206,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         tf.placeholder = "Username:"
         tf.translatesAutoresizingMaskIntoConstraints = false
         
-        
+        tf.layer.borderColor = myTextColor.cgColor
         
         tf.delegate = self
         
@@ -222,9 +222,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         // automatiskai bus paselectintas register kai ijugsni appsa
         sc.selectedSegmentIndex = 1
         sc.layer.borderWidth = 1
-        let borderColor = UIColor.white
+        let borderColor = myTextColor//UIColor.white
         sc.layer.borderColor = borderColor.cgColor
-        sc.tintColor = .white
+        sc.tintColor = myTextColor//.white
         sc.addTarget(self, action: #selector(handleLoginRegisterChange), for: .valueChanged)
         
         return sc
@@ -254,12 +254,12 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     func handleLoginButton(){
         loginButton.backgroundColor  = myColor//UIColor(patternImage: patternImage!)//myColor
         loginButton.layer.borderWidth = 1
-        let borderColor = UIColor.white
+        let borderColor = myTextColor//UIColor.white
         loginButton.layer.borderColor = borderColor.cgColor
         loginButton.setTitle("Register", for: .normal)
         loginButton.layer.cornerRadius = 5
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.setTitleColor(UIColor.white, for: .normal)
+        loginButton.setTitleColor(myTextColor, for: .normal)
         loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
     }
     
@@ -400,6 +400,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         tf.translatesAutoresizingMaskIntoConstraints = false
        // tf.text = "rytis@gmail.com"
         tf.delegate = self
+        tf.layer.borderColor = myTextColor.cgColor
         
         return tf
         

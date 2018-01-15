@@ -560,7 +560,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
     }
     
 }

@@ -54,7 +54,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(getMyPosts), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(refreshPosts), for: .valueChanged)
         return refresh
     }()
     
@@ -78,19 +78,28 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     var keys = [String]()
-    var a = 3
+    var a = 5
     var i = 0
+    
+    func refreshPosts(){
+        a = 5
+        i = 0
+        self.postId.removeAll()
+        getMyPosts()
+    }
+    
     func getMyPosts(){
+
         let uid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference().child("users").child(uid!).child("followed")
-        ref.queryOrdered(byChild: "timeStamp").queryLimited(toFirst: UInt(a)).observe(.value, with: { (snapshot) in
+        ref.queryLimited(toFirst: UInt(a)).queryOrdered(byChild: "timeStamp").observe(.value, with: { (snapshot) in
             self.allUsers.descriptions.removeAll()
             self.allUsers.downloadUrls.removeAll()
             self.allUsers.uid.removeAll()
             self.allUsers.city.removeAll()
             self.allUsers.location.removeAll()
             self.datee.removeAll()
-            self.postId.removeAll()
+            
             self.allUsers.email.removeAll()
             self.isItFoundOrLost.removeAll()
             
@@ -143,14 +152,17 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.refresh.endRefreshing()
-                self.i += 2
+                self.i += 5
+                ref.removeAllObservers()
                 
             }
             if self.postId.count == 0 {
                 self.showNoResults()
+                ref.removeAllObservers()
                 self.refresh.endRefreshing()
             } else {
                 self.noResults.removeFromSuperview()
+                ref.removeAllObservers()
             }
             
         })
@@ -255,132 +267,132 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         }, withCancel: nil)
     }*/
     
-    func getFollowedPosts(post: String){
-        let foundRef = Database.database().reference().child("allPosts")
-       
-      //----
-        
-        foundRef.child("found").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
-                let dict = snapshot.value as? [String: Any]
-                if snapshot.exists(){
-                 //     print("found snapshot ",snapshot)
-                    self.postId.append(snapshot.key)
-                    self.isItFoundOrLost.append("found")
-                    let date = dict?["timeStamp"] as! Double
-                    self.datee.append(date)
-                    
-                    let downloadUrl = dict?["downloadURL"] as! String
-                    self.allUsers.downloadUrls.append(downloadUrl)
-                    
-                    let location = dict?["locationName"] as! String
-                    self.allUsers.location.append(location)
-                    
-                    let description = dict?["description"] as! String
-                    self.allUsers.descriptions.append(description)
-                    
-                    let city = dict?["city"] as! String
-                    self.allUsers.city.append(city)
-                    
-                    let uid = dict?["uid"] as! String
-                    self.allUsers.uid.append(uid)
-                    
-                    let email = dict?["name"] as! String// cia vardas!!!
-                    self.allUsers.email.append(email)
-                    
-                    DispatchQueue.main.async {
-                        if self.allUsers.descriptions.count == 0 {
-                            self.tableView.reloadData()
-                            self.showNoResults()
-                        }
-                        if self.allUsers.postName.count > 0{
-                            self.noResults.removeFromSuperview()
-                        }
-                        self.getLostFollowed(post: post)
-                        foundRef.removeAllObservers()
-                    }
-                   
-                }
-                else{
-                    DispatchQueue.main.async {
-                        self.getLostFollowed(post: post)
-                        foundRef.removeAllObservers()
-                    }
-                   
-                }
-            
-            })//cia foundRef snapshot
-
-
-        
-    }
+//    func getFollowedPosts(post: String){
+//        let foundRef = Database.database().reference().child("allPosts")
+//       
+//      //----
+//        
+//        foundRef.child("found").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
+//                let dict = snapshot.value as? [String: Any]
+//                if snapshot.exists(){
+//                 //     print("found snapshot ",snapshot)
+//                    self.postId.append(snapshot.key)
+//                    self.isItFoundOrLost.append("found")
+//                    let date = dict?["timeStamp"] as! Double
+//                    self.datee.append(date)
+//                    
+//                    let downloadUrl = dict?["downloadURL"] as! String
+//                    self.allUsers.downloadUrls.append(downloadUrl)
+//                    
+//                    let location = dict?["locationName"] as! String
+//                    self.allUsers.location.append(location)
+//                    
+//                    let description = dict?["description"] as! String
+//                    self.allUsers.descriptions.append(description)
+//                    
+//                    let city = dict?["city"] as! String
+//                    self.allUsers.city.append(city)
+//                    
+//                    let uid = dict?["uid"] as! String
+//                    self.allUsers.uid.append(uid)
+//                    
+//                    let email = dict?["name"] as! String// cia vardas!!!
+//                    self.allUsers.email.append(email)
+//                    
+//                    DispatchQueue.main.async {
+//                        if self.allUsers.descriptions.count == 0 {
+//                            self.tableView.reloadData()
+//                            self.showNoResults()
+//                        }
+//                        if self.allUsers.postName.count > 0{
+//                            self.noResults.removeFromSuperview()
+//                        }
+//                        self.getLostFollowed(post: post)
+//                        foundRef.removeAllObservers()
+//                    }
+//                   
+//                }
+//                else{
+//                    DispatchQueue.main.async {
+//                        self.getLostFollowed(post: post)
+//                        foundRef.removeAllObservers()
+//                    }
+//                   
+//                }
+//            
+//            })//cia foundRef snapshot
+//
+//
+//        
+//    }
     
     var datee = [Double]()
-    
-    func getLostFollowed(post: String){
-        let lostRef = Database.database().reference().child("allPosts")
-        lostRef.child("lost").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
-            let dict = snapshot.value as? [String: Any]
-            if snapshot.exists(){
-               // print("lost snapshot ",snapshot)
-                self.isItFoundOrLost.append("lost")
-                self.postId.append(snapshot.key)
-                
-                let date = dict?["timeStamp"] as! Double
-                self.datee.append(date)
-                
-                let downloadUrl = dict?["downloadURL"] as! String
-                self.allUsers.downloadUrls.append(downloadUrl)
-                
-                let location = dict?["locationName"] as! String
-                self.allUsers.location.append(location)
-                
-                let description = dict?["description"] as! String
-                self.allUsers.descriptions.append(description)
-                
-                let city = dict?["city"] as! String
-                self.allUsers.city.append(city)
-                
-                let uid = dict?["uid"] as! String
-                self.allUsers.uid.append(uid)
-                
-                let email = dict?["name"] as! String// cia vardas!!!
-                self.allUsers.email.append(email)
-               
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refresh.endRefreshing()
-                    //self.sortPosts(timee: self.allUsers.date)
-                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
-                    lostRef.removeAllObservers()
-                 
-                    if self.allUsers.descriptions.count == 0 {
-                        self.tableView.reloadData()
-                        self.showNoResults()
-                    }
-                    if self.allUsers.postName.count > 0{
-                        self.noResults.removeFromSuperview()
-                    }
-                    
-                }
-            } else{
-                
-              
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refresh.endRefreshing()
-                    //self.sortPosts(timee: self.allUsers.date)
-                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
-                    lostRef.removeAllObservers()
-                    
-                }
-                
-            }
-            
-        })//cia lostRef
-
-    }
-
+//    
+//    func getLostFollowed(post: String){
+//        let lostRef = Database.database().reference().child("allPosts")
+//        lostRef.child("lost").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
+//            let dict = snapshot.value as? [String: Any]
+//            if snapshot.exists(){
+//               // print("lost snapshot ",snapshot)
+//                self.isItFoundOrLost.append("lost")
+//                self.postId.append(snapshot.key)
+//                
+//                let date = dict?["timeStamp"] as! Double
+//                self.datee.append(date)
+//                
+//                let downloadUrl = dict?["downloadURL"] as! String
+//                self.allUsers.downloadUrls.append(downloadUrl)
+//                
+//                let location = dict?["locationName"] as! String
+//                self.allUsers.location.append(location)
+//                
+//                let description = dict?["description"] as! String
+//                self.allUsers.descriptions.append(description)
+//                
+//                let city = dict?["city"] as! String
+//                self.allUsers.city.append(city)
+//                
+//                let uid = dict?["uid"] as! String
+//                self.allUsers.uid.append(uid)
+//                
+//                let email = dict?["name"] as! String// cia vardas!!!
+//                self.allUsers.email.append(email)
+//               
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                    self.refresh.endRefreshing()
+//                    //self.sortPosts(timee: self.allUsers.date)
+//                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
+//                    lostRef.removeAllObservers()
+//                 
+//                    if self.allUsers.descriptions.count == 0 {
+//                        self.tableView.reloadData()
+//                        self.showNoResults()
+//                    }
+//                    if self.allUsers.postName.count > 0{
+//                        self.noResults.removeFromSuperview()
+//                    }
+//                    
+//                }
+//            } else{
+//                
+//              
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                    self.refresh.endRefreshing()
+//                    //self.sortPosts(timee: self.allUsers.date)
+//                    self.findSameNumbers(gooNumbers: self.allUsers.postName, SortNumbers: self.postId)
+//                    lostRef.removeAllObservers()
+//                    
+//                }
+//                
+//            }
+//            
+//        })//cia lostRef
+//
+//    }
+//
     
   /*  func sortPosts(timee: [Double]){
         var time = timee
@@ -462,83 +474,83 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }*/
     
 
-    func findSameNumbers(gooNumbers: [String], SortNumbers: [String]){
-        var goodNumbers = gooNumbers
-        var toSortNumbers = SortNumbers
-        var i:Int = 0
-        if postId.count == allUsers.postName.count && postId.count > 1{
-        while i < goodNumbers.count{
-            //print(goodNumbers[i])
-            var j:Int = 0
-            while j < toSortNumbers.count{
-                // print(toSortNumbers[j])
-                
-                if toSortNumbers[j] == goodNumbers[i]{
-                    //print("sutamp ", goodNumbers[i], " ir ",toSortNumbers[j])
-                    toSortNumbers.insert(toSortNumbers[j], at: i)
-                    toSortNumbers.remove(at: j+1)
-                    
-              //      allUsers.date.insert(allUsers.date[j], at: i)
-              //      allUsers.date.remove(at: j + 1)
-                    
-                    datee.insert(datee[j], at: i)
-                    datee.remove(at: j + 1)
-                    
-                    isItFoundOrLost.insert(isItFoundOrLost[j], at: i)
-                    isItFoundOrLost.remove(at: j + 1)
-                    
-                    allUsers.email.insert(allUsers.email[j], at: i)
-                    allUsers.email.remove(at: j + 1)
-                    
-                    allUsers.city.insert(allUsers.city[j], at: i)
-                    allUsers.city.remove(at: j + 1)
-                    
-                    allUsers.location.insert(allUsers.location[j], at: i)
-                    allUsers.location.remove(at: j + 1)
-                    
-                    postId.insert(postId[j], at: i)
-                    postId.remove(at: j + 1)
-                    
-                    allUsers.uid.insert(allUsers.uid[j], at: i)
-                    allUsers.uid.remove(at: j + 1)
-                    
-                    // allUsers.timeStamp.insert(allUsers.timeStamp[j], at: i)
-                    //allUsers.timeStamp.remove(at: j + 1)
-                    
-                    // allUsers.postName.insert(allUsers.postName[j], at: i)
-                    //allUsers.postName.remove(at: j + 1)
-                    
-                    allUsers.downloadUrls.insert(allUsers.downloadUrls[j], at: i)
-                    allUsers.downloadUrls.remove(at: j + 1)
-                    
-                    allUsers.descriptions.insert(allUsers.descriptions[j], at: i)
-                    allUsers.descriptions.remove(at: j + 1)
-                }
-                
-                j += 1
-            }
-            
-            i += 1
-        }
-            datee.reverse()
-          //  self.allUsers.date.reverse()
-            self.allUsers.email.reverse()
-            self.allUsers.uid.reverse()
-            // self.allUsers.postName.reverse()
-            self.allUsers.timeStamp.reverse()
-            self.allUsers.downloadUrls.reverse()
-            self.allUsers.descriptions.reverse()
-            self.allUsers.city.reverse()
-            self.allUsers.location.reverse()
-            self.postId.reverse()
-            self.isItFoundOrLost.reverse()
-            // self.allUsers.date = datee
-            
-            tableView.reloadData()
-            self.refresh.endRefreshing()
-    }
-    }
-
+//    func findSameNumbers(gooNumbers: [String], SortNumbers: [String]){
+//        var goodNumbers = gooNumbers
+//        var toSortNumbers = SortNumbers
+//        var i:Int = 0
+//        if postId.count == allUsers.postName.count && postId.count > 1{
+//        while i < goodNumbers.count{
+//            //print(goodNumbers[i])
+//            var j:Int = 0
+//            while j < toSortNumbers.count{
+//                // print(toSortNumbers[j])
+//                
+//                if toSortNumbers[j] == goodNumbers[i]{
+//                    //print("sutamp ", goodNumbers[i], " ir ",toSortNumbers[j])
+//                    toSortNumbers.insert(toSortNumbers[j], at: i)
+//                    toSortNumbers.remove(at: j+1)
+//                    
+//              //      allUsers.date.insert(allUsers.date[j], at: i)
+//              //      allUsers.date.remove(at: j + 1)
+//                    
+//                    datee.insert(datee[j], at: i)
+//                    datee.remove(at: j + 1)
+//                    
+//                    isItFoundOrLost.insert(isItFoundOrLost[j], at: i)
+//                    isItFoundOrLost.remove(at: j + 1)
+//                    
+//                    allUsers.email.insert(allUsers.email[j], at: i)
+//                    allUsers.email.remove(at: j + 1)
+//                    
+//                    allUsers.city.insert(allUsers.city[j], at: i)
+//                    allUsers.city.remove(at: j + 1)
+//                    
+//                    allUsers.location.insert(allUsers.location[j], at: i)
+//                    allUsers.location.remove(at: j + 1)
+//                    
+//                    postId.insert(postId[j], at: i)
+//                    postId.remove(at: j + 1)
+//                    
+//                    allUsers.uid.insert(allUsers.uid[j], at: i)
+//                    allUsers.uid.remove(at: j + 1)
+//                    
+//                    // allUsers.timeStamp.insert(allUsers.timeStamp[j], at: i)
+//                    //allUsers.timeStamp.remove(at: j + 1)
+//                    
+//                    // allUsers.postName.insert(allUsers.postName[j], at: i)
+//                    //allUsers.postName.remove(at: j + 1)
+//                    
+//                    allUsers.downloadUrls.insert(allUsers.downloadUrls[j], at: i)
+//                    allUsers.downloadUrls.remove(at: j + 1)
+//                    
+//                    allUsers.descriptions.insert(allUsers.descriptions[j], at: i)
+//                    allUsers.descriptions.remove(at: j + 1)
+//                }
+//                
+//                j += 1
+//            }
+//            
+//            i += 1
+//        }
+//            datee.reverse()
+//          //  self.allUsers.date.reverse()
+//            self.allUsers.email.reverse()
+//            self.allUsers.uid.reverse()
+//            // self.allUsers.postName.reverse()
+//            self.allUsers.timeStamp.reverse()
+//            self.allUsers.downloadUrls.reverse()
+//            self.allUsers.descriptions.reverse()
+//            self.allUsers.city.reverse()
+//            self.allUsers.location.reverse()
+//            self.postId.reverse()
+//            self.isItFoundOrLost.reverse()
+//            // self.allUsers.date = datee
+//            
+//            tableView.reloadData()
+//            self.refresh.endRefreshing()
+//    }
+//    }
+//
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AllItemsTableViewCell
@@ -604,5 +616,24 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 
     }
 
+    
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lasItem = postId.count - 1
+        print("count", postId.count, i, a)
+        if lasItem > 0 {
+            if indexPath.row == lasItem{
+             
+                if i <= postId.count{
+                    print("load more ", i, a)
+                    a += 5
+                    //addMoreRows()
+                    getMyPosts()
+                }
+                // handle your logic here to get more items, add it to dataSource and reload tableview
+            }
+        }
 
+    }
+    
 }

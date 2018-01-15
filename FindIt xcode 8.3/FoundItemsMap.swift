@@ -101,7 +101,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
         
         searchController.searchBar.delegate = self
         searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)//myColor
-        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
+        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: myTextColor]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
         self.searchController.hidesNavigationBarDuringPresentation = false;

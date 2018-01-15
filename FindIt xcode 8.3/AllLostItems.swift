@@ -217,6 +217,8 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         return strDate
     }
     
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // let postInfo = PostInfo()

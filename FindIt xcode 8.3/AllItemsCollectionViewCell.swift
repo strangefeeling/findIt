@@ -249,6 +249,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let postInfo = PostInfo()
+        postInfo.bandymas = "LOL"
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
         image.loadImageUsingCacheWithUrlString(profileImageURL)

@@ -103,7 +103,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         searchController.searchBar.layer.borderColor = myColor.cgColor
         searchController.searchBar.placeholder = "Enter City Name"
         searchController.searchBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
-        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.white]
+        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: myTextColor]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState.normal)
         
         self.searchController.hidesNavigationBarDuringPresentation = false;
@@ -166,98 +166,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     
     
     
-    /*   func searchFound(){
-     var i = 1
-     
-     let ref = Database.database().reference().child("allPosts").child("found")
-     ref.queryOrdered(byChild: "city").queryStarting(atValue: textInput).queryEnding(atValue: textInput+"\u{f8ff}").observeSingleEvent(of:.childAdded, with: { (snapshot) in
-     if postNames.contains(snapshot.key) == false{
-     postNames.append(snapshot.key)
-     }
-     ref.queryOrdered(byChild: "city").queryStarting(atValue: self.textInput).queryEnding(atValue: self.textInput+"\u{f8ff}").observeSingleEvent(of:  .value, with: { (snapshot) in
-     
-     guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-     
-     
-     
-     for snap in snapshots {
-     if let description = snap.childSnapshot(forPath: "description").value as? String {
-     self.usersSearchResults.append(description)
-     
-     }
-     
-     
-     if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
-     self.allUsers.timeStamp.append(timePosted)
-     self.allUsers.dictionary["timeStamp"] = timePosted
-     self.date.append(Double(timePosted))
-     
-     }
-     
-     if let snaaap = snap.childSnapshot(forPath: "downloadURL").value as? String {
-     self.allUsers.downloadUrls.append(snaaap)
-     self.allUsers.dictionary["downloadURL"] = snaaap
-     }
-     if let uid = snap.childSnapshot(forPath: "uid").value as? String {
-     self.allUsers.uid.append(uid)
-     // self.allUsers.dictionary["downloadURL"] = snaaap
-     }
-     
-     if let city = snap.childSnapshot(forPath: "city").value as? String{
-     self.cities.append(city)
-     
-     }
-     
-     if let location = snap.childSnapshot(forPath: "locationName").value as? String {
-     self.locations.append(location)
-     }
-     
-     if let email = snap.childSnapshot(forPath: "email").value as? String{
-     self.emails.append(email)
-     }
-     
-     }
-     /* self.date.reverse()
-     self.emails.reverse()
-     self.allUsers.uid.reverse()
-     self.allUsers.postName.reverse()
-     self.allUsers.timeStamp.reverse()
-     self.allUsers.downloadUrls.reverse()
-     self.allUsers.descriptions.reverse()
-     self.cities.reverse()
-     self.locations.reverse()
-     self.postId.reverse()*/
-     
-     /* let dictionary = snapshot.value as! [String: Any]
-     let desc = dictionary["description"] as! String
-     self.usersSearchResults.append(desc)*/
-     
-     
-     
-     
-     DispatchQueue.main.async {
-     
-     self.searchResults.cellContent = self.usersSearchResults
-     self.searchResults.allUids = self.allUsers.uid
-     self.searchResults.emails = self.emails
-     self.searchResults.date = self.date
-     self.searchResults.downloadUrls = self.allUsers.downloadUrls
-     self.searchResults.cities = self.cities
-     self.searchResults.locations = self.locations
-     
-     if i == 1{
-     self.show(self.searchResults, sender: true)
-     //self.dismiss(animated: true, completion: nil)
-     //print(postNames)
-     }
-     i += 1
-     }
-     
-     })
-     
-     })
-     
-     }*/
+
     
     
     func handleNavigation(){
@@ -269,8 +178,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         // navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogOut))
-        navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
+        navigationController?.navigationBar.tintColor = myTextColor
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: myTextColor, NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
         /*  let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 39, height: 39))
          imageView.contentMode = .scaleAspectFit
          let image = UIImage(named: "iPhone 7 Plus2")*/
@@ -313,8 +222,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     
     func setTabBarAppearence(){
         self.tabBar.isTranslucent = false
-        self.tabBar.barTintColor = myColor//UIColor(patternImage: patternImage!)
-        self.tabBar.tintColor = .white
+        // tab bar background
+        self.tabBar.barTintColor = .white//UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+//myColor//UIColor(red: 230/255, green: 239/255, blue: 1, alpha: 1)//myColor//UIColor(red: 241/255, green: 1, blue: 248/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
+        //self.tabBar.tintColor = .white
+        self.tabBar.unselectedItemTintColor = .darkText//myTextColor//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+//.white//myTextColor
+        //paselectinto spalva
+        self.tabBar.tintColor = myTextColor//.darkText//.red//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+
+        
+        
         self.tabBar.alpha = 1
     }
     
@@ -331,6 +249,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         addbt.setTitle("Add item", for: .normal)
         addbt.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         addbt.addTarget(self, action: #selector(addIteem), for: .touchUpInside)
+        addbt.setTitleColor(myTextColor, for: .normal)
         return addbt
     }()
     
@@ -340,6 +259,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         logout.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         logout.translatesAutoresizingMaskIntoConstraints = false
         logout.addTarget(self, action: #selector(handleLogOut), for: .touchUpInside)
+        logout.setTitleColor(myTextColor, for: .normal)
         
         return logout
     }()
@@ -350,6 +270,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         browseMap.titleLabel?.font = UIFont(name: "Avenir Next", size: 18)
         browseMap.translatesAutoresizingMaskIntoConstraints = false
         browseMap.addTarget(self, action: #selector(toMap), for: .touchUpInside)
+        browseMap.setTitleColor(myTextColor, for: .normal)
         return browseMap
     }()
     
@@ -493,33 +414,21 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         setTabBarAppearence()
         // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(addIteem))
         let moreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 8, height: 24))
-        moreButton.setImage(UIImage(named: "Untitled"), for: .normal)
+        
+        
+        moreButton.setImage(UIImage(named: "Untitled")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        moreButton.tintColor = myTextColor
         // moreButton.contentEdgeInsets = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
         moreButton.addTarget(self, action: #selector(showMore), for: .touchUpInside)
         // pleciam touch area
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: moreButton)
         
-        /* let tabOne = MyItems()
-         let tabOneBarItem = UITabBarItem(title: "All Items", image: UIImage(named:"defaultImage.png"), selectedImage: UIImage(named: "selectedImage.png"))
-         tabOne.title = "My Items"
-         
-         tabOne.tabBarItem = tabOneBarItem
-         tabOneBarItem.badgeColor = .red
-         let tabTwo = AllItems()
-         let tabTwoBarItem2 = UITabBarItem(title: "My Items", image: UIImage(named: "defaultImage2.png"), selectedImage: UIImage(named: "selectedImage2.png"))
-         tabTwoBarItem2.badgeColor = .red
-         tabTwo.tabBarItem = tabTwoBarItem2
-         tabTwo.title = "All Items"
-         
-         
-         let allItems = AllItems()
-         let myItems = MyItems()*/
-        // self.viewControllers = [AllItems(), MyItems()]
+     
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
     }
     
     /*   func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {

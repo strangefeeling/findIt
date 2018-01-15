@@ -29,20 +29,24 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     let lostFoundSegentedControll: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["My Posts","Followed"])
-        sc.translatesAutoresizingMaskIntoConstraints = false
+        let sc = UISegmentedControl(items: ["Found","Lost"])
         sc.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.tintColor = .white
+        sc.tintColor = .white//myTextColor
         let borderColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let attrs = [
-            NSForegroundColorAttributeName: UIColor.white,
+            NSForegroundColorAttributeName: myTextColor,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
-        ]
-        
+            ] as [String : Any]
+        //sc.subviews[0].tintColor = .red
+        //
         sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:myTextColor], for: .selected)
+        
         sc.layer.borderColor = borderColor.cgColor
-        sc.layer.borderWidth = 0.5        //sc.selectedSegmentIndex = 0
+        sc.layer.borderWidth = 0.5
+        // sc.backgroundColor = myColor
+        //sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(handleSegmentedControll), for: .valueChanged)
         return sc
     }()

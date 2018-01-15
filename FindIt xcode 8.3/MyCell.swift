@@ -68,9 +68,16 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
     lazy var refresh: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(getMyPosts), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(refreshPosts), for: .valueChanged)
         return refresh
     }()
+    
+    func refreshPosts(){
+        a = 2
+        i = 0
+        self.postId.removeAll()
+        getMyPosts()
+    }
     
     func getMyPosts(){
         let uid = Auth.auth().currentUser?.uid

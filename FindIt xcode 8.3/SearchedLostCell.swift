@@ -248,7 +248,7 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let postInfo = PostInfo()
+        
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
         image.loadImageUsingCacheWithUrlString(profileImageURL)
