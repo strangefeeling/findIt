@@ -29,7 +29,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     let lostFoundSegentedControll: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Found","Lost"])
+        let sc = UISegmentedControl(items: ["My Posts","Followed"])
         sc.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = .white//myTextColor

@@ -69,9 +69,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         var animationimages: [UIImage] = []
         var i = 0
-        while i <= 35{
+        while i <= 32{
             
-                        let bundlePath = Bundle.main.path(forResource: "f\(i)", ofType: "png")
+                        let bundlePath = Bundle.main.path(forResource: "Fb\(i)", ofType: "png")
                         let image = UIImage(contentsOfFile: bundlePath!)
                         animationimages.append(image!)
             
@@ -112,7 +112,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     func setImage(){
     print("cbb")
         logoView.stopAnimating()
-        logoView.image = UIImage(named: "f35")
+        logoView.image = UIImage(named: "Fb32")
         logoView.animationImages = nil
     }
     

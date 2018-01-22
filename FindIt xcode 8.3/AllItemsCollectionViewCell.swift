@@ -64,6 +64,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
         contentView.addConstraintsWithFormat(format: "V:|-50-[v0]-85-|", views: tableView)
         
+        
     }
     
     let getAllItemsButton: UIButton = {
@@ -115,7 +116,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 self.date.removeAll()
                 self.postId.removeAll()
                 self.emails.removeAll()
-                
+                print(snapshot)
                 
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
@@ -344,7 +345,6 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
             })
         }
     }*/
-    
     
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

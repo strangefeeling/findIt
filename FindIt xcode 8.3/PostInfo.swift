@@ -121,7 +121,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         let circle = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.layer.cornerRadius = 30
-        circle.backgroundColor = UIColor(red: 255/255, green: 209/255, blue: 151/255, alpha: 1)//myColor//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
+        circle.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//UIColor(red: 255/255, green: 209/255, blue: 151/255, alpha: 1)//myColor//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         circle.addTarget(self, action: #selector(circleAction), for: .touchUpInside)
         
         circle.alpha = 0.5
