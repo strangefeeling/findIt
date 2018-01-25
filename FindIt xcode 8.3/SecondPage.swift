@@ -41,7 +41,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         //sc.subviews[0].tintColor = .red
         //
         sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:myTextColor], for: .selected)
+       // UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:myTextColor], for: .selected)
         
         sc.layer.borderColor = borderColor.cgColor
         sc.layer.borderWidth = 0.5

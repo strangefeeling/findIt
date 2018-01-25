@@ -45,7 +45,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
         tableView.addSubview(refresh)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)
         contentView.addConstraintsWithFormat(format: "V:|-50-[v0]-85-|", views: tableView)
-        
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     }
     
     func refreshPosts(){
@@ -167,7 +167,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
      }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height
+        return 100//UIScreen.main.bounds.height
     }
     
     

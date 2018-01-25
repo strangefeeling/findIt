@@ -50,6 +50,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         tableView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -85).isActive = true
         tableView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     }
     
     lazy var refresh: UIRefreshControl = {
@@ -587,7 +588,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
+        return 100//UIScreen.main.bounds.height// - 40
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

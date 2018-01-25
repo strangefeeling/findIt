@@ -44,7 +44,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.white], for: .selected)
+        //UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.white], for: .selected)
         view.addSubview(inputsContainerView)
         activityIndicator.center = view.center
         view.backgroundColor = myColor//UIColor(patternImage: patternImage!)
@@ -69,9 +69,9 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         var animationimages: [UIImage] = []
         var i = 0
-        while i <= 32{
+        while i <= 35{
             
-                        let bundlePath = Bundle.main.path(forResource: "Fb\(i)", ofType: "png")
+                        let bundlePath = Bundle.main.path(forResource: "f\(i)", ofType: "png")
                         let image = UIImage(contentsOfFile: bundlePath!)
                         animationimages.append(image!)
             
@@ -112,7 +112,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     func setImage(){
     print("cbb")
         logoView.stopAnimating()
-        logoView.image = UIImage(named: "Fb32")
+        logoView.image = UIImage(named: "F35")
         logoView.animationImages = nil
     }
     

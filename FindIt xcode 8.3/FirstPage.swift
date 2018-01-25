@@ -39,17 +39,13 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         let sc = UISegmentedControl(items: ["Found","Lost"])
         sc.backgroundColor = myColor//UIColor(patternImage: patternImage!)
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.tintColor = .white//myTextColor
+        sc.tintColor = myTextColor
         let borderColor = myColor//UIColor(patternImage: patternImage!)//myColor
         let attrs = [
-            NSForegroundColorAttributeName: myTextColor,
+            NSForegroundColorAttributeName: myColor,
             NSFontAttributeName: UIFont(name: "Avenir Next", size: 16)!
-        ] as [String : Any]
-        //sc.subviews[0].tintColor = .red
-        //
-        sc.setTitleTextAttributes(attrs as [NSObject : AnyObject] , for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:myTextColor], for: .selected)
-        
+        ] as [NSObject : Any]  
+        sc.setTitleTextAttributes(attrs as [NSObject : AnyObject], for: UIControlState.selected)
         sc.layer.borderColor = borderColor.cgColor
         sc.layer.borderWidth = 0.5
         // sc.backgroundColor = myColor
@@ -88,7 +84,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         myImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         myImage.topAnchor.constraint(equalTo: view.topAnchor, constant: -80).isActive = true*/
         setup()
-        
+        collectionView?.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         collectionView?.register(AllItemsCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(AllLostItems.self, forCellWithReuseIdentifier: cellId2)
         // Do any additional setup after loading the view.
@@ -101,7 +97,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         collectionView?.register(MyItemsCell.self, forCellWithReuseIdentifier: cellId)
         
         
-        collectionView?.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        //collectionView?.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         

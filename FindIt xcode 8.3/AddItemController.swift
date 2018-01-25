@@ -354,8 +354,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         button.setTitleColor(UIColor.white, for: .normal)
         button.layer.cornerRadius = 5
         button.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = myTextColor.cgColor
+        //button.layer.borderWidth = 1
+        //button.layer.borderColor = myTextColor.cgColor
         return button
         
     }()
@@ -386,8 +386,8 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
         pb.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
         pb.setTitleColor(UIColor.white, for: .normal)
         pb.layer.cornerRadius = 5
-        pb.layer.borderWidth = 1
-        pb.layer.borderColor = myTextColor.cgColor
+       // pb.layer.borderWidth = 1
+        //pb.layer.borderColor = myTextColor.cgColor
         return pb
     }()
     
@@ -857,7 +857,7 @@ class AddItemController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     // status bar spalva keiciam
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        return .lightContent
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

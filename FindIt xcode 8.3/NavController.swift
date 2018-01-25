@@ -20,7 +20,7 @@ class NavController: UINavigationController {
     
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        return .lightContent
     }
     
    

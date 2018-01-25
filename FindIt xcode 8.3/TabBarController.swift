@@ -223,13 +223,13 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
     func setTabBarAppearence(){
         self.tabBar.isTranslucent = false
         // tab bar background
-        self.tabBar.barTintColor = .white//UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        self.tabBar.barTintColor = myColor//.white//UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
 //myColor//UIColor(red: 230/255, green: 239/255, blue: 1, alpha: 1)//myColor//UIColor(red: 241/255, green: 1, blue: 248/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         //self.tabBar.tintColor = .white
-        self.tabBar.unselectedItemTintColor = .darkText//myTextColor//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+        self.tabBar.unselectedItemTintColor = .white//myTextColor//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
 //.white//myTextColor
         //paselectinto spalva
-        self.tabBar.tintColor = myTextColor//.darkText//.red//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+        self.tabBar.tintColor = .blue//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//.darkText//.red//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
 
         
         

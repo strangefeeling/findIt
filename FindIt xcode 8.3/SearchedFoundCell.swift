@@ -48,6 +48,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
         contentView.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.addSubview(refresh)
+        tableView.contentInset = UIEdgeInsets(top: 35, left: 0, bottom: 50, right: 0)
         //tableView.frame = CGRect(x: 0, y: 50, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
         
@@ -247,7 +248,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
+        return 100//UIScreen.main.bounds.height// - 40
     }
     
     

@@ -25,7 +25,7 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         button.setTitle("Search", for: .normal)
         button.titleLabel?.textAlignment = .left
         //button.titleLabel?.textColor = .black
-        button.setTitleColor(myTextColor, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(handleSearch), for: .touchUpInside)
         return button
     }()
@@ -207,14 +207,13 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
        let back = UIButton()
         back.translatesAutoresizingMaskIntoConstraints = false
         back.setTitle("Back", for: .normal)
-        //back.titleLabel?.textColor = .black
-        back.setTitleColor(myTextColor, for: .normal)
+        back.titleLabel?.textColor = .black
+        back.setTitleColor(.black, for: .normal)
         back.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         return back
     }()
     
-   
-    
+ 
     func longprss(gestureRecognizer: UIGestureRecognizer){
         if gestureRecognizer.state == UIGestureRecognizerState.began{
             
@@ -292,12 +291,12 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         view.addSubview(serachButton)
         
         backButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: -UIScreen.main.bounds.height / 33.35).isActive = true
-        backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 2 * UIScreen.main.bounds.height / 33.35).isActive = true
+        backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
         backButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        serachButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: UIScreen.main.bounds.height / 33.35).isActive = true
-        serachButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 2 * UIScreen.main.bounds.height / 33.35).isActive = true
+        serachButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 8).isActive = true
+        serachButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
         serachButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         serachButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
@@ -318,4 +317,6 @@ class MapController: UIViewController, CLLocationManagerDelegate, UISearchBarDel
         backButton.widthAnchor.constraint(equalToConstant: 60).isActive = true*/
     }
 
+    
+    
 }

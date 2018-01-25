@@ -54,6 +54,7 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
         tableView.dataSource = self
         tableView.separatorStyle = .none
         //tableView.layoutIfNeeded()
+        tableView.contentInset = UIEdgeInsets(top: 35, left: 0, bottom: 50, right: 0)
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
         contentView.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -199,7 +200,7 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height / 2.5 + 10 * (UIScreen.main.bounds.height / 33.35 + 8)//UIScreen.main.bounds.height// - 40
+        return 100//UIScreen.main.bounds.height// - 40
     }
     
     

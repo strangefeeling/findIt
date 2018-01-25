@@ -35,7 +35,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         setupView()
 
-        tableView.register(PostInfoCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(CommentsCell.self, forCellReuseIdentifier: cellId)
         tableView.register(PostInfoStuff.self, forCellReuseIdentifier: cellIdTwo)
         
         
@@ -273,6 +273,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                 followButton.setTitle("Follow", for: .normal)
                 let uid = Auth.auth().currentUser?.uid
                 let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
+                
                 let anotherRef = ref
                 anotherRef.removeValue()
             
@@ -285,6 +286,10 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
                     print(snapshot)
                     let followedRef = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
                     followedRef.setValue(snapshot.value)
+                    DispatchQueue.main.async {
+                        let timeStamp = Int(NSDate().timeIntervalSince1970)
+                        followedRef.child("timeStamp").setValue(timeStamp * -1)
+                    }
                 })
             }
         }
@@ -557,6 +562,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     }
     
     
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.row == 0{
@@ -605,7 +611,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             return cellTwo
         }
         else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PostInfoCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CommentsCell
             cell.awakeFromNib()
            // cell.backgroundColor = myColor
             cell.selectionStyle = UITableViewCellSelectionStyle.none

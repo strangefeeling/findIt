@@ -8,18 +8,29 @@
 
 import UIKit
 
-class PostInfoCell: UITableViewCell {
+class CommentsCell: UITableViewCell {
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
        // contentView.addSubview(bubbleView)
-        
+        contentView.backgroundColor = .yellow
         contentView.addSubview(message)
      //   contentView.addSubview(separatorLine)
         contentView.addSubview(emailLabel)
         
+        
         setup()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let f = contentView.frame
+        let fr = UIEdgeInsetsInsetRect(f, UIEdgeInsetsMake(10, 10, 5, 10))
+        contentView.frame = fr
+        contentView.layer.cornerRadius = 20
+        contentView.layer.borderWidth = 1
     }
     
     let bubbleView: UIView = {
@@ -43,9 +54,9 @@ class PostInfoCell: UITableViewCell {
     func setup(){
         
         emailLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -2).isActive = true
-        emailLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-        emailLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7).isActive = true
-        emailLabel.heightAnchor.constraint(equalToConstant:  UIScreen.main.bounds.height / 33.5 + 8).isActive = true
+        emailLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
+        emailLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
+        emailLabel.heightAnchor.constraint(equalToConstant:  24).isActive = true
         
         message.translatesAutoresizingMaskIntoConstraints = false
         message.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true

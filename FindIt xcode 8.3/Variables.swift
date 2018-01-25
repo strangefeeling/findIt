@@ -20,7 +20,7 @@ var doINeedToSearch = false
 
 var foundCity = "Vilnius"
 
-var myTextColor = UIColor.black// UIColor(red: 127/255, green: 25/255, blue: 23/255, alpha: 1)
+var myTextColor = UIColor.white// UIColor(red: 127/255, green: 25/255, blue: 23/255, alpha: 1)
 
 //var patternImage = UIImage(named: "iPhone 7 Plus1")
 
