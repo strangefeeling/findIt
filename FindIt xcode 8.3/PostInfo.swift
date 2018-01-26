@@ -15,7 +15,7 @@ var posterEmail = String()
 
 var firstCellHeight: CGFloat = 0
 
-class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
+class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var isCommentByPoster: Bool = false
     
@@ -244,7 +244,7 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
         return button
     }()
     //_________________________________________________________//_________________________________________________________
-        @objc func toEditPost(){
+    @objc func toEditPost(){
         
         let vc = AddItemController()
     
@@ -387,6 +387,10 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
             for snap in snapshots {
                 if let comment = snap.childSnapshot(forPath: "comment").value as? String {
                     self.comments.append(comment)
+                    let cell = CommentsCell()
+                    cell.cellWidths.append(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!))
+                   // print(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------", UIScreen.main.bounds.width * 0.7)
+                    //print(print(comment.heightOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------"))
                     print(self.comments)
                 }
                 
@@ -468,9 +472,6 @@ class PostInfo: UIViewController , UITableViewDelegate, UITableViewDataSource {
     var tableViewHeightConstraint: NSLayoutConstraint?
     
     func setupView(){
-        
-        
-        
         view.addSubview(tableView)
         
         // scrollView.addSubview(image)
@@ -646,5 +647,12 @@ extension String {
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
         
         return ceil(boundingBox.height)
-}
+    }
+    
+    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        
+        return ceil(boundingBox.width)
+    }
 }

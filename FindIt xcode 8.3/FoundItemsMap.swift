@@ -425,7 +425,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 print("pinIndex ",self.pinIndex)
                 postName = self.postNames[self.pinIndex]
                 posterUid.text = self.emails[self.pinIndex]
-                postInfo.toId = self.toId[self.pinIndex]
+               // postInfo.toId = self.toId[self.pinIndex]
             //    image.loadImageUsingCacheWithUrlString(self.downloadURL[self.pinIndex])
             //    image.contentMode = .scaleAspectFit
                 locationLabel.text = self.locations[self.pinIndex]

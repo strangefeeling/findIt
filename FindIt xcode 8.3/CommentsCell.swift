@@ -14,30 +14,31 @@ class CommentsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
        // contentView.addSubview(bubbleView)
-        contentView.backgroundColor = .yellow
-        contentView.addSubview(message)
+       // contentView.backgroundColor = .yellow
+        
      //   contentView.addSubview(separatorLine)
-        contentView.addSubview(emailLabel)
+       
+        print(cellWidths)
         
         
         setup()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let f = contentView.frame
-        let fr = UIEdgeInsetsInsetRect(f, UIEdgeInsetsMake(10, 10, 5, 10))
-        contentView.frame = fr
-        contentView.layer.cornerRadius = 20
-        contentView.layer.borderWidth = 1
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        
+//      //  let f = contentView.frame
+//       // let fr = UIEdgeInsetsInsetRect(f, UIEdgeInsetsMake(10, 10, 0, 10))
+//        //contentView.frame = fr
+//       // contentView.layer.cornerRadius = 20
+//        //contentView.layer.borderWidth = 1
+//    }
     
     let bubbleView: UIView = {
        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .yellow
-        view.layer.cornerRadius = 4
+        view.layer.cornerRadius = 10
         view.sizeToFit()
         return view
     }()
@@ -45,24 +46,44 @@ class CommentsCell: UITableViewCell {
     var emailLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Avenir Next", size:  UIScreen.main.bounds.height / 33.5)
+        label.font = UIFont(name: "Avenir Next-Bold", size:  20)
         label.textColor = .darkGray
         return label
     }()
 
     
     func setup(){
-        
+             contentView.addSubview(emailLabel)
         emailLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -2).isActive = true
         emailLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
         emailLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
         emailLabel.heightAnchor.constraint(equalToConstant:  24).isActive = true
+        
+        //contentView.addSubview(bubbleView)
+        contentView.addSubview(message)
         
         message.translatesAutoresizingMaskIntoConstraints = false
         message.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         message.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         message.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7).isActive = true
         message.topAnchor.constraint(equalTo: emailLabel.bottomAnchor).isActive = true
+      
+      
+        
+//        if let font = UIFont(name: "Avenir Next", size: 16)
+//        {
+//            let fontAttributes = [NSFontAttributeName: font]
+//            let myText = NSString(string: message.text!)
+//            let size = (myText).size(attributes: fontAttributes)
+//            print(size)
+//        }
+        
+        
+//        
+//        bubbleView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+//        bubbleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+//        bubbleView.widthAnchor.constraint(equalTo: message.widthAnchor, multiplier: 1.1).isActive = true
+//        bubbleView.topAnchor.constraint(equalTo: emailLabel.bottomAnchor).isActive = true
         
         //bubbleView.bottomAnchor.constraint(equalTo: message.bottomAnchor, constant: -2).isActive = true
        /* bubbleView.leftAnchor.constraint(equalTo: message.leftAnchor).isActive = true
@@ -77,6 +98,8 @@ class CommentsCell: UITableViewCell {
         separatorLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true*/
 
     }
+    
+
     
     private func estimatedFrameForText(text: String) -> CGRect{
         //200 nes chatmessagecelle toks, o 1000, nes px ir reik didelio
@@ -99,7 +122,7 @@ class CommentsCell: UITableViewCell {
         return image
     }()
 
-    
+    var cellWidths = [CGFloat]()
         
     let message: UILabel = {
         let message = UILabel()
@@ -113,4 +136,17 @@ class CommentsCell: UITableViewCell {
         return message
     }()
     
+}
+
+extension String {
+    func widthOfString(usingFont font: UIFont) -> CGFloat {
+        let fontAttributes = [NSFontAttributeName: font]
+        let size = self.size(attributes: fontAttributes)
+        return size.width
+    }
+    func heightOfString(usingFont font: UIFont) -> CGFloat {
+        let fontAttributes = [NSFontAttributeName: font]
+        let size = self.size(attributes: fontAttributes)
+        return size.height
+    }
 }

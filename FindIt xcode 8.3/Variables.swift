@@ -35,7 +35,7 @@ let myColor =  UIColor(red: 140/255, green: 212/255, blue: 141/255, alpha: 1)//U
 var descriptiontextField: UILabel = {
     let textField = UILabel()
     textField.text = "sadhbjkasfaksfnaklsvnzkcnaskfnsakjnakscnascnadskjnsdkjvndmnz,mcvn"
-    textField.font = UIFont(name: "Avenir Next", size: 16)
+    textField.font = UIFont(name: "Avenir Next", size: 20)
     textField.numberOfLines = 0
     textField.sizeToFit()
     textField.textAlignment = .center
@@ -54,10 +54,10 @@ var cityLabel: UILabel = {
     label.text = "Name"
     label.textAlignment = .left
     label.sizeToFit()
-    
+    //label.backgroundColor = .green
     label.textColor = .darkGray
-    label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.font = UIFont(name: "Avenir Next-Bold", size: 20)
+   // label.translatesAutoresizingMaskIntoConstraints = false
     return label
 }()
 
@@ -66,10 +66,10 @@ var locationLabel: UILabel = {
     label.text = "Location"
     label.textAlignment = .left
     label.sizeToFit()
-    
+   // label.backgroundColor = .cyan
     label.textColor = .darkGray
-    label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.font = UIFont(name: "Avenir Next-Bold", size: 20)
+    //label.translatesAutoresizingMaskIntoConstraints = false
     return label
 }()
 
@@ -80,17 +80,17 @@ var dateLabel: UILabel = {
     label.sizeToFit()
     
     label.textColor = .lightGray
-    label.font = UIFont(name: "Avenir Next-Bold", size: 16)
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.font = UIFont(name: "Avenir Next-Bold", size: 20)
+    //label.translatesAutoresizingMaskIntoConstraints = false
     return label
 }()
 
 var posterUid: UILabel = {
     var uid = UILabel()
-    uid.translatesAutoresizingMaskIntoConstraints = false
+    //uid.translatesAutoresizingMaskIntoConstraints = false
     uid.sizeToFit()
     //uid.backgroundColor = .yellow
-    uid.font = UIFont(name: "Avenir Next", size: 16)
+    uid.font = UIFont(name: "Avenir Next", size: 20)
     uid.textColor = .darkGray
     
     return uid

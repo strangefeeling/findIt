@@ -251,7 +251,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let postInfo = PostInfo()
-        postInfo.bandymas = "LOL"
+       // postInfo.bandymas = "LOL"
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
         image.loadImageUsingCacheWithUrlString(profileImageURL)
@@ -262,7 +262,9 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
         posterUid.text = currentCell.nameLabel.text
         dateLabel.text = currentCell.dateLabel.text!
         locationLabel.text = currentCell.locationLabel.text!
+        locationLabel.font = UIFont(name: "Avenir Next", size: 20)
         cityLabel.text = currentCell.cityLabel.text!
+        cityLabel.font = UIFont(name: "Avenir Next", size: 20)
         postName = postId[indexPath.item]
         toIdd = allUsers.uid[indexPath.row]
         

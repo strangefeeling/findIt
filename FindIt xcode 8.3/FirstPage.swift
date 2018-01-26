@@ -15,7 +15,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
    
     
     func showController() {
-        let vc = PostInfo()
+        let vc = PostInfoScroll()
         show(vc, sender: self)
     }
     
