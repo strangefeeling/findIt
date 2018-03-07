@@ -14,12 +14,18 @@ class MessagesController: UITableViewController {
     var selectedUserId = [String]()
     var messagesCount = 0
     var fromName = [String]()
+    var messages = [String]()
     var toName = [String]()
     var toUser = String()
     var fromUser = String()
     var toEmail = [String]()
     var fromEmail = [String]()
     var emails = [String]()
+    var timeStamps = [String]()
+    var messagesKeys = [String]()
+    var lastMessages = [String]()
+    var lastMessage = String()
+    
     
     
     override func viewDidLoad() {
@@ -27,6 +33,9 @@ class MessagesController: UITableViewController {
         setNeedsStatusBarAppearanceUpdate()
         observeMessages()
         //tableView.allowsSelection = false
+        
+        
+        
         
  
         
@@ -57,7 +66,8 @@ class MessagesController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lol", for: indexPath) as! MessagesCell
         cell.awakeFromNib()
         cell.selectionStyle = UITableViewCellSelectionStyle.none
-
+        cell.userName.text = emails[indexPath.row]
+        cell.lastMessage.text = lastMessages[indexPath.row]
         //        let user = Auth.auth().currentUser?.uid
         DispatchQueue.main.async {
             /*
@@ -70,17 +80,29 @@ class MessagesController: UITableViewController {
             
             if let emails = UserDefaults.standard.object(forKey: "emails") as? [String]{
                 //cell.userName.text = emails[indexPath.row]
-                self.getNames(cell: cell, name: self.toName[indexPath.row])
+                //self.getNames(cell: cell, name: self.toName[indexPath.row])
                 
             }else
             {
-            self.getNames(cell: cell, name: self.toName[indexPath.row])
+            //self.getNames(cell: cell, name: self.toName[indexPath.row])
             }
         }
         return cell
     }
     
     func getNames(cell: MessagesCell, name: String){
+        let uid = Auth.auth().currentUser?.uid
+        let aref = Database.database().reference().child("users").child(uid!).child("lastMessages").child(name)//.child("message")
+        aref.queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
+            
+            let dictionary = snapshot.value as! [String: Any]
+            let message = dictionary["message"] as! String
+            //let timeStamp = dictionary["timeStamp"] as! Double
+            
+            cell.lastMessage.text = message
+        }, withCancel: { (error) in
+            
+        })
         let ref = Database.database().reference().child("users").child(name)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             let dictionary = snapshot.value as! [String: Any]
@@ -91,17 +113,17 @@ class MessagesController: UITableViewController {
             }
             
             cell.userName.text = email
-            let uid = Auth.auth().currentUser?.uid
-            let ref = Database.database().reference().child("user-messages").child(uid!).child(name).queryLimited(toLast: 1)
+         
+            //let ref = Database.database().reference().child("user-messages").child(uid!).child(name).queryLimited(toLast: 1)
             
-            ref.observe(.childAdded, with: { (snapshot) in
-                let messagesRef = Database.database().reference().child("messages").child(snapshot.key)
-                messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    let dictionary = snapshot.value as! [String: Any]
-                    let message = dictionary["text"] as! String
-                    cell.lastMessage.text = message
-                }, withCancel: nil)
-            }, withCancel: nil)
+//            ref.observe(.childAdded, with: { (snapshot) in
+//                let messagesRef = Database.database().reference().child("messages").child(snapshot.key)
+//                messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+//                    let dictionary = snapshot.value as! [String: Any]
+//                    let message = dictionary["text"] as! String
+//                    cell.lastMessage.text = message
+//                }, withCancel: nil)
+//            }, withCancel: nil)
             DispatchQueue.main.async {
                 
                 //UserDefaults.standard.set(self.emails, forKey: "emails")
@@ -109,63 +131,54 @@ class MessagesController: UITableViewController {
         })
     }
     
-    var messagesKeys = [String]()
-    var lastMessages = [String]()
-    var lastMessage = String()
+
     
-    func getLastMessage(toId: String) {
-        let uid = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference().child("user-messages").child(uid!).child(toId).queryLimited(toLast: 1)
-        
-        ref.observe(.childAdded, with: { (snapshot) in
-            let messagesRef = Database.database().reference().child("messages").child(snapshot.key)
-            messagesRef.observe(.value, with: { (snapshot) in
-                let dictionary = snapshot.value as! [String: Any]
-                let message = dictionary["text"] as! String
-                
-            }, withCancel: nil)
-        }, withCancel: nil)
-    }
+//    func getLastMessage(toId: String) {
+//        let uid = Auth.auth().currentUser?.uid
+//        let ref  = Database.database().reference().child("users").child(uid!).child("lastMessages")
+//        
+////        let ref = Database.database().reference().child("user-messages").child(uid!).child(toId).queryLimited(toLast: 1)
+////        
+//        ref.observe(.childAdded, with: { (snapshot) in
+//            let messagesRef = Database.database().reference().child("messages").child(snapshot.key)
+//            messagesRef.observe(.value, with: { (snapshot) in
+//                print(snapshot)
+////                let dictionary = snapshot.value as! [String: Any]
+////                let message = dictionary["text"] as! String
+//                
+//            }, withCancel: nil)
+//        }, withCancel: nil)
+//    }
     
     func observeMessages(){
-        toName.removeAll()
-        fromName.removeAll()
+       
         let uid = Auth.auth().currentUser?.uid
-        let userMessagesRef = Database.database().reference().child("user-messages").child(uid!)
-        userMessagesRef.observe( .childAdded, with: { (snapshot) in
-            
-            self.toName.append(snapshot.key)
-            self.fromName.append(uid!)
-//self.getLastMessage(toId: snapshot.key)
-            
-            
-            
-         
-            //self.toName.append(snapshot.key)
-            /*let messagesRef = Database.database().reference().child("messages").child(snapshot.key)
-             messagesRef.queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
-             
-             
+        let userMessagesRef = Database.database().reference().child("users").child(uid!).child("lastMessages")
+        userMessagesRef.queryOrdered(byChild: "timeStamp").observe( .value, with: { (snapshot) in
            
-             let dictionary = snapshot.value as! [String:Any]
-             
-             if (self.toName.contains(dictionary["fromId"] as! String) == false && self.toName.contains(dictionary["toId"] as! String) == false) || (self.fromName.contains(dictionary["fromId"] as! String) == false && self.fromName.contains(dictionary["toId"] as! String) == false)  {
-             
-             self.toName.append(dictionary["fromId"] as! String)
-             self.fromName.append(dictionary["toId"] as! String)
-             
-             }
-             
-             
-             // self.toName.reverse()
-             // self.fromName.reverse()
-             
-             DispatchQueue.main.async {
-             
-             self.tableView.reloadData()
-             }
-             
-             })*/
+            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            self.toName.removeAll()
+            self.fromName.removeAll()
+            self.lastMessages.removeAll()
+            self.emails.removeAll()
+            for snap in snapshots {
+            
+               
+                if let name = snap.childSnapshot(forPath: "name").value as? String {
+                    
+                    self.emails.append(name)
+                    self.toName.append(snap.key)
+                    self.fromName.append(uid!)
+                }
+                if let message = snap.childSnapshot(forPath: "message").value as? String {
+                    
+                    self.lastMessages.append(message)
+                }
+            
+            }
+            
+            
+            
             DispatchQueue.main.async {
                 UserDefaults.standard.set(self.toName, forKey: "toName")
                 self.tableView.reloadData()

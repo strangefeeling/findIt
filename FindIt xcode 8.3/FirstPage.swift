@@ -23,7 +23,7 @@ class FirstPage: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         didSet{
             if didRemoveItems{
                 collectionView?.reloadData()
-                print("reloadinau")
+                
             }
         }
     }

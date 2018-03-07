@@ -167,7 +167,7 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
      }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height
+        return 161//UIScreen.main.bounds.height
     }
     
     
@@ -249,11 +249,11 @@ class AllLostItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lasItem = allUsers.descriptions.count - 3
-        print("count", howManySnaps.count, i, a)
+        
         if indexPath.row == lasItem{
             
             if i <= howManySnaps.count{
-                print("load more ", i, a)
+                
                 a += 5
                 //addMoreRows()
                 observeOneTime()

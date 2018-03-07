@@ -177,7 +177,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
                 
                 DispatchQueue.main.async {
                     // self.sortPosts(timee: self.date)
-                    print( self.howManySnaps, "<------")
+                    
                     self.tableView.reloadData()
                     self.refresh.endRefreshing()
                     //self.i += 5
@@ -248,7 +248,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height// - 40
+        return 161//UIScreen.main.bounds.height// - 40
     }
     
     
@@ -296,7 +296,7 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(self.howManySnaps,"didSelect")
+        
         
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
@@ -326,12 +326,12 @@ class SearchedFoundCell: UICollectionViewCell, UITableViewDelegate, UITableViewD
     
        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lasItem = cellContent.count - 3
-        print("count", cellContent.count, i, a)
+        
         if lasItem > 0 {
             if indexPath.row == lasItem{
                 
                 if i <= cellContent.count{
-                    print("load more ", i, a)
+                    
                     a += 5
                     //addMoreRows()
                     getPosts()

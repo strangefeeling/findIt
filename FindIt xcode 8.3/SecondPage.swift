@@ -16,7 +16,7 @@ class SecondPage: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     let cellId = "blah"
     
     func showController() {
-        let vc = PostInfo()
+        let vc = PostInfoScroll()
         
         show(vc, sender: self)
     }

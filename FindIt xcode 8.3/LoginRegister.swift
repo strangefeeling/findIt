@@ -110,7 +110,7 @@ class LoginRegister: UIViewController, UITextFieldDelegate {
     }
     
     func setImage(){
-    print("cbb")
+    
         logoView.stopAnimating()
         logoView.image = UIImage(named: "F35")
         logoView.animationImages = nil

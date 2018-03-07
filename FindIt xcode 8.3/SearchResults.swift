@@ -242,7 +242,7 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
         locationLabel.text = currentCell.locationLabel.text!
         cityLabel.text = currentCell.cityLabel.text!
         // postName = postId[indexPath.item]
-        print("POST NAME ",postName)
+        
         descriptiontextField.text = currentCell.infoLabel.text
         toIdd = allUsers.uid[indexPath.row]
         imageUrl = profileImageURL
@@ -543,12 +543,12 @@ class SearchResults: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lasItem = cellContent.count - 2
-        print("count", howManySnaps.count, i, a)
+        
         if lasItem > 0 {
             if indexPath.row == lasItem{
                 
                 if i <= howManySnaps.count{
-                    print("load more ", i, a)
+                    
                     a += 4
                     //addMoreRows()
                     getPosts()

@@ -138,6 +138,8 @@ class AllItemsTableViewCell: UITableViewCell  {
         return label
     }()
     
+   
+    
     let itemDescription: UITextView = {
         let iD = UITextView()
         let borderColor = UIColor.darkGray
@@ -163,8 +165,17 @@ class AllItemsTableViewCell: UITableViewCell  {
         return line
     }()
     
+    let grayView: UIView = {
+        let line = UIView()
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.backgroundColor = UIColor(red: 223/255, green: 220/255, blue: 220/255, alpha: 1)
+        line.layer.borderWidth = 1
+        line.layer.borderColor = UIColor.black.cgColor
+        return line
+    }()
     
     
+    //223,220,220
     func makeConstraints(){
         //contentView.addSubview(itemDescription)
         // contentView.addSubview(descriptionLabel)
@@ -182,14 +193,14 @@ class AllItemsTableViewCell: UITableViewCell  {
         contentView.addSubview(infoLabel)
         contentView.addSubview(cityLabel)
        // contentView.addSubview(cityWord)
-//        contentView.addSubview(dateLabel)
+        contentView.addSubview(dateLabel)
 //        contentView.addSubview(nameLabel)
 //        contentView.addSubview(separatorLine)
         
         womanImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         womanImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-        womanImage.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        womanImage.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        womanImage.widthAnchor.constraint(equalToConstant: 142).isActive = true
+        womanImage.heightAnchor.constraint(equalToConstant: 132).isActive = true
         
         infoLabel.leftAnchor.constraint(equalTo: womanImage.rightAnchor, constant: 8).isActive = true
         infoLabel.topAnchor.constraint(equalTo: womanImage.topAnchor).isActive = true
@@ -199,7 +210,18 @@ class AllItemsTableViewCell: UITableViewCell  {
         cityLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 8).isActive = true
         cityLabel.leftAnchor.constraint(equalTo: infoLabel.leftAnchor).isActive = true
         cityLabel.widthAnchor.constraint(equalTo: infoLabel.widthAnchor).isActive = true
-        cityLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        cityLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18).isActive = true
+        dateLabel.leftAnchor.constraint(equalTo: infoLabel.leftAnchor).isActive = true
+        dateLabel.rightAnchor.constraint(equalTo: infoLabel.rightAnchor).isActive = true
+        dateLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        contentView.addSubview(grayView)
+        grayView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        grayView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+        grayView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        grayView.topAnchor.constraint(equalTo: womanImage.bottomAnchor, constant: 8).isActive = true
        /* womanImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 48).isActive = true
         womanImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: UIScreen.main.bounds.width / 46.875).isActive = true
         womanImage.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UIScreen.main.bounds.width / 46.875).isActive = true

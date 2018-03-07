@@ -35,7 +35,8 @@ let myColor =  UIColor(red: 140/255, green: 212/255, blue: 141/255, alpha: 1)//U
 var descriptiontextField: UILabel = {
     let textField = UILabel()
     textField.text = "sadhbjkasfaksfnaklsvnzkcnaskfnsakjnakscnascnadskjnsdkjvndmnz,mcvn"
-    textField.font = UIFont(name: "Avenir Next", size: 20)
+    textField.font = UIFont(name: "Avenir Next", size: 18)
+    textField.layer.cornerRadius = 10
     textField.numberOfLines = 0
     textField.sizeToFit()
     textField.textAlignment = .center

@@ -18,7 +18,7 @@ class CommentsCell: UITableViewCell {
         
      //   contentView.addSubview(separatorLine)
        
-        print(cellWidths)
+        
         
         
         setup()
@@ -75,7 +75,7 @@ class CommentsCell: UITableViewCell {
 //            let fontAttributes = [NSFontAttributeName: font]
 //            let myText = NSString(string: message.text!)
 //            let size = (myText).size(attributes: fontAttributes)
-//            print(size)
+
 //        }
         
         

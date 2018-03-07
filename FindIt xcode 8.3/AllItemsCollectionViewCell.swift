@@ -116,7 +116,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 self.date.removeAll()
                 self.postId.removeAll()
                 self.emails.removeAll()
-                print(snapshot)
+                
                 
                 guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 for snap in snapshots {
@@ -200,7 +200,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height// - 40
+        return 161//UIScreen.main.bounds.height// - 40
     }
 
     
@@ -342,7 +342,7 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
                 DispatchQueue.main.async(execute: {
                     self.i += 5
                     ref.removeAllObservers()
-                   print(self.allUsers.descriptions)
+     
                     self.tableView.reloadData()
                 })
             })
@@ -352,12 +352,12 @@ class AllItemsCollectionViewCell: UICollectionViewCell, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
        let lasItem = allUsers.descriptions.count - 3
-        //print("count", howManySnaps.count, i, a)
+        
         if lasItem > 0 {
         if indexPath.row == lasItem{
            
             if i <= howManySnaps.count{
-            //print("load more ", i, a)
+            
             a += 5
             //addMoreRows()
                 observeOneTime()

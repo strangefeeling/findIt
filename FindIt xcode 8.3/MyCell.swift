@@ -622,7 +622,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
      }*/
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height //- 40
+        return 161//UIScreen.main.bounds.height //- 40
     }
     
     
@@ -669,8 +669,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("POST NAMEEEEEE ",postId[indexPath.row])
-        print("FOUNDOOOOORLOOOOOST ",isItFoundOrLost[indexPath.row])
+
         // let postInfo = PostInfo()
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
         
@@ -703,7 +702,7 @@ class MyCell: UICollectionViewCell, UITableViewDelegate, UITableViewDataSource {
                 if indexPath.row == lasItem{
                     
                     if i <= postId.count{
-                        print("load more ", i, a , postId.count)
+                        
                         a += 2
                         //addMoreRows()
                         getMyPosts()

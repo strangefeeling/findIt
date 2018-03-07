@@ -16,13 +16,14 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         
         view.addSubview(scrollView)
-        scrollView.addSubview(postImage)
-        scrollView.addSubview(cityWord)
-        scrollView.addSubview(cityLabel)
-        scrollView.addSubview(locationWord)
-        scrollView.addSubview(locationLabel)
-        scrollView.addSubview(descriptiontextField)
-        scrollView.addSubview(tableView)
+       // scrollView.addSubview(postImage)
+//        scrollView.addSubview(cityWord)
+//        scrollView.addSubview(cityLabel)
+//        scrollView.addSubview(locationWord)
+//        scrollView.addSubview(locationLabel)
+//        scrollView.addSubview(descriptiontextField)
+//        scrollView.addSubview(tableView)
+        
         setupView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -31,72 +32,347 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.allowsSelection = false
         tableView.register(CommentsCell.self, forCellReuseIdentifier: cellId)
         getComment()
+        checkIfPostIsInFollowed()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         getComment()
     }
+    
+    let containerView: UIView = {
+        let view = UIView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let streetCityDateView: UIView = {
+       let view = UIView()
+        
+        view.backgroundColor = myColor
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    let descriptionBackgroundView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = myColor
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    let posterName: UILabel = {
+        let view = UILabel()
+        
+        view.text = posterUid.text
+        view.textColor = myColor
+        view.textAlignment = .center
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let envelopeImage: UIButton = {
+        let iv = UIButton()
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        iv.setImage(UIImage(named: "envelopeAndroid")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        iv.addTarget(self, action: #selector(toPostComment), for: .touchUpInside)
+        
+        return iv
+    }()
+    
+    let chatImage: UIButton = {
+        let iv = UIButton()
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        iv.setImage( UIImage(named: "commentsAndroid")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        iv.addTarget(self, action: #selector(toChatController), for: .touchUpInside)
+        
+        return iv
+    }()
+    
+    let followImage: UIButton = {
+        let iv = UIButton()
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        iv.setImage(UIImage(named: "follow_button"), for: .normal)
+        iv.addTarget(self, action: #selector(followPost), for: .touchUpInside)
+        
+        return iv
+    }()
+   
+    
+    
+    let editImage: UIButton = {
+        let iv = UIButton()
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.tintColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        iv.setImage(UIImage(named: "edit_image")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        iv.addTarget(self, action: #selector(toEditPost), for: .touchUpInside)
+        
+        return iv
+    }()
+    
+    let commentsButton: UIButton = {
+       let bt = UIButton()
+        
+        bt.setTitle("Comments(0)", for: .normal)
+        bt.backgroundColor = UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)
+        bt.addTarget(self, action: #selector(toPostComment), for: UIControlEvents.touchUpInside)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.layer.cornerRadius = 5
+        bt.titleLabel?.font =  UIFont(name: "Avenir Next", size: 18)
+  
+        return bt
+    }()
+    
+    
     
     var tableView = UITableView()
     
     func setupView(){
         
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .white
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 760)
         
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        scrollView.backgroundColor = .white
+        
+        scrollView.addSubview(containerView)
         
         
+        containerView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        containerView.leftAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
+        containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         
-       // scrollView.addSubview(boxView)
-        var yPosition: CGFloat = 0
-        postImage.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 16 * 9)
+        var containerViewHeightAnchor = containerView.heightAnchor.constraint(equalToConstant: scrollView.contentSize.height)
+        
+        containerViewHeightAnchor.isActive = true
+        
+        containerView.addSubview(posterName)
+        
+        posterName.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        posterName.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8).isActive = true
+        posterName.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        posterName.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        
+        containerView.addSubview(postImage)
+        
+        postImage.translatesAutoresizingMaskIntoConstraints = false
+        
+        postImage.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 48).isActive = true
+        postImage.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        postImage.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        postImage.heightAnchor.constraint(equalTo: postImage.widthAnchor).isActive = true
+        
         postImage.loadImageUsingCacheWithUrlString(imageUrl)
         
-        yPosition += UIScreen.main.bounds.height / 16 * 9
         
         
-        cityWord.frame = CGRect(x: 8, y: yPosition + 8, width: 48, height: 24)
+        containerView.addSubview(envelopeImage)
+        
+        envelopeImage.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 12).isActive = true
+        envelopeImage.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        envelopeImage.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        envelopeImage.topAnchor.constraint(equalTo: postImage.bottomAnchor, constant: 8).isActive = true
+        
+        let currUser = Auth.auth().currentUser?.uid
+        
+        if toIdd != currUser {
+        
+        containerView.addSubview(chatImage)
+        
+        chatImage.leftAnchor.constraint(equalTo: envelopeImage.rightAnchor, constant: 12).isActive = true
+        chatImage.widthAnchor.constraint(equalTo: envelopeImage.widthAnchor).isActive = true
+        chatImage.heightAnchor.constraint(equalTo: envelopeImage.heightAnchor).isActive = true
+        chatImage.topAnchor.constraint(equalTo: envelopeImage.topAnchor, constant: 0).isActive = true
+        
+        containerView.addSubview(followImage)
+        
+        followImage.leftAnchor.constraint(equalTo: chatImage.rightAnchor, constant: 12).isActive = true
+        followImage.widthAnchor.constraint(equalTo: chatImage.widthAnchor).isActive = true
+        followImage.heightAnchor.constraint(equalTo: chatImage.heightAnchor).isActive = true
+        followImage.topAnchor.constraint(equalTo: chatImage.topAnchor, constant: 0).isActive = true
+        } else {
+            containerView.addSubview(editImage)
+            
+            editImage.leftAnchor.constraint(equalTo: envelopeImage.rightAnchor, constant: 12).isActive = true
+            editImage.widthAnchor.constraint(equalToConstant: 29).isActive = true
+            editImage.heightAnchor.constraint(equalToConstant: 29).isActive = true
+            editImage.topAnchor.constraint(equalTo: envelopeImage.topAnchor, constant: 0).isActive = true
+        }
+        
+        containerView.addSubview(streetCityDateView)
+        
+        streetCityDateView.translatesAutoresizingMaskIntoConstraints = false
+        
+        streetCityDateView.topAnchor.constraint(equalTo: envelopeImage.bottomAnchor, constant: 24).isActive = true
+        streetCityDateView.leftAnchor.constraint(equalTo: envelopeImage.leftAnchor, constant: 0).isActive = true
+        streetCityDateView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16).isActive = true
+        streetCityDateView.heightAnchor.constraint(equalToConstant: 78).isActive = true
+        
+        streetCityDateView.addSubview(cityWord)
+        
+        cityWord.translatesAutoresizingMaskIntoConstraints = false
+        
+        cityWord.text = "City: " + cityLabel.text!
+        //cityWord.backgroundColor = .red
+        cityWord.leftAnchor.constraint(equalTo: streetCityDateView.leftAnchor, constant: 4).isActive = true
+        cityWord.topAnchor.constraint(equalTo: streetCityDateView.topAnchor, constant: 4).isActive = true
+        cityWord.rightAnchor.constraint(equalTo: streetCityDateView.rightAnchor, constant: 4).isActive = true
+        cityWord.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         
-        let cityLabelHeight = heightForView(text: cityLabel.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - 64 - 8)
-        cityLabel.frame = CGRect(x: 8 + cityWord.frame.width, y: yPosition + 6, width: UIScreen.main.bounds.width, height: cityLabelHeight)
         
-        yPosition += 6 + cityLabelHeight
+        streetCityDateView.addSubview(locationWord)
         
+        locationWord.translatesAutoresizingMaskIntoConstraints = false
         
-        locationWord.frame = CGRect(x: 8, y: yPosition + 8, width: 64, height: 24)
+        locationWord.text = "Street: " + locationLabel.text!
         
+        locationWord.leftAnchor.constraint(equalTo: cityWord.leftAnchor, constant: 0).isActive = true
+        locationWord.topAnchor.constraint(equalTo: cityWord.bottomAnchor, constant: 4).isActive = true
+        locationWord.rightAnchor.constraint(equalTo: streetCityDateView.rightAnchor, constant: 4).isActive = true
+        locationWord.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        let locationLabelHeight = heightForView(text: locationLabel.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - locationWord.frame.width - 8)
-        locationLabel.frame = CGRect(x: locationWord.frame.width + 8, y: yPosition + 6, width: UIScreen.main.bounds.width - locationWord.frame.width - 8, height: locationLabelHeight)
-        
-        yPosition += 6 + locationLabelHeight
-        
-        
-        let descriptionTextFieldHeight = heightForView(text: descriptiontextField.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - 8)
-        descriptiontextField.frame = CGRect(x: 4, y: yPosition + 8 + 16, width: UIScreen.main.bounds.width - 8, height: descriptionTextFieldHeight)
-        
-        yPosition += 8 + descriptionTextFieldHeight + 16
-        
-        
-        tableView.estimatedRowHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.layoutIfNeeded()
-        tableView.frame = CGRect(x: 0, y: yPosition + 8, width: UIScreen.main.bounds.width, height: tableView.contentSize.height)
+        streetCityDateView.addSubview(dateLabel)
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.leftAnchor.constraint(equalTo: cityWord.leftAnchor).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: locationWord.bottomAnchor, constant: 4).isActive = true
+        dateLabel.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        dateLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         
-        yPosition += tableView.contentSize.height
+        containerView.addSubview(descriptionBackgroundView)
         
-        print(yPosition,"<------", tableView.contentSize.height)
+        containerView.addSubview(descriptiontextField)
         
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: yPosition + 10)
+        descriptiontextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        //descriptiontextField.backgroundColor = myColor
+        descriptiontextField.textColor = .white
+        //descriptiontextField.layer.cornerRadius = 20
+        
+        descriptiontextField.widthAnchor.constraint(equalTo: streetCityDateView.widthAnchor, multiplier: 0.95).isActive = true
+        descriptiontextField.heightAnchor.constraint(greaterThanOrEqualToConstant: 64).isActive = true
+        descriptiontextField.leftAnchor.constraint(equalTo: streetCityDateView.leftAnchor).isActive = true
+        descriptiontextField.topAnchor.constraint(equalTo: streetCityDateView.bottomAnchor, constant: 16).isActive = true //148 , 104
+        
+        
+        
+        descriptionBackgroundView.widthAnchor.constraint(equalTo: streetCityDateView.widthAnchor).isActive = true
+        descriptionBackgroundView.heightAnchor.constraint(equalTo: descriptiontextField.heightAnchor, constant: 8).isActive = true
+        descriptionBackgroundView.centerXAnchor.constraint(equalTo: streetCityDateView.centerXAnchor).isActive = true
+        descriptionBackgroundView.centerYAnchor.constraint(equalTo: descriptiontextField.centerYAnchor).isActive = true
+        
+        
+        
+        containerView.addSubview(commentsButton)
+        
+        commentsButton.topAnchor.constraint(equalTo: descriptionBackgroundView.bottomAnchor, constant: 8).isActive = true
+        commentsButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        commentsButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        commentsButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
+        
+        scrollView.resizeScrollViewContentSize()
         
         scrollView.layoutIfNeeded()
+        view.layoutIfNeeded()
+        
+        
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 144 + descriptionBackgroundView.frame.height + postImage.frame.height + posterName.frame.height + streetCityDateView.frame.height + 8)
+       
+       // scrollView.resizeScrollViewContentSize()
+       
+       
+        
+        containerViewHeightAnchor.isActive = false
+        
+        containerViewHeightAnchor = containerView.heightAnchor.constraint(equalToConstant: scrollView.contentSize.height)
+        
+        containerViewHeightAnchor.isActive = true
+        
+        
+       
+    
+        
+       // scrollView.addSubview(boxView)
+        
+        
+//        //nuo cia
+//        var yPosition: CGFloat = 0
+//        postImage.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 16 * 9)
+//        postImage.loadImageUsingCacheWithUrlString(imageUrl)
+//        
+//        yPosition += UIScreen.main.bounds.height / 16 * 9
+//        
+//        
+//        cityWord.frame = CGRect(x: 8, y: yPosition + 8, width: 48, height: 24)
+//        
+//        
+//        let cityLabelHeight = heightForView(text: cityLabel.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - 64 - 8)
+//        cityLabel.frame = CGRect(x: 8 + cityWord.frame.width, y: yPosition + 6, width: UIScreen.main.bounds.width, height: cityLabelHeight)
+//        
+//        yPosition += 6 + cityLabelHeight
+//        
+//        
+//        locationWord.frame = CGRect(x: 8, y: yPosition + 8, width: 64, height: 24)
+//        
+//        
+//        let locationLabelHeight = heightForView(text: locationLabel.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - locationWord.frame.width - 8)
+//        locationLabel.frame = CGRect(x: locationWord.frame.width + 8, y: yPosition + 6, width: UIScreen.main.bounds.width - locationWord.frame.width - 8, height: locationLabelHeight)
+//        
+//        yPosition += 6 + locationLabelHeight
+//        
+//        
+//        let descriptionTextFieldHeight = heightForView(text: descriptiontextField.text!, font: UIFont(name: "Avenir Next", size: 20)!, width: UIScreen.main.bounds.width - 8)
+//        descriptiontextField.frame = CGRect(x: 4, y: yPosition + 8 + 16, width: UIScreen.main.bounds.width - 8, height: descriptionTextFieldHeight)
+//        
+//        descriptiontextField.backgroundColor = myColor
+//        descriptiontextField.layer.cornerRadius = 5
+//        descriptiontextField.textColor = .white
+//        
+//        
+//        
+//        yPosition += 8 + descriptionTextFieldHeight + 32
+//        
+//        scrollView.addSubview(commentsView)
+//        commentsView.frame = CGRect(x: 0, y: yPosition, width: UIScreen.main.bounds.width, height: 30)
+//        scrollView.addSubview(commentsWord)
+//        commentsWord.frame = CGRect(x: view.frame.midX - 50, y: yPosition + 5, width: 100, height: 20)
+//        
+//        yPosition += commentsView.frame.height
+//        
+//        tableView.estimatedRowHeight = 44
+//        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.layoutIfNeeded()
+//        tableView.frame = CGRect(x: 0, y: yPosition + 8, width: UIScreen.main.bounds.width, height: tableView.contentSize.height)
+//        
+//        
+//        yPosition += tableView.contentSize.height
+//        
+//        print(yPosition,"<------", tableView.contentSize.height)
+//        
+//        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: yPosition + 10)
+//        
+//        scrollView.layoutIfNeeded()
+//        view.layoutIfNeeded()
+//        
+//        //iki cia
         
 //        postImage.frame = CGRect(x: UIScreen.main.bounds.width / 2 - (UIScreen.main.bounds.width ) / 2, y: 8, width: UIScreen.main.bounds.width, height: 300)
 //        postImage.loadImageUsingCacheWithUrlString(imageUrl)
@@ -134,29 +410,30 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
 //        
 //        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 8 + locationLabelHeight +  yPosition + descriptionTextFieldHeight + cityLabelHeight + 8 + 2 + 200)
         
-        view.addSubview(circle)
-        circle.addSubview(pliusas)
-        
-        circle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
-        circle.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
-        circle.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        circle.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-        pliusas.translatesAutoresizingMaskIntoConstraints = false
-        pliusas.widthAnchor.constraint(equalTo: circle.widthAnchor, multiplier: 0.5).isActive = true
-        pliusas.heightAnchor.constraint(equalTo: circle.heightAnchor, multiplier: 0.5).isActive = true
-        pliusas.centerXAnchor.constraint(equalTo: circle.centerXAnchor).isActive = true
-        pliusas.centerYAnchor.constraint(equalTo: circle.centerYAnchor).isActive = true
+//        view.addSubview(circle)
+//        circle.addSubview(pliusas)
+//
+//        circle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+//        circle.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
+//        circle.widthAnchor.constraint(equalToConstant: 60).isActive = true
+//        circle.heightAnchor.constraint(equalToConstant: 60).isActive = true
+//        
+//        pliusas.translatesAutoresizingMaskIntoConstraints = false
+//        pliusas.widthAnchor.constraint(equalTo: circle.widthAnchor, multiplier: 0.5).isActive = true
+//        pliusas.heightAnchor.constraint(equalTo: circle.heightAnchor, multiplier: 0.5).isActive = true
+//        pliusas.centerXAnchor.constraint(equalTo: circle.centerXAnchor).isActive = true
+//        pliusas.centerYAnchor.constraint(equalTo: circle.centerYAnchor).isActive = true
     }
     
-    let boxView: UIView = {
+    let commentsView: UIView = {
       let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderWidth = 0.5
-        view.layer.cornerRadius = 5
+        //view.layer.borderWidth = 0.5
+        //view.layer.cornerRadius = 5
         view.backgroundColor = .yellow
         return view
     }()
+    
     
     func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
@@ -171,6 +448,7 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let scrollView: UIScrollView = {
        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = false
        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
@@ -180,16 +458,18 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         label.text = "City: "
         label.textAlignment = .left
         label.sizeToFit()
+        label.textColor = .white
         //label.backgroundColor = .red
-        label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next", size: 20)
+        
+        label.font = UIFont(name: "Avenir Next", size: 16)
         
         return label
     }()
     
     let commentsWord: UILabel = {
        let label = UILabel()
-        label.text = "Comments:"
+        label.text = "Comments"
+        label.font = UIFont(name: "Avenir Next", size: 16)
         return label
     }()
     
@@ -204,10 +484,24 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         let label = UILabel()
         label.text = "Street: "
         label.textAlignment = .left
+        label.textColor = .white
        // label.sizeToFit()
         //label.backgroundColor = .blue
-        label.textColor = .darkGray
-        label.font = UIFont(name: "Avenir Next", size: 20)
+        
+        label.font = UIFont(name: "Avenir Next", size: 16)
+        //label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let dateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "date: 2018-03-03"
+        label.textAlignment = .left
+        label.textColor = .white
+        // label.sizeToFit()
+        //label.backgroundColor = .blue
+        
+        label.font = UIFont(name: "Avenir Next", size: 16)
         //label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -245,14 +539,15 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() == false {
-                print("not in followed")
+                
+                let timeStamp = Int(NSDate().timeIntervalSince1970) * -1
                 
                 self.isItFollowed = false
                 self.followBool = true
                 
             }
             else {
-                print("followed")
+                
                 self.isItFollowed = true
                 self.followBool = false
                 
@@ -265,25 +560,33 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         didSet {
             if followBool {
                 
-                followButton.setTitle("Follow", for: .normal)
+                //followButton.setTitle("Follow", for: .normal)
+                followImage.setImage(UIImage(named:"follow_button"), for: .normal)
                 let uid = Auth.auth().currentUser?.uid
                 let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
-                
+                let followersRef = Database.database().reference().child("followers").child(postName).child(uid!)
                 let anotherRef = ref
+                let followersRemoveRef = followersRef
+                followersRemoveRef.removeValue()
                 anotherRef.removeValue()
                 
             }
             else {
-                followButton.setTitle("Unfollow", for: .normal)
+                //followButton.setTitle("Unfollow", for: .normal)
+                followImage.setImage(UIImage(named:"unfollow_button"), for: .normal)
                 let uid = Auth.auth().currentUser?.uid
                 let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
                 ref.observe(.value, with: { (snapshot) in
-                    print(snapshot)
+                    
                     let followedRef = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
                     followedRef.setValue(snapshot.value)
+                    followedRef.child("foundOrLost").setValue(foundOrLost)
+                    //followedRef.child(snapshot.key)
+                    let timeStamp = Int(NSDate().timeIntervalSince1970)
+                    followedRef.child("timeStamp").setValue(timeStamp * -1)
+                    let followersRef = Database.database().reference().child("followers").child(postName).child(uid!)
                     DispatchQueue.main.async {
-                        let timeStamp = Int(NSDate().timeIntervalSince1970)
-                        followedRef.child("timeStamp").setValue(timeStamp * -1)
+                        followersRef.setValue(1)
                     }
                 })
             }
@@ -426,9 +729,9 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func toPostComment(){
         circleBool = false
-        let vc = AddCommentController()
-        vc.email.text = "to: \((posterUid.text)!)"
-        vc.postName = postName
+        let vc = CommentsControllerViewController()
+        vc.email = "to: \((posterUid.text)!)"
+        //vc.postName = postName
         
         
         show(vc, sender: self)
@@ -511,27 +814,30 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
         ref.queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
             self.comments.removeAll()
             self.fromEmail.removeAll()
-            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
-            for snap in snapshots {
-                if let comment = snap.childSnapshot(forPath: "comment").value as? String {
-                    self.comments.append(comment)
-                    let cell = CommentsCell()
-                    cell.cellWidths.append(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!))
-                    // print(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------", UIScreen.main.bounds.width * 0.7)
-                    //print(print(comment.heightOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------"))
-                    print(self.comments)
-                }
-                
-                if let email = snap.childSnapshot(forPath: "name").value as? String {
-                    self.fromEmail.append(email)
-                }
-                
-                DispatchQueue.main.async {
-                    self.setupView()
-                    self.tableView.reloadData()
-                    
-                }
-            }
+            
+            self.commentsButton.setTitle("Comments(\(snapshot.childrenCount))", for: .normal)
+            
+//            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
+//            for snap in snapshots {
+//                if let comment = snap.childSnapshot(forPath: "comment").value as? String {
+//                    self.comments.append(comment)
+//                    let cell = CommentsCell()
+//                    cell.cellWidths.append(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!))
+//                    // print(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------", UIScreen.main.bounds.width * 0.7)
+//                    //print(print(comment.heightOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------"))
+//                    print(self.comments)
+//                }
+//                
+//                if let email = snap.childSnapshot(forPath: "name").value as? String {
+//                    self.fromEmail.append(email)
+//                }
+//                
+//                DispatchQueue.main.async {
+//                    self.setupView()
+//                    self.tableView.reloadData()
+//                    
+//                }
+//            }
         }, withCancel: nil)
         self.tableView.reloadData()
     }
@@ -552,6 +858,23 @@ class PostInfoScroll: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
     }
-
     
 }
+extension UIScrollView {
+    
+    func resizeScrollViewContentSize() {
+        
+        var contentRect = CGRect.zero
+        
+        for view in self.subviews {
+            
+            contentRect = contentRect.union(view.frame)
+            
+        }
+        
+        self.contentSize = contentRect.size
+        
+    }
+    
+}
+

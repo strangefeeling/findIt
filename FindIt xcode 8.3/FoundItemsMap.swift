@@ -150,8 +150,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
             
             guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for snap in snapshots {
-                print(snap.key,"<-----")
-                //self.postNames.append(snap.key)
+               
                 guard let dictionary = snap.value as? [String: Any] else {return}
                 if let latitude = dictionary["lat"] as? String {
                     
@@ -187,7 +186,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                     
                     DispatchQueue.main.async {
                         self.getAnnotations(lat: lati, lon: long, description: description)
-                        print(self.emails)
+                        
                         self.ref.removeAllObservers()
                     }
                 }
@@ -321,7 +320,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 
             }
         }
-        print(postNames[pinIndex])
+        
         
     }
     
@@ -434,7 +433,7 @@ class FoundItemsMap: UIViewController, CLLocationManagerDelegate , MKMapViewDele
                 dateLabel.text = String(self.makeDate(date:  self.dates[self.pinIndex]))
                 descriptiontextField.text = self.descriptions[self.pinIndex + 1]
                 toIdd = self.toId[self.pinIndex]
-                print("cara uid ",toIdd)
+                
                 foundOrLost = "found" 
                 self.show(postInfo, sender: self)
             //}

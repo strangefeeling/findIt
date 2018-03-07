@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		570B73242019F73D00D09C8D /* PostInfoScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570B73232019F73D00D09C8D /* PostInfoScroll.swift */; };
+		573208CD204D96F10078462D /* CommentsControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573208CC204D96F10078462D /* CommentsControllerViewController.swift */; };
+		573208CF204D974C0078462D /* CommentsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573208CE204D974C0078462D /* CommentsCollectionViewCell.swift */; };
 		5732C07C200E283F0052C5E5 /* Fb0.png in Resources */ = {isa = PBXBuildFile; fileRef = 5732C05B200E283F0052C5E5 /* Fb0.png */; };
 		5732C07D200E283F0052C5E5 /* Fb1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5732C05C200E283F0052C5E5 /* Fb1.png */; };
 		5732C07E200E283F0052C5E5 /* Fb10.png in Resources */ = {isa = PBXBuildFile; fileRef = 5732C05D200E283F0052C5E5 /* Fb10.png */; };
@@ -179,6 +181,8 @@
 /* Begin PBXFileReference section */
 		0459CB7FF908CE1564249014 /* Pods_FindIt_xcode_8_3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FindIt_xcode_8_3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		570B73232019F73D00D09C8D /* PostInfoScroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoScroll.swift; sourceTree = "<group>"; };
+		573208CC204D96F10078462D /* CommentsControllerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsControllerViewController.swift; sourceTree = "<group>"; };
+		573208CE204D974C0078462D /* CommentsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewCell.swift; sourceTree = "<group>"; };
 		5732C05B200E283F0052C5E5 /* Fb0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Fb0.png; sourceTree = "<group>"; };
 		5732C05C200E283F0052C5E5 /* Fb1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Fb1.png; sourceTree = "<group>"; };
 		5732C05D200E283F0052C5E5 /* Fb10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Fb10.png; sourceTree = "<group>"; };
@@ -523,6 +527,7 @@
 			isa = PBXGroup;
 			children = (
 				7B17CF921FAC76F000394879 /* TabBarController.swift */,
+				573208CC204D96F10078462D /* CommentsControllerViewController.swift */,
 				7B17CF941FAC773B00394879 /* AddItemController.swift */,
 				7B17CF961FAC775700394879 /* LoginRegister.swift */,
 				7B81EF8C1FBEF06E0036F982 /* AddCommentController.swift */,
@@ -611,6 +616,7 @@
 				7B45D7BC1FED433C00A5A6A6 /* SearchedFoundCell.swift */,
 				7B45D7BE1FED738100A5A6A6 /* SearchedLostCell.swift */,
 				7BEB4BF41FCD8B7500D1B990 /* MyCell.swift */,
+				573208CE204D974C0078462D /* CommentsCollectionViewCell.swift */,
 				7BE2B0711FCB0E6500418B11 /* AllLostItems.swift */,
 				7B7E85191FD6CAF80085C8F9 /* FollowedItems.swift */,
 				7BBF48B81FC8798D005414C1 /* AllItemsTableViewCell.swift */,
@@ -902,6 +908,7 @@
 				7B18EF101FAF2C6A007742F4 /* FoundItemsMap.swift in Sources */,
 				7BBF48B91FC8798D005414C1 /* AllItemsTableViewCell.swift in Sources */,
 				7B7E851A1FD6CAF80085C8F9 /* FollowedItems.swift in Sources */,
+				573208CD204D96F10078462D /* CommentsControllerViewController.swift in Sources */,
 				7BA44FC61FB115EE00667DA6 /* NavController.swift in Sources */,
 				7B17CF9D1FAC77B400394879 /* Chat.swift in Sources */,
 				7BDEA9A51FEA67FE0090CB79 /* MyItemsCell.swift in Sources */,
@@ -913,6 +920,7 @@
 				7B17CFA41FAC780300394879 /* Messages.swift in Sources */,
 				7BA44FCA1FB1CAEC00667DA6 /* MoreCell.swift in Sources */,
 				570B73242019F73D00D09C8D /* PostInfoScroll.swift in Sources */,
+				573208CF204D974C0078462D /* CommentsCollectionViewCell.swift in Sources */,
 				7B17CFA61FAC782300394879 /* Extensions.swift in Sources */,
 				7B17CF951FAC773B00394879 /* AddItemController.swift in Sources */,
 				7B8F4C141FAC73D300E61996 /* AppDelegate.swift in Sources */,

@@ -30,7 +30,7 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = myColor
-        print("BANDYMAS ",bandymas)
+        
         tableView.dataSource = self
         tableView.delegate = self
         setupView()
@@ -45,7 +45,7 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
         super.viewWillAppear(true)
         self.navigationController?.isNavigationBarHidden = false
         checkIfPostIsInFollowed()
-        print("this item is from ",foundOrLost)
+        
         if shouldIDismiss{
             popRoot()
             shouldIDismiss = false
@@ -57,7 +57,7 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
         tableView.rowHeight = UITableViewAutomaticDimension
         firstCellHeight = UIScreen.main.bounds.height / 2.5 + 7 * (UIScreen.main.bounds.height / 33.35 + 8)  + descriptiontextField.frame.height
         if toIdd == Auth.auth().currentUser?.uid{
-            print("you can edit this post")
+            
            // navigationController?.navigationBar.tintColor = .red
             //navigationController?.navigationBar.set 
            
@@ -217,14 +217,14 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let ref = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() == false {
-                print("not in followed")
+                
                 
                 self.isItFollowed = false
                 self.followBool = true
                 
             }
             else {
-                print("followed")
+                
                 self.isItFollowed = true
                 self.followBool = false
                 
@@ -262,7 +262,7 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
 
     func popRoot(){
-        print("FUUUUUUCK")
+        
         navigationController?.popViewController(animated: true)
     }
     
@@ -283,12 +283,12 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 let uid = Auth.auth().currentUser?.uid
                 let ref = Database.database().reference().child("allPosts").child(foundOrLost).child(postName)
                 ref.observe(.value, with: { (snapshot) in
-                    print(snapshot)
+                    
                     let followedRef = Database.database().reference().child("users").child(uid!).child("followed").child(postName)
                     followedRef.setValue(snapshot.value)
                     DispatchQueue.main.async {
                         let timeStamp = Int(NSDate().timeIntervalSince1970)
-                        followedRef.child("timeStamp").setValue(timeStamp * -1)
+                        //followedRef.child("timeStamp").setValue(timeStamp * -1)
                     }
                 })
             }
@@ -391,7 +391,7 @@ class PostInfo: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     cell.cellWidths.append(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!))
                    // print(comment.widthOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------", UIScreen.main.bounds.width * 0.7)
                     //print(print(comment.heightOfString(usingFont: UIFont(name: "Avenir Next", size: 16)!),"<--------"))
-                    print(self.comments)
+                    
                 }
                 
                 if let email = snap.childSnapshot(forPath: "name").value as? String {

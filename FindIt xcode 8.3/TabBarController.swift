@@ -129,7 +129,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         tabThree.tabBarItem = taThreeBarItem
         
         foundCity = searchBar.text!.folding(options: .diacriticInsensitive, locale: .current).capitalized
-        print(foundCity)
+        
         self.selectedIndex = 0
         setViewControllers([tabOne,tabTwo, tabThree], animated: false)
         searchController.dismiss(animated: true, completion: nil)
@@ -226,10 +226,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate , GADBann
         self.tabBar.barTintColor = myColor//.white//UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
 //myColor//UIColor(red: 230/255, green: 239/255, blue: 1, alpha: 1)//myColor//UIColor(red: 241/255, green: 1, blue: 248/255, alpha: 1)//myColor//UIColor(patternImage: patternImage!)
         //self.tabBar.tintColor = .white
-        self.tabBar.unselectedItemTintColor = .white//myTextColor//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+        self.tabBar.unselectedItemTintColor = .darkText//myTextColor//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
 //.white//myTextColor
         //paselectinto spalva
-        self.tabBar.tintColor = .blue//UIColor(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//.darkText//.red//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
+        self.tabBar.tintColor = UIColor.white//(red: 255/255, green: 88/255, blue: 85/255, alpha: 1)//.darkText//.red//UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1)
 
         
         

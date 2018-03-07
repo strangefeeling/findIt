@@ -38,6 +38,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     override func awakeFromNib() {
        // observeOneTime()
         getMyPosts()
+        //getFollowedPostsIds()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(AllItemsTableViewCell.self, forCellReuseIdentifier: cellId)
@@ -87,20 +88,32 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         i = 0
         self.postId.removeAll()
         getMyPosts()
+        //getFollowedPostsIds()
+    }
+    
+    func getFollowedPostsIds(){
+        let uid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference().child("users").child(uid!).child("followed")
+        ref.queryOrdered(byChild: "timeStamp").queryLimited(toFirst: UInt(a)).observe(.childAdded, with: { (snapshot) in
+            
+            DispatchQueue.main.async {
+                self.refresh.endRefreshing()
+            }
+        })
     }
     
     func getMyPosts(){
 
         let uid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference().child("users").child(uid!).child("followed")
-        ref.queryLimited(toFirst: UInt(a)).queryOrdered(byChild: "timeStamp").observe(.value, with: { (snapshot) in
+        ref.queryOrdered(byChild: "timeStamp").queryLimited(toFirst: UInt(a)).observe(.value, with: { (snapshot) in
             self.allUsers.descriptions.removeAll()
             self.allUsers.downloadUrls.removeAll()
             self.allUsers.uid.removeAll()
             self.allUsers.city.removeAll()
             self.allUsers.location.removeAll()
             self.datee.removeAll()
-            
+            self.allUsers.postName.removeAll()
             self.allUsers.email.removeAll()
             self.isItFoundOrLost.removeAll()
             
@@ -115,7 +128,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
                 if let timePosted = snap.childSnapshot(forPath: "timeStamp").value as? Int {
                     self.allUsers.timeStamp.append(timePosted)
                     self.allUsers.dictionary["timeStamp"] = timePosted
-                    self.datee.append(Double(timePosted))
+                    self.datee.append(Double(timePosted * -1))
                     
                 }
                 
@@ -208,7 +221,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 //            guard let snapshots = snapshot.children.allObjects as? [DataSnapshot] else { return }
 //            
 //            for snap in snapshots{
-//                print(snap.key)
+
 //                self.allUsers.postName.append(snap.key) // ieskosim kuriu postu pavadinimas sutampa su followed pavadinimu
 //                self.getFollowedPosts(post: snap.key)
 //                
@@ -276,7 +289,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 //        foundRef.child("found").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
 //                let dict = snapshot.value as? [String: Any]
 //                if snapshot.exists(){
-//                 //     print("found snapshot ",snapshot)
+
 //                    self.postId.append(snapshot.key)
 //                    self.isItFoundOrLost.append("found")
 //                    let date = dict?["timeStamp"] as! Double
@@ -334,7 +347,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 //        lostRef.child("lost").child(post).observeSingleEvent(of: .value, with: { (snapshot) in
 //            let dict = snapshot.value as? [String: Any]
 //            if snapshot.exists(){
-//               // print("lost snapshot ",snapshot)
+
 //                self.isItFoundOrLost.append("lost")
 //                self.postId.append(snapshot.key)
 //                
@@ -465,7 +478,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
             */
             tableView.reloadData()
             self.refresh.endRefreshing()
-            print(allUsers.descriptions)
+     
             }
             
            
@@ -481,7 +494,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
 //        var i:Int = 0
 //        if postId.count == allUsers.postName.count && postId.count > 1{
 //        while i < goodNumbers.count{
-//            //print(goodNumbers[i])
+
 //            var j:Int = 0
 //            while j < toSortNumbers.count{
 //                // print(toSortNumbers[j])
@@ -588,7 +601,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height// - 40
+        return 161//UIScreen.main.bounds.height// - 40
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -596,7 +609,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let profileImageURL = allUsers.downloadUrls[indexPath.item]
-        print(indexPath.row)
+        
         image.loadImageUsingCacheWithUrlString(profileImageURL)
         image.contentMode = .scaleAspectFit
         //postInfo.descriptiontextField.text = allUsers.descriptions[indexPath.item]
@@ -606,7 +619,7 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
         dateLabel.text = currentCell.dateLabel.text!
         locationLabel.text = currentCell.locationLabel.text!
         cityLabel.text = currentCell.cityLabel.text!
-        postName = postId[indexPath.row]
+        postName = allUsers.postName[indexPath.row]
         foundOrLost = isItFoundOrLost[indexPath.row]
         
         descriptiontextField.text = currentCell.infoLabel.text
@@ -621,12 +634,12 @@ class FollowedItems: UICollectionViewCell, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lasItem = postId.count - 1
-        print("count", postId.count, i, a)
+        
         if lasItem > 0 {
             if indexPath.row == lasItem{
              
                 if i <= postId.count{
-                    print("load more ", i, a)
+                    
                     a += 5
                     //addMoreRows()
                     getMyPosts()

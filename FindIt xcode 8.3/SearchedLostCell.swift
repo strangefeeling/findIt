@@ -200,7 +200,7 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100//UIScreen.main.bounds.height// - 40
+        return 161//UIScreen.main.bounds.height// - 40
     }
     
     
@@ -303,12 +303,12 @@ class SearchedLostCell: UICollectionViewCell, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lasItem = cellContent.count - 3
-        print("count", cellContent.count, i, a)
+        
         if lasItem > 0 {
             if indexPath.row == lasItem{
                 
                 if i <= cellContent.count{
-                    print("load more ", i, a)
+                    
                     a += 5
                     //addMoreRows()
                     getPosts()
